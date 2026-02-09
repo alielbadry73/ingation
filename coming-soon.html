@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coming Soon | IG Nation</title>
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/iconify-icon@1.0.7/dist/iconify-icon.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Jost:wght@400;600;700&display=swap" rel="stylesheet">
+    <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
+    
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Jost', sans-serif;
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            min-height: 100vh;
+        }
+        
+        /* Dashboard Header - Same as student dashboard */
+        .dashboard-header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            color: #333;
+            padding: 1rem 0;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            margin: 0;
+            position: relative;
+            top: 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            z-index: 999;
+        }
+        
+        .coming-soon-content {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: calc(100vh - 100px);
+            padding: 2rem;
+        }
+        
+        .coming-soon-card {
+            background: white;
+            border-radius: 24px;
+            padding: 4rem 3rem;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+            text-align: center;
+            max-width: 600px;
+            width: 100%;
+        }
+        
+        .coming-soon-icon {
+            font-size: 6rem;
+            margin-bottom: 2rem;
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+        
+        .coming-soon-title {
+            font-size: 3rem;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 1rem;
+        }
+        
+        .coming-soon-subtitle {
+            font-size: 1.3rem;
+            color: #666;
+            margin-bottom: 2rem;
+        }
+        
+        .feature-list {
+            text-align: left;
+            margin: 2rem 0;
+            padding: 2rem;
+            background: #f8f9fa;
+            border-radius: 16px;
+        }
+        
+        .feature-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+            color: #555;
+        }
+        
+        .feature-item i {
+            color: #667eea;
+            font-size: 1.5rem;
+        }
+        
+        .back-button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 1rem 3rem;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .back-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <!-- Dashboard Header -->
+    <header class="dashboard-header">
+        <div class="container-fluid">
+            <!-- Top Header with Navigation Buttons -->
+            <div class="row align-items-center" style="padding: 0.5rem 0;">
+                <div class="col-6">
+                    <div class="d-flex align-items-center">
+                        <!-- Hamburger Menu Button -->
+                        <button id="menuToggle" onclick="toggleSidebar()" style="width: 45px; height: 45px; background: white; border: 1px solid #e9ecef; border-radius: 8px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.1); margin-right: 1rem;" onmouseover="this.style.boxShadow='0 4px 8px rgba(0,0,0,0.15)'" onmouseout="this.style.boxShadow='0 2px 4px rgba(0,0,0,0.1)'">
+                            <iconify-icon icon="material-symbols:menu" style="font-size: 1.5rem; color: #333;"></iconify-icon>
+                        </button>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="d-flex justify-content-end align-items-center gap-2">
+                        <!-- IG Nation Logo -->
+                        <a href="index.html" style="margin-right: 2rem; display: flex; align-items: center; text-decoration: none;">
+                            <img src="images/ig-nation-logo-graduation.png" alt="IG Nation" style="height: 45px; width: auto;">
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+    <!-- Coming Soon Content -->
+    <div class="coming-soon-content">
+        <div class="coming-soon-card">
+            <div class="coming-soon-icon">🚀</div>
+            <h1 class="coming-soon-title">Coming Soon!</h1>
+            <p class="coming-soon-subtitle">This feature is under development</p>
+            
+            <div class="feature-list">
+                <div class="feature-item">
+                    <i class="bi bi-check-circle-fill"></i>
+                    <span>Advanced topic practice sessions</span>
+                </div>
+                <div class="feature-item">
+                    <i class="bi bi-check-circle-fill"></i>
+                    <span>Interactive problem-solving exercises</span>
+                </div>
+                <div class="feature-item">
+                    <i class="bi bi-check-circle-fill"></i>
+                    <span>Personalized learning pathways</span>
+                </div>
+                <div class="feature-item">
+                    <i class="bi bi-check-circle-fill"></i>
+                    <span>Real-time progress tracking</span>
+                </div>
+            </div>
+            
+            <p style="color: #888; margin-bottom: 2rem;">We're working hard to bring you an amazing learning experience. Stay tuned!</p>
+            
+            <a href="student-dashboard.html" class="back-button">
+                <i class="bi bi-arrow-left me-2"></i>
+                Back to Dashboard
+            </a>
+        </div>
+    </div>
+
+    <!-- Sidebar Menu -->
+    <div id="sidebar" class="sidebar" style="position: fixed; top: 0; left: -350px; width: 350px; height: 100vh; background: white; box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1); transition: left 0.3s ease; z-index: 1000; overflow-y: auto;">
+        <!-- Sidebar Header -->
+        <div class="sidebar-header" style="padding: 1.5rem; border-bottom: 1px solid #e9ecef; display: flex; justify-content: space-between; align-items: center;">
+            <h4 style="margin: 0; color: #333; font-weight: 700;">My Courses</h4>
+            <button onclick="toggleSidebar()" style="background: none; border: none; color: #666; cursor: pointer; font-size: 1.5rem; padding: 0.25rem;" onmouseover="this.style.color='#333'" onmouseout="this.style.color='#666'">
+                <iconify-icon icon="material-symbols:close"></iconify-icon>
+            </button>
+        </div>
+        
+        <!-- Sidebar Content -->
+        <div class="sidebar-content" style="padding: 1rem;">
+            <!-- Books Section -->
+            <div class="menu-section">
+                <div class="menu-item" onclick="window.location.href='physics-library.html'" style="display: flex; align-items: center; padding: 1rem; background: #f8f9fa; border-radius: 12px; margin-bottom: 0.5rem; cursor: pointer; transition: all 0.3s ease;" onmouseover="this.style.background='#e9ecef'" onmouseout="this.style.background='#f8f9fa'">
+                    <div class="menu-icon" style="width: 40px; height: 40px; background: linear-gradient(135deg, #667eea, #764ba2); border-radius: 8px; display: flex; align-items: center; justify-content: center; margin-right: 1rem;">
+                        <iconify-icon icon="material-symbols:menu-book" style="font-size: 1.5rem; color: white;"></iconify-icon>
+                    </div>
+                    <div class="menu-text" style="flex: 1;">
+                        <div class="menu-title" style="font-weight: 600; color: #333; font-size: 1rem;">Books</div>
+                        <div class="menu-subtitle" style="font-size: 0.8rem; color: #666;">Textbooks & Study Materials</div>
+                    </div>
+                    <iconify-icon icon="material-symbols:keyboard-arrow-right" style="font-size: 1.2rem; color: #666;"></iconify-icon>
+                </div>
+            </div>
+
+            <!-- Lectures Section -->
+            <div class="menu-section">
+                <div class="menu-item" onclick="window.location.href='physics-lectures.html'" style="display: flex; align-items: center; padding: 1rem; background: #f8f9fa; border-radius: 12px; margin-bottom: 0.5rem; cursor: pointer; transition: all 0.3s ease;" onmouseover="this.style.background='#e9ecef'" onmouseout="this.style.background='#f8f9fa'">
+                    <div class="menu-icon" style="width: 40px; height: 40px; background: linear-gradient(135deg, #667eea, #764ba2); border-radius: 8px; display: flex; align-items: center; justify-content: center; margin-right: 1rem;">
+                        <iconify-icon icon="material-symbols:play-circle" style="font-size: 1.5rem; color: white;"></iconify-icon>
+                    </div>
+                    <div class="menu-text" style="flex: 1;">
+                        <div class="menu-title" style="font-weight: 600; color: #333; font-size: 1rem;">Lectures</div>
+                        <div class="menu-subtitle" style="font-size: 0.8rem; color: #666;">Video Lessons & Tutorials</div>
+                    </div>
+                    <iconify-icon icon="material-symbols:keyboard-arrow-right" style="font-size: 1.2rem; color: #666;"></iconify-icon>
+                </div>
+            </div>
+
+            <!-- Track Progress Section -->
+            <div class="menu-section">
+                <div class="menu-item" onclick="toggleSubmenu('progress')" style="display: flex; align-items: center; padding: 1rem; background: #f8f9fa; border-radius: 12px; margin-bottom: 0.5rem; cursor: pointer; transition: all 0.3s ease;" onmouseover="this.style.background='#e9ecef'" onmouseout="this.style.background='#f8f9fa'">
+                    <div class="menu-icon" style="width: 40px; height: 40px; background: linear-gradient(135deg, #667eea, #764ba2); border-radius: 8px; display: flex; align-items: center; justify-content: center; margin-right: 1rem;">
+                        <iconify-icon icon="material-symbols:trending-up" style="font-size: 1.5rem; color: white;"></iconify-icon>
+                    </div>
+                    <div class="menu-text" style="flex: 1;">
+                        <div class="menu-title" style="font-weight: 600; color: #333; font-size: 1rem;">Track Progress</div>
+                        <div class="menu-subtitle" style="font-size: 0.8rem; color: #666;">Monitor Learning Journey</div>
+                    </div>
+                    <iconify-icon id="progress-arrow" icon="material-symbols:keyboard-arrow-down" style="font-size: 1.2rem; color: #666; transition: transform 0.3s ease;"></iconify-icon>
+                </div>
+                <div id="progress-submenu" class="submenu" style="display: none; margin-left: 1rem; margin-bottom: 0.5rem;">
+                    <div class="submenu-item" style="padding: 0.75rem; color: #666; font-size: 0.9rem; border-left: 2px solid #e9ecef; padding-left: 1rem; margin-bottom: 0.25rem;">Quiz Scores</div>
+                    <div class="submenu-item" style="padding: 0.75rem; color: #666; font-size: 0.9rem; border-left: 2px solid #e9ecef; padding-left: 1rem; margin-bottom: 0.25rem;">Assignment Grades</div>
+                    <div class="submenu-item" style="padding: 0.75rem; color: #666; font-size: 0.9rem; border-left: 2px solid #e9ecef; padding-left: 1rem;">Study Time</div>
+                </div>
+            </div>
+
+            <!-- Practice Section -->
+            <div class="menu-section">
+                <div class="menu-item" onclick="window.location.href='coming-soon.html'" style="display: flex; align-items: center; padding: 1rem; background: #f8f9fa; border-radius: 12px; margin-bottom: 0.5rem; cursor: pointer; transition: all 0.3s ease;" onmouseover="this.style.background='#e9ecef'" onmouseout="this.style.background='#f8f9fa'">
+                    <div class="menu-icon" style="width: 40px; height: 40px; background: linear-gradient(135deg, #667eea, #764ba2); border-radius: 8px; display: flex; align-items: center; justify-content: center; margin-right: 1rem;">
+                        <iconify-icon icon="material-symbols:fitness-center" style="font-size: 1.5rem; color: white;"></iconify-icon>
+                    </div>
+                    <div class="menu-text" style="flex: 1;">
+                        <div class="menu-title" style="font-weight: 600; color: #333; font-size: 1rem;">Practice on Topic</div>
+                        <div class="menu-subtitle" style="font-size: 0.8rem; color: #666;">Topic-based Practice</div>
+                    </div>
+                    <iconify-icon icon="material-symbols:keyboard-arrow-right" style="font-size: 1.2rem; color: #666;"></iconify-icon>
+                </div>
+            </div>
+
+            <!-- Badges Section -->
+            <div class="menu-section">
+                <div class="menu-item" onclick="toggleSubmenu('badges')" style="display: flex; align-items: center; padding: 1rem; background: #f8f9fa; border-radius: 12px; margin-bottom: 0.5rem; cursor: pointer; transition: all 0.3s ease;" onmouseover="this.style.background='#e9ecef'" onmouseout="this.style.background='#f8f9fa'">
+                    <div class="menu-icon" style="width: 40px; height: 40px; background: linear-gradient(135deg, #667eea, #764ba2); border-radius: 8px; display: flex; align-items: center; justify-content: center; margin-right: 1rem;">
+                        <iconify-icon icon="material-symbols:workspace-premium" style="font-size: 1.5rem; color: white;"></iconify-icon>
+                    </div>
+                    <div class="menu-text" style="flex: 1;">
+                        <div class="menu-title" style="font-weight: 600; color: #333; font-size: 1rem;">Badges</div>
+                        <div class="menu-subtitle" style="font-size: 0.8rem; color: #666;">Achievements & Rewards</div>
+                    </div>
+                    <iconify-icon id="badges-arrow" icon="material-symbols:keyboard-arrow-down" style="font-size: 1.2rem; color: #666; transition: transform 0.3s ease;"></iconify-icon>
+                </div>
+                <div id="badges-submenu" class="submenu" style="display: none; margin-left: 1rem; margin-bottom: 0.5rem;">
+                    <div class="submenu-item" style="padding: 0.75rem; color: #666; font-size: 0.9rem; border-left: 2px solid #e9ecef; padding-left: 1rem; margin-bottom: 0.25rem;">Quiz Master</div>
+                    <div class="submenu-item" style="padding: 0.75rem; color: #666; font-size: 0.9rem; border-left: 2px solid #e9ecef; padding-left: 1rem; margin-bottom: 0.25rem;">Study Streak</div>
+                    <div class="submenu-item" style="padding: 0.75rem; color: #666; font-size: 0.9rem; border-left: 2px solid #e9ecef; padding-left: 1rem;">Top Performer</div>
+                </div>
+            </div>
+
+            
+            <!-- Live Sessions Section -->
+            <div class="menu-section">
+                <div class="menu-item" onclick="window.location.href='physics-live-sessions.html'" style="display: flex; align-items: center; padding: 1rem; background: #f8f9fa; border-radius: 12px; margin-bottom: 0.5rem; cursor: pointer; transition: all 0.3s ease;" onmouseover="this.style.background='#e9ecef'" onmouseout="this.style.background='#f8f9fa'">
+                    <div class="menu-icon" style="width: 40px; height: 40px; background: linear-gradient(135deg, #667eea, #764ba2); border-radius: 8px; display: flex; align-items: center; justify-content: center; margin-right: 1rem;">
+                        <iconify-icon icon="material-symbols:video-call" style="font-size: 1.5rem; color: white;"></iconify-icon>
+                    </div>
+                    <div class="menu-text" style="flex: 1;">
+                        <div class="menu-title" style="font-weight: 600; color: #333; font-size: 1rem;">Live Sessions</div>
+                        <div class="menu-subtitle" style="font-size: 0.8rem; color: #666;">Interactive Learning Sessions</div>
+                    </div>
+                    <iconify-icon icon="material-symbols:keyboard-arrow-right" style="font-size: 1.2rem; color: #666;"></iconify-icon>
+                </div>
+            </div>
+            
+            <!-- Past Papers Section -->
+            <div class="menu-section">
+                <div class="menu-item" onclick="toggleSubmenu('papers')" style="display: flex; align-items: center; padding: 1rem; background: #f8f9fa; border-radius: 12px; margin-bottom: 0.5rem; cursor: pointer; transition: all 0.3s ease;" onmouseover="this.style.background='#e9ecef'" onmouseout="this.style.background='#f8f9fa'">
+                    <div class="menu-icon" style="width: 40px; height: 40px; background: linear-gradient(135deg, #667eea, #764ba2); border-radius: 8px; display: flex; align-items: center; justify-content: center; margin-right: 1rem;">
+                        <iconify-icon icon="material-symbols:description" style="font-size: 1.5rem; color: white;"></iconify-icon>
+                    </div>
+                    <div class="menu-text" style="flex: 1;">
+                        <div class="menu-title" style="font-weight: 600; color: #333; font-size: 1rem;">Past Papers</div>
+                        <div class="menu-subtitle" style="font-size: 0.8rem; color: #666;">Previous Exam Papers & Solutions</div>
+                    </div>
+                    <iconify-icon id="papers-arrow" icon="material-symbols:keyboard-arrow-down" style="font-size: 1.2rem; color: #666; transition: transform 0.3s ease;"></iconify-icon>
+                </div>
+                <div id="papers-submenu" class="submenu" style="display: none; margin-left: 1rem; margin-bottom: 0.5rem;">
+                    <div class="submenu-item" onclick="window.location.href='physics-past-papers.html'" style="padding: 0.75rem; color: #666; font-size: 0.9rem; border-left: 2px solid #e9ecef; padding-left: 1rem; margin-bottom: 0.25rem; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.background='#f8f9fa'; this.style.color='#667eea'" onmouseout="this.style.background='transparent'; this.style.color='#666'">All Past Papers</div>
+                    <div class="submenu-item" onclick="window.location.href='physics-past-papers-2025.html'" style="padding: 0.75rem; color: #666; font-size: 0.9rem; border-left: 2px solid #e9ecef; padding-left: 1rem; margin-bottom: 0.25rem; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.background='#f8f9fa'; this.style.color='#667eea'" onmouseout="this.style.background='transparent'; this.style.color='#666'">2025 Papers</div>
+                    <div class="submenu-item" onclick="window.location.href='physics-past-papers-2024.html'" style="padding: 0.75rem; color: #666; font-size: 0.9rem; border-left: 2px solid #e9ecef; padding-left: 1rem; margin-bottom: 0.25rem; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.background='#f8f9fa'; this.style.color='#667eea'" onmouseout="this.style.background='transparent'; this.style.color='#666'">2024 Papers</div>
+                    <div class="submenu-item" onclick="window.location.href='physics-past-papers-2023.html'" style="padding: 0.75rem; color: #666; font-size: 0.9rem; border-left: 2px solid #e9ecef; padding-left: 1rem; margin-bottom: 0.25rem; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.background='#f8f9fa'; this.style.color='#667eea'" onmouseout="this.style.background='transparent'; this.style.color='#666'">2023 Papers</div>
+                    <div class="submenu-item" onclick="window.location.href='physics-past-papers-2022.html'" style="padding: 0.75rem; color: #666; font-size: 0.9rem; border-left: 2px solid #e9ecef; padding-left: 1rem; margin-bottom: 0.25rem; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.background='#f8f9fa'; this.style.color='#667eea'" onmouseout="this.style.background='transparent'; this.style.color='#666'">2022 Papers</div>
+                    <div class="submenu-item" onclick="window.location.href='physics-past-papers-2021.html'" style="padding: 0.75rem; color: #666; font-size: 0.9rem; border-left: 2px solid #e9ecef; padding-left: 1rem; margin-bottom: 0.25rem; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.background='#f8f9fa'; this.style.color='#667eea'" onmouseout="this.style.background='transparent'; this.style.color='#666'">2021 Papers</div>
+                    <div class="submenu-item" onclick="window.location.href='physics-past-papers-2020.html'" style="padding: 0.75rem; color: #666; font-size: 0.9rem; border-left: 2px solid #e9ecef; padding-left: 1rem; margin-bottom: 0.25rem; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.background='#f8f9fa'; this.style.color='#667eea'" onmouseout="this.style.background='transparent'; this.style.color='#666'">2020 Papers</div>
+                    <div class="submenu-item" onclick="window.location.href='physics-past-papers-2019.html'" style="padding: 0.75rem; color: #666; font-size: 0.9rem; border-left: 2px solid #e9ecef; padding-left: 1rem; margin-bottom: 0.25rem; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.background='#f8f9fa'; this.style.color='#667eea'" onmouseout="this.style.background='transparent'; this.style.color='#666'">2019 Papers</div>
+                    <div class="submenu-item" onclick="window.location.href='physics-past-papers-2018.html'" style="padding: 0.75rem; color: #666; font-size: 0.9rem; border-left: 2px solid #e9ecef; padding-left: 1rem; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.background='#f8f9fa'; this.style.color='#667eea'" onmouseout="this.style.background='transparent'; this.style.color='#666'">2018 Papers</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sidebar Overlay -->
+    <div id="sidebarOverlay" class="sidebar-overlay" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); z-index: 999; display: none;" onclick="toggleSidebar()"></div>
+
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebarOverlay');
+            
+            if (sidebar.style.left === '-350px' || sidebar.style.left === '') {
+                sidebar.style.left = '0';
+                overlay.style.display = 'block';
+                document.body.style.overflow = 'hidden';
+            } else {
+                sidebar.style.left = '-350px';
+                overlay.style.display = 'none';
+                document.body.style.overflow = 'auto';
+                closeAllSubmenus();
+            }
+        }
+
+        function toggleSubmenu(menuId) {
+            const submenu = document.getElementById(menuId + '-submenu');
+            const arrow = document.getElementById(menuId + '-arrow');
+            
+            if (submenu.style.display === 'none' || submenu.style.display === '') {
+                closeAllSubmenus();
+                submenu.style.display = 'block';
+                arrow.style.transform = 'rotate(180deg)';
+            } else {
+                submenu.style.display = 'none';
+                arrow.style.transform = 'rotate(0deg)';
+            }
+        }
+
+        function closeAllSubmenus() {
+            const submenus = document.querySelectorAll('.submenu');
+            const arrows = document.querySelectorAll('[id$="-arrow"]');
+            
+            submenus.forEach(submenu => {
+                submenu.style.display = 'none';
+            });
+            
+            arrows.forEach(arrow => {
+                arrow.style.transform = 'rotate(0deg)';
+            });
+        }
+    </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

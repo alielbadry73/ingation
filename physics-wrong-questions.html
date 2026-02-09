@@ -1,0 +1,1142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wrong Questions - Physics - IG Nation</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/iconify-icon@1.0.7/dist/iconify-icon.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f8f9fa;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Header - Purple Gradient */
+        .dashboard-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1rem 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin: 0;
+        }
+
+        .dashboard-header .row {
+            margin: 0 !important;
+        }
+        
+        .main-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+        }
+        
+        .page-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+        
+        .page-subtitle {
+            color: #666;
+            margin-bottom: 2rem;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .stat-card {
+            background: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #dc3545;
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-label {
+            color: #666;
+            font-size: 0.875rem;
+        }
+        
+        .folder-structure {
+            margin-bottom: 2rem;
+        }
+        
+        .folder-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 1rem;
+        }
+        
+        .folders-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+        
+        .folder-item {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            border: 2px solid transparent;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            position: relative;
+        }
+        
+        .subfolder-container {
+            margin-top: 1rem;
+            padding-left: 2rem;
+            border-left: 3px solid #e9ecef;
+        }
+        
+        .subfolder-item {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 0.5rem;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+            border: 2px solid transparent;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            position: relative;
+        }
+        
+        .subfolder-item:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            border-color: #8b5cf6;
+        }
+        
+        .subfolder-item.active {
+            border-color: #8b5cf6;
+            background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+            color: white;
+        }
+        
+        .subfolder-item.active .subfolder-icon {
+            color: white;
+        }
+        
+        .subfolder-icon {
+            font-size: 1.5rem;
+            color: #8b5cf6;
+            transition: color 0.3s ease;
+        }
+        
+        .subfolder-content {
+            flex: 1;
+        }
+        
+        .subfolder-name {
+            font-size: 0.95rem;
+            font-weight: 600;
+            margin: 0 0 0.25rem 0;
+            color: inherit;
+        }
+        
+        .subfolder-count {
+            font-size: 0.75rem;
+            margin: 0;
+            opacity: 0.8;
+            color: inherit;
+        }
+        
+        .folder-actions {
+            display: flex;
+            gap: 0.5rem;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .folder-item:hover .folder-actions {
+            opacity: 1;
+        }
+        
+        .subfolder-actions {
+            display: flex;
+            gap: 0.25rem;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .subfolder-item:hover .subfolder-actions {
+            opacity: 1;
+        }
+        
+        .btn-sm {
+            padding: 0.25rem 0.5rem;
+            font-size: 0.75rem;
+        }
+        
+        .draggable-question {
+            cursor: grab;
+            transition: all 0.3s ease;
+        }
+        
+        .draggable-question:hover {
+            transform: scale(1.02);
+            box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+        }
+        
+        .draggable-question.dragging {
+            opacity: 0.5;
+            transform: rotate(5deg);
+        }
+        
+        .drop-zone {
+            border: 2px dashed #8b5cf6;
+            background: rgba(139, 92, 246, 0.1);
+            border-radius: 8px;
+            padding: 1rem;
+            text-align: center;
+            color: #8b5cf6;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            margin-top: 0.5rem;
+        }
+        
+        .drop-zone.drag-over {
+            background: rgba(139, 92, 246, 0.2);
+            border-color: #7c3aed;
+        }
+        
+        .folder-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+            border-color: #8b5cf6;
+        }
+        
+        .folder-item.active {
+            border-color: #8b5cf6;
+            background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+            color: white;
+        }
+        
+        .folder-item.active .folder-icon {
+            color: white;
+        }
+        
+        .folder-icon {
+            font-size: 2.5rem;
+            color: #8b5cf6;
+            transition: color 0.3s ease;
+        }
+        
+        .folder-content {
+            flex: 1;
+        }
+        
+        .folder-name {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin: 0 0 0.5rem 0;
+            color: inherit;
+        }
+        
+        .folder-count {
+            font-size: 0.875rem;
+            margin: 0;
+            opacity: 0.8;
+            color: inherit;
+        }
+        
+        .question-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            border-left: 4px solid #dc3545;
+        }
+        
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+        
+        .question-text {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #333;
+            flex: 1;
+            margin-right: 1rem;
+        }
+        
+        .question-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            align-items: flex-end;
+        }
+        
+        .chapter-badge {
+            background: #8b5cf6;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        
+        .attempts-badge {
+            background: #ffc107;
+            color: #212529;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        
+        .question-details {
+            margin-bottom: 1rem;
+        }
+        
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+            font-size: 0.875rem;
+        }
+        
+        .detail-label {
+            font-weight: 600;
+            color: #666;
+        }
+        
+        .detail-value {
+            color: #333;
+        }
+        
+        .options-list {
+            margin: 1rem 0;
+        }
+        
+        .option-item {
+            padding: 8px 12px;
+            margin: 5px 0;
+            border-radius: 6px;
+            border: 1px solid #e9ecef;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .option-item.correct {
+            background: #d4edda;
+            border-color: #28a745;
+            color: #155724;
+        }
+        
+        .option-item.incorrect {
+            background: #f8d7da;
+            border-color: #dc3545;
+            color: #721c24;
+        }
+        
+        .option-number {
+            font-weight: 600;
+            min-width: 20px;
+        }
+        
+        .question-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 1rem;
+        }
+        
+        .btn {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            padding: 8px 16px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-size: 0.875rem;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+            border: 1px solid #dc3545;
+        }
+        
+        .btn-outline-secondary {
+            background: transparent;
+            color: #6c757d;
+            border: 1px solid #6c757d;
+        }
+        
+        .btn-outline-secondary:hover {
+            background: #6c757d;
+            color: white;
+        }
+        
+        .btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: #666;
+        }
+        
+        .empty-state iconify-icon {
+            font-size: 4rem;
+            color: #ddd;
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Back Arrow Button -->
+    <button class="back-button" onclick="history.back()" title="Back" style="position: fixed; top: 19px; left: 20px; z-index: 1000; background: rgba(255, 255, 255, 0.95); border: 2px solid rgba(102, 126, 234, 0.3); border-radius: 50%; width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; cursor: pointer; backdrop-filter: blur(10px); box-shadow: 0 4px 15px rgba(102, 126, 234, 0.2); transition: all 0.3s ease;" onmouseover="this.style.background='rgba(255, 255, 255, 1)'; this.style.borderColor='rgba(102, 126, 234, 0.5)'; this.style.transform='translateY(-2px)'; this.style.boxShadow='0 8px 25px rgba(102, 126, 234, 0.3)'" onmouseout="this.style.background='rgba(255, 255, 255, 0.95)'; this.style.borderColor='rgba(102, 126, 234, 0.3)'; this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 15px rgba(102, 126, 234, 0.2)'">
+        <iconify-icon icon="material-symbols:arrow-back" style="font-size: 1.5rem; color: #667eea;"></iconify-icon>
+    </button>
+
+    <!-- Dashboard Header -->
+    <header class="dashboard-header">
+        <div class="container-fluid">
+            <!-- Top Header with Navigation Buttons -->
+            <div class="row align-items-center" style="padding: 0.5rem 0;">
+                <div class="col-12">
+                    <div class="d-flex justify-content-end align-items-center gap-2">
+                        <!-- IG Nation Logo -->
+                        <a href="student-dashboard.html" style="margin-right: 2rem; display: flex; align-items: center; text-decoration: none;">
+                            <img src="images/ig-nation-logo-graduation.png" alt="IG Nation" style="height: 45px; width: auto;">
+                        </a>
+                        
+                        <!-- Focus Mode Button -->
+                        <button class="nav-icon-btn" onclick="navigateToFocusMode()" style="width: 45px; height: 45px; background: rgba(255, 255, 255, 0.2); border: 1px solid rgba(255, 255, 255, 0.3); border-radius: 8px; cursor: pointer; transition: all 0.3s ease; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 4px rgba(0,0,0,0.1);" onmouseover="this.style.background='rgba(255, 255, 255, 0.3)'; this.style.boxShadow='0 4px 8px rgba(0,0,0,0.2)'" onmouseout="this.style.background='rgba(255, 255, 255, 0.2)'; this.style.boxShadow='0 2px 4px rgba(0,0,0,0.1)'">
+                            <img src="images/7898418_focus_business_finance_office_marketing_icon.png" alt="Focus" style="width: 20px; height: 20px; filter: brightness(0) invert(1);">
+                        </button>
+                        
+                        <!-- Notifications Button -->
+                        <div class="notifications-container" style="position: relative;">
+                            <button class="nav-icon-btn" onclick="openNotifications()" style="width: 45px; height: 45px; background: rgba(255, 255, 255, 0.2); border: 1px solid rgba(255, 255, 255, 0.3); border-radius: 8px; cursor: pointer; transition: all 0.3s ease; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 4px rgba(0,0,0,0.1); position: relative;" onmouseover="this.style.background='rgba(255, 255, 255, 0.3)'; this.style.boxShadow='0 4px 8px rgba(0,0,0,0.2)'" onmouseout="this.style.background='rgba(255, 255, 255, 0.2)'; this.style.boxShadow='0 2px 4px rgba(0,0,0,0.1)'">
+                                <iconify-icon icon="material-symbols:notifications" style="font-size: 1.2rem; color: white;"></iconify-icon>
+                                <span id="notificationBadge" class="notification-badge" style="position: absolute; top: -5px; right: -5px; background: #ef4444; color: white; border-radius: 50%; width: 18px; height: 18px; font-size: 0.7rem; display: none; align-items: center; justify-content: center; font-weight: 700;">0</span>
+                            </button>
+                        </div>
+                        
+                        <!-- Community Button -->
+                        <button class="nav-icon-btn" onclick="navigateToCommunity()" style="width: 45px; height: 45px; background: rgba(255, 255, 255, 0.2); border: 1px solid rgba(255, 255, 255, 0.3); border-radius: 8px; cursor: pointer; transition: all 0.3s ease; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 4px rgba(0,0,0,0.1);" onmouseover="this.style.background='rgba(255, 255, 255, 0.3)'; this.style.boxShadow='0 4px 8px rgba(0,0,0,0.2)'" onmouseout="this.style.background='rgba(255, 255, 255, 0.2)'; this.style.boxShadow='0 2px 4px rgba(0,0,0,0.1)'">
+                            <img src="images/4213440_community_group_leader_people_team_icon.png" alt="Community" style="width: 20px; height: 20px; filter: brightness(0) invert(1);">
+                        </button>
+                        
+                        <!-- Profile Button -->
+                        <button class="nav-icon-btn" onclick="navigateToProfile()" style="width: 45px; height: 45px; background: rgba(255, 255, 255, 0.2); border: 1px solid rgba(255, 255, 255, 0.3); border-radius: 8px; cursor: pointer; transition: all 0.3s ease; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 4px rgba(0,0,0,0.1);" onmouseover="this.style.background='rgba(255, 255, 255, 0.3)'; this.style.boxShadow='0 4px 8px rgba(0,0,0,0.2)'" onmouseout="this.style.background='rgba(255, 255, 255, 0.2)'; this.style.boxShadow='0 2px 4px rgba(0,0,0,0.1)'">
+                            <img src="images/4092564_profile_about_mobile ui_user_icon.png" alt="Profile" style="width: 20px; height: 20px; filter: brightness(0) invert(1);">
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </header>
+
+    <!-- Create Folder Modal -->
+    <div class="modal fade" id="createFolderModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Create New Custom Folder</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="folderName" class="form-label">Folder Name</label>
+                        <input type="text" class="form-control" id="folderName" placeholder="e.g., Mechanics Review, Hard Problems, etc.">
+                    </div>
+                    <div class="mb-3">
+                        <label for="folderDescription" class="form-label">Description (Optional)</label>
+                        <textarea class="form-control" id="folderDescription" rows="2" placeholder="Describe what this folder contains..."></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" onclick="createFolder()">Create Folder</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Create Subfolder Modal -->
+    <div class="modal fade" id="createSubfolderModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Create New Subfolder</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">Activity Type</label>
+                        <input type="text" class="form-control" id="parentActivityType" readonly>
+                    </div>
+                    <div class="mb-3">
+                        <label for="subfolderName" class="form-label">Subfolder Name</label>
+                        <input type="text" class="form-control" id="subfolderName" placeholder="e.g., Chapter 1, Mechanics Basics, etc.">
+                    </div>
+                    <div class="mb-3">
+                        <label for="subfolderDescription" class="form-label">Description (Optional)</label>
+                        <textarea class="form-control" id="subfolderDescription" rows="2" placeholder="Describe what this subfolder contains..."></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" onclick="createSubfolder()">Create Subfolder</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <h1 class="page-title">Wrong Questions - Physics</h1>
+        <p class="page-subtitle">Navigate to specific activity types to review and practice physics questions you answered incorrectly. Questions are organized by activity type for focused study.</p>
+        
+        <!-- Stats -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-number" id="totalWrong">0</div>
+                <div class="stat-label">Total Wrong Questions</div>
+            </div>
+        </div>
+        
+        <!-- Folder Structure (Chapters + Custom Folders) -->
+        <div class="folder-structure">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h3 class="folder-title mb-0">Activity Types</h3>
+                <button class="btn btn-primary btn-sm" onclick="showCreateFolderModal()">
+                    <iconify-icon icon="material-symbols:create-new-folder"></iconify-icon>
+                    Create Custom Folder
+                </button>
+            </div>
+            <div class="folders-grid" id="foldersGrid">
+                <!-- Folders will be generated dynamically -->
+            </div>
+        </div>
+        
+        <!-- Instructions -->
+        <div class="instructions-section" style="background: white; border-radius: 12px; padding: 2rem; box-shadow: 0 4px 12px rgba(0,0,0,0.08); margin-top: 2rem;">
+            <h3 style="color: #333; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+                <iconify-icon icon="material-symbols:info" style="color: #8b5cf6;"></iconify-icon>
+                How to Use Wrong Questions
+            </h3>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem;">
+                <div style="padding: 1rem; background: #f8f9fa; border-radius: 8px; border-left: 4px solid #8b5cf6;">
+                    <h5 style="color: #333; margin-bottom: 0.5rem;">📁 Browse by Activity Type</h5>
+                    <p style="color: #666; margin: 0; font-size: 0.9rem;">Click on Assignments, Quizzes, or Exams folders above to view your wrong questions organized by activity type.</p>
+                </div>
+                <div style="padding: 1rem; background: #f8f9fa; border-radius: 8px; border-left: 4px solid #28a745;">
+                    <h5 style="color: #333; margin-bottom: 0.5rem;">🎯 Practice & Review</h5>
+                    <p style="color: #666; margin: 0; font-size: 0.9rem;">Each folder contains questions you answered incorrectly, allowing you to focus on specific areas for improvement.</p>
+                </div>
+                <div style="padding: 1rem; background: #f8f9fa; border-radius: 8px; border-left: 4px solid #ffc107;">
+                    <h5 style="color: #333; margin-bottom: 0.5rem;">📊 Track Progress</h5>
+                    <p style="color: #666; margin: 0; font-size: 0.9rem;">Monitor your improvement by reviewing wrong questions and marking them as correct when you master them.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/iconify-icon@1.0.7/dist/iconify-icon.min.js"></script>
+    <script src="js/notifications.js"></script>
+    <script>
+        // Navigation Functions
+        function navigateToFocusMode() {
+            window.location.href = 'focus-mode.html';
+        }
+        
+        function navigateToCommunity() {
+            window.location.href = 'physics-community.html';
+        }
+        
+        function navigateToProfile() {
+            window.location.href = 'student-profile.html';
+        }
+
+        let wrongQuestions = [];
+        let customFolders = [];
+        let subfolders = [];
+        let currentFolder = null;
+        let currentSubfolder = null;
+        
+        console.log('=== SCRIPT LOADED ===');
+        console.log('Physics wrong questions script is running');
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('=== PAGE LOADED ===');
+            console.log('DOM Content Loaded event fired');
+            loadCustomFolders();
+            loadSubfolders();
+            loadWrongQuestions();
+            displayFolders();
+            displayQuestions();
+            console.log('=== PAGE LOAD COMPLETE ===');
+        });
+
+        // Helper function to get student answer
+        function getStudentAnswer(question) {
+            console.log('=== DEBUGGING STUDENT ANSWER ===');
+            console.log('Full question object:', JSON.stringify(question, null, 2));
+            console.log('Available fields:', Object.keys(question));
+            
+            // Check if studentAnswer exists (for text-based answers)
+            if (question.studentAnswer) {
+                console.log('Found studentAnswer:', question.studentAnswer);
+                return question.studentAnswer;
+            }
+            
+            // Check if userAnswer exists and is a valid index for multiple choice
+            if (question.userAnswer !== undefined && question.userAnswer !== null) {
+                console.log('userAnswer found:', question.userAnswer, 'Type:', typeof question.userAnswer);
+                const userAnswerIndex = parseInt(question.userAnswer);
+                console.log('Parsed userAnswerIndex:', userAnswerIndex);
+                if (question.options && question.options.length > 0 && 
+                    userAnswerIndex >= 0 && userAnswerIndex < question.options.length) {
+                    console.log('Found userAnswer index:', userAnswerIndex, 'Options:', question.options);
+                    return question.options[userAnswerIndex];
+                } else {
+                    console.log('userAnswer index out of bounds or no options');
+                }
+            }
+            
+            // Check for other possible field names
+            const possibleAnswerFields = ['selectedAnswer', 'answer', 'studentAnswer', 'userSelection', 'chosenAnswer'];
+            for (const field of possibleAnswerFields) {
+                if (question[field] !== undefined && question[field] !== null) {
+                    console.log(`Found ${field}:`, question[field], 'Type:', typeof question[field]);
+                    const answerIndex = parseInt(question[field]);
+                    if (question.options && question.options.length > 0 && 
+                        answerIndex >= 0 && answerIndex < question.options.length) {
+                        console.log(`Found ${field} index:`, answerIndex, 'Options:', question.options);
+                        return question.options[answerIndex];
+                    }
+                }
+            }
+            
+            console.log('No valid student answer found after checking all fields');
+            return 'No answer provided';
+        }
+
+        // Helper function to get correct answer
+        function getCorrectAnswer(question) {
+            console.log('=== DEBUGGING CORRECT ANSWER ===');
+            console.log('Full question object:', JSON.stringify(question, null, 2));
+            console.log('Available fields:', Object.keys(question));
+            
+            // Check if correctAnswer exists and is a valid index for multiple choice
+            if (question.correctAnswer !== undefined && question.correctAnswer !== null) {
+                console.log('correctAnswer found:', question.correctAnswer, 'Type:', typeof question.correctAnswer);
+                const correctAnswerIndex = parseInt(question.correctAnswer);
+                console.log('Parsed correctAnswerIndex:', correctAnswerIndex);
+                if (question.options && question.options.length > 0 && 
+                    correctAnswerIndex >= 0 && correctAnswerIndex < question.options.length) {
+                    console.log('Found correctAnswer index:', correctAnswerIndex, 'Options:', question.options);
+                    return question.options[correctAnswerIndex];
+                } else {
+                    console.log('correctAnswer index out of bounds or no options');
+                }
+            }
+            
+            // Check if correctAnswerText exists (for text-based answers)
+            if (question.correctAnswerText) {
+                console.log('Found correctAnswerText:', question.correctAnswerText);
+                return question.correctAnswerText;
+            }
+            
+            // Check for other possible field names
+            const possibleCorrectAnswerFields = ['rightAnswer', 'answer', 'correctAnswer', 'solution', 'expectedAnswer'];
+            for (const field of possibleCorrectAnswerFields) {
+                if (question[field] !== undefined && question[field] !== null) {
+                    console.log(`Found ${field}:`, question[field], 'Type:', typeof question[field]);
+                    const answerIndex = parseInt(question[field]);
+                    if (question.options && question.options.length > 0 && 
+                        answerIndex >= 0 && answerIndex < question.options.length) {
+                        console.log(`Found ${field} index:`, answerIndex, 'Options:', question.options);
+                        return question.options[answerIndex];
+                    }
+                }
+            }
+            
+            console.log('No valid correct answer found after checking all fields');
+            return 'Correct answer not provided';
+        }
+        
+        function loadWrongQuestions() {
+            console.log('=== LOADING WRONG QUESTIONS ===');
+            // Load all wrong questions from localStorage (including quizzes and exams)
+            const allWrongQuestions = JSON.parse(localStorage.getItem('physicsWrongQuestions')) || [];
+            // Don't filter out any questions - keep all wrong questions
+            wrongQuestions = allWrongQuestions.filter(q => q.subject === 'physics');
+            console.log('Loaded all physics wrong questions (including quizzes and exams)');
+            console.log('Number of wrong questions found:', wrongQuestions.length);
+            
+            // Only set activityType if it's not already set (preserve existing values)
+            wrongQuestions.forEach(question => {
+                if (!question.activityType) {
+                    const assignmentTitle = (question.assignmentTitle || '').toLowerCase();
+                    const questionType = (question.questionType || '').toLowerCase();
+                    const activityTitle = (question.activityTitle || '').toLowerCase();
+                    
+                    // Auto-assign activity type based on content - only if not already set
+                    if (assignmentTitle.includes('exam') || assignmentTitle.includes('final') || assignmentTitle.includes('midterm') || 
+                        questionType.includes('exam') || activityTitle.includes('exam')) {
+                        question.activityType = 'exams';
+                        question.source = 'exam';
+                    } else if (assignmentTitle.includes('quiz') || assignmentTitle.includes('test') || 
+                               questionType.includes('quiz') || activityTitle.includes('quiz')) {
+                        question.activityType = 'quizzes';
+                        question.source = 'quiz';
+                    } else if (assignmentTitle.includes('assignment') || assignmentTitle.includes('homework') || 
+                               assignmentTitle.includes('practice') || questionType.includes('assignment') || 
+                               questionType.includes('homework') || activityTitle.includes('assignment')) {
+                        question.activityType = 'assignments';
+                        question.source = 'assignment';
+                    } else {
+                        // Default to assignments if no clear indicator
+                        question.activityType = 'assignments';
+                        question.source = 'assignment';
+                    }
+                }
+            });
+            
+            // Save updated questions with activity types
+            localStorage.setItem('physicsWrongQuestions', JSON.stringify(wrongQuestions));
+            
+            console.log('Before final filter - wrongQuestions length:', wrongQuestions.length);
+            console.log('Before final filter - sample question:', wrongQuestions[0]);
+            
+            // Show all questions by default - don't filter them out
+            // The original filter was too restrictive and removed all questions
+            console.log('Skipping restrictive filter - showing all questions');
+            // wrongQuestions = wrongQuestions.filter(q => {
+            //     const keepQuestion = (q.folderId || q.subfolderId || (!q.activityType || q.activityType === 'custom')) && !q.inActivityFolder;
+            //     console.log('Question', q.id, 'keepQuestion:', keepQuestion, 'folderId:', q.folderId, 'subfolderId:', q.subfolderId, 'activityType:', q.activityType, 'inActivityFolder:', q.inActivityFolder);
+            //     return keepQuestion;
+            // });
+            
+            console.log('After final filter - wrongQuestions length:', wrongQuestions.length);
+            console.log('After final filter - wrongQuestions:', wrongQuestions);
+            
+            updateStats();
+            displayFolders();
+            displayQuestions();
+        }
+        
+        function updateStats() {
+            document.getElementById('totalWrong').textContent = wrongQuestions.length;
+        }
+        
+        function loadCustomFolders() {
+            customFolders = JSON.parse(localStorage.getItem('physicsCustomFolders')) || [];
+        }
+        
+        function saveCustomFolders() {
+            localStorage.setItem('physicsCustomFolders', JSON.stringify(customFolders));
+        }
+        
+        function showCreateFolderModal() {
+            document.getElementById('folderName').value = '';
+            document.getElementById('folderDescription').value = '';
+            const modal = new bootstrap.Modal(document.getElementById('createFolderModal'));
+            modal.show();
+        }
+        
+        function createFolder() {
+            const name = document.getElementById('folderName').value.trim();
+            const description = document.getElementById('folderDescription').value.trim();
+            
+            if (!name) {
+                alert('Please enter a folder name');
+                return;
+            }
+            
+            const folder = {
+                id: 'folder_' + Date.now(),
+                name: name,
+                description: description,
+                createdAt: new Date().toISOString(),
+                subject: 'physics'
+            };
+            
+            customFolders.push(folder);
+            saveCustomFolders();
+            
+            bootstrap.Modal.getInstance(document.getElementById('createFolderModal')).hide();
+            displayFolders();
+            alert('Folder created successfully!');
+        }
+        
+        function deleteFolder(folderId, event) {
+            event.stopPropagation();
+            if (confirm('Are you sure you want to delete this folder? Questions inside will not be deleted.')) {
+                customFolders = customFolders.filter(f => f.id !== folderId);
+                saveCustomFolders();
+                
+                // Remove folder association from questions
+                wrongQuestions.forEach(q => {
+                    if (q.folderId === folderId) {
+                        delete q.folderId;
+                    }
+                });
+                localStorage.setItem('physicsWrongQuestions', JSON.stringify(wrongQuestions));
+                
+                displayFolders();
+                displayQuestions();
+            }
+        }
+        
+        function openFolder(folderId, folderName) {
+            // Redirect to specific activity type page
+            switch(folderId) {
+                case 'assignments':
+                    window.location.href = 'physics-wrong-questions-assignments.html';
+                    break;
+                case 'quizzes':
+                    window.location.href = 'physics-wrong-questions-quizzes.html';
+                    break;
+                case 'exams':
+                    window.location.href = 'physics-wrong-questions-exams.html';
+                    break;
+                default:
+                    // For custom folders, toggle subfolder visibility
+                    const subfolderContainer = document.getElementById(`subfolders-${folderId}`);
+                    if (subfolderContainer) {
+                        subfolderContainer.style.display = subfolderContainer.style.display === 'none' ? 'block' : 'none';
+                    }
+                    
+                    // Set current folder for filtering
+                    if (currentFolder === folderId) {
+                        currentFolder = null;
+                        currentSubfolder = null;
+                    } else {
+                        currentFolder = folderId;
+                        currentSubfolder = null;
+                    }
+                    
+                    displayQuestions();
+                    break;
+            }
+        }
+        
+        function openSubfolder(subfolderId, subfolderName) {
+            // Set current subfolder for filtering
+            if (currentSubfolder === subfolderId) {
+                currentSubfolder = null;
+            } else {
+                currentSubfolder = subfolderId;
+            }
+            
+            displayQuestions();
+        }
+        
+        function getSubfoldersHtml(activityTypeId) {
+            const activitySubfolders = subfolders.filter(s => s.activityType === activityTypeId);
+            
+            if (activitySubfolders.length === 0) {
+                return '<div style="text-align: center; padding: 1rem; color: #666; font-style: italic;">No subfolders created yet</div>';
+            }
+            
+            let subfoldersHtml = '';
+            activitySubfolders.forEach(subfolder => {
+                const count = wrongQuestions.filter(q => q.subfolderId === subfolder.id).length;
+                
+                subfoldersHtml += `
+                    <div class="subfolder-item" onclick="openSubfolder('${subfolder.id}', '${subfolder.name.replace(/'/g, "\\'")}')">
+                        <div class="subfolder-icon">
+                            <iconify-icon icon="material-symbols:folder-open"></iconify-icon>
+                        </div>
+                        <div class="subfolder-content">
+                            <h5 class="subfolder-name">${subfolder.name}</h5>
+                            <p class="subfolder-count">${count} question${count !== 1 ? 's' : ''}</p>
+                        </div>
+                        <div class="subfolder-actions">
+                            <button class="btn btn-sm btn-outline-danger" onclick="deleteSubfolder('${subfolder.id}', event)" title="Delete Subfolder">
+                                <iconify-icon icon="material-symbols:delete"></iconify-icon>
+                            </button>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            return subfoldersHtml;
+        }
+        
+        function displayFolders() {
+            const foldersGrid = document.getElementById('foldersGrid');
+            if (!foldersGrid) return;
+            
+            let foldersHtml = '';
+            
+            // Add predefined activity type folders (Exams, Quizzes, Assignments)
+            const activityTypes = [
+                { id: 'exams', name: 'Exams', icon: 'material-symbols:quiz' },
+                { id: 'quizzes', name: 'Quizzes', icon: 'material-symbols:quiz' },
+                { id: 'assignments', name: 'Assignments', icon: 'material-symbols:assignment' }
+            ];
+            
+            activityTypes.forEach(activityType => {
+                // Get all questions (not just filtered ones) to count properly
+                const allQuestions = JSON.parse(localStorage.getItem('physicsWrongQuestions')) || [];
+                const count = allQuestions.filter(q => {
+                    // Use auto-assigned activity type or fallback to manual categorization
+                    return q.activityType === activityType.id || q.source === activityType.id.slice(0, -1);
+                }).length;
+                
+                foldersHtml += `
+                    <div class="folder-item" onclick="openFolder('${activityType.id}', '${activityType.name}')">
+                        <div class="folder-icon">
+                            <iconify-icon icon="${activityType.icon}"></iconify-icon>
+                        </div>
+                        <div class="folder-content">
+                            <h4 class="folder-name">${activityType.name}</h4>
+                            <p class="folder-count">${count} question${count !== 1 ? 's' : ''}</p>
+                        </div>
+                        <div class="folder-actions">
+                            <button class="btn btn-sm btn-outline-primary" onclick="event.stopPropagation(); showCreateSubfolderModal('${activityType.id}')" title="Create Subfolder">
+                                <iconify-icon icon="material-symbols:add-folder"></iconify-icon>
+                            </button>
+                        </div>
+                        <div class="subfolder-container" id="subfolders-${activityType.id}" style="display: none;">
+                            ${getSubfoldersHtml(activityType.id)}
+                        </div>
+                    </div>
+                `;
+            });
+            
+            // Add custom folders
+            customFolders.forEach(folder => {
+                const count = wrongQuestions.filter(q => q.folderId === folder.id).length;
+                
+                foldersHtml += `
+                    <div class="folder-item" onclick="openFolder('${folder.id}', '${folder.name.replace(/'/g, "\\'")}')">
+                        <div class="folder-icon">
+                            <iconify-icon icon="material-symbols:folder-special"></iconify-icon>
+                        </div>
+                        <div class="folder-content">
+                            <h4 class="folder-name">${folder.name}</h4>
+                            <p class="folder-count">${count} question${count !== 1 ? 's' : ''}</p>
+                            ${folder.description ? `<p style="font-size: 0.8rem; margin: 0; opacity: 0.7;">${folder.description}</p>` : ''}
+                        </div>
+                        <button class="btn btn-sm btn-outline-danger" onclick="deleteFolder('${folder.id}', event)" style="position: absolute; top: 0.5rem; right: 0.5rem; opacity: 0; transition: opacity 0.3s;">
+                            <iconify-icon icon="material-symbols:delete"></iconify-icon>
+                        </button>
+                    </div>
+                `;
+            });
+            
+            // Group questions by chapter (for other uncategorized)
+            const chapterGroups = {};
+            wrongQuestions.forEach(q => {
+                if (!q.folderId && q.chapter) {
+                    const chapter = q.chapter;
+                    const chapterLower = chapter.toLowerCase();
+                    // Skip if already in ch1, ch2, ch3
+                    if (!chapterLower.includes('ch1') && !chapterLower.includes('ch2') && !chapterLower.includes('ch3')) {
+                        if (!chapterGroups[chapter]) {
+                            chapterGroups[chapter] = [];
+                        }
+                        chapterGroups[chapter].push(q);
+                    }
+                }
+            });
+            
+            // Sort chapters
+            const sortedChapters = Object.keys(chapterGroups).sort();
+            
+            sortedChapters.forEach(chapter => {
+                const count = chapterGroups[chapter].length;
+                
+                foldersHtml += `
+                    <div class="folder-item" onclick="openFolder('chapter_${chapter.toLowerCase().replace(/[^a-z0-9]/g, '-')}', '${chapter.replace(/'/g, "\\'")}')">
+                        <div class="folder-icon">
+                            <iconify-icon icon="material-symbols:folder"></iconify-icon>
+                        </div>
+                        <div class="folder-content">
+                            <h4 class="folder-name">${chapter}</h4>
+                            <p class="folder-count">${count} question${count !== 1 ? 's' : ''}</p>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            foldersGrid.innerHTML = foldersHtml;
+            
+            // Add hover effect for delete buttons
+            document.querySelectorAll('.folder-item').forEach(item => {
+                const deleteBtn = item.querySelector('.btn-outline-danger');
+                if (deleteBtn) {
+                    item.addEventListener('mouseenter', () => {
+                        deleteBtn.style.opacity = '1';
+                    });
+                    item.addEventListener('mouseleave', () => {
+                        deleteBtn.style.opacity = '0';
+                    });
+                }
+            });
+        }
+        
+        function filterByChapter(chapter) {
+            if (currentFolder === chapter) {
+                currentFolder = null;
+            } else {
+                currentFolder = chapter;
+            }
+            displayFolders();
+            displayQuestions();
+        }
+        
+        function displayQuestions() {
+            // Questions are now displayed in individual folder pages
+            // This function is kept for compatibility but doesn't display anything
+            console.log('Questions are now displayed in individual folder pages (assignments, quizzes, exams)');
+        }
+        
+        function removeQuestion(questionId) {
+            if (confirm('Are you sure you want to remove this question from your wrong questions list?')) {
+                wrongQuestions = wrongQuestions.filter(q => q.id !== questionId);
+                localStorage.setItem('physicsWrongQuestions', JSON.stringify(wrongQuestions));
+                loadWrongQuestions();
+            }
+        }
+        
+        function markAsCorrect(questionId) {
+            if (confirm('Mark this question as correctly answered? It will be removed from your wrong questions list.')) {
+                wrongQuestions = wrongQuestions.filter(q => q.id !== questionId);
+                localStorage.setItem('physicsWrongQuestions', JSON.stringify(wrongQuestions));
+                loadWrongQuestions();
+            }
+        }
+        
+        function moveToFolder(questionId) {
+            const question = wrongQuestions.find(q => q.id === questionId);
+            if (!question) return;
+            
+            if (customFolders.length === 0) {
+                alert('No custom folders available. Please create a folder first.');
+                return;
+            }
+            
+            // Show folder selection
+            let folderOptions = customFolders.map((f, i) => `${i + 1}. ${f.name}`).join('\n');
+            const selectedFolderNum = prompt(`Select a folder to move this question:\n\n${folderOptions}\n\nEnter folder number (or 0 to remove from folder):`);
+            
+            if (selectedFolderNum === null) return; // Cancelled
+            
+            const folderIndex = parseInt(selectedFolderNum) - 1;
+            if (selectedFolderNum === '0') {
+                delete question.folderId;
+            } else if (folderIndex >= 0 && folderIndex < customFolders.length) {
+                question.folderId = customFolders[folderIndex].id;
+            } else {
+                alert('Invalid folder number');
+                return;
+            }
+            
+            // Update in storage
+            localStorage.setItem('physicsWrongQuestions', JSON.stringify(wrongQuestions));
+            loadWrongQuestions();
+        }
+        
+        // Subfolder Functions
+        function loadSubfolders() {
+            subfolders = JSON.parse(localStorage.getItem('physicsSubfolders')) || [];
+        }
+        
+        function saveSubfolders() {
+            localStorage.setItem('physicsSubfolders', JSON.stringify(subfolders));
+        }
+        
+        function showCreateSubfolderModal(activityType) {
+            document.getElementById('parentActivityType').value = activityType.charAt(0).toUpperCase() + activityType.slice(1);
+            document.getElementById('subfolderName').value = '';
+            document.getElementById('subfolderDescription').value = '';
+            document.getElementById('createSubfolderModal').setAttribute('data-activity-type', activityType);
+            const modal = new bootstrap.Modal(document.getElementById('createSubfolderModal'));
+            modal.show();
+        }
+        
+        function createSubfolder() {
+            const activityType = document.getElementById('createSubfolderModal').getAttribute('data-activity-type');
+            const name = document.getElementById('subfolderName').value.trim();
+            const description = document.getElementById('subfolderDescription').value.trim();
+            
+            if (!name) {
+                alert('Please enter a subfolder name');
+                return;
+            }
+            
+            const subfolder = {
+                id: 'subfolder_' + Date.now(),
+                name: name,
+                description: description,
+                activityType: activityType,
+                createdAt: new Date().toISOString(),
+                subject: 'physics'
+            };
+            
+            subfolders.push(subfolder);
+            saveSubfolders();
+            
+            bootstrap.Modal.getInstance(document.getElementById('createSubfolderModal')).hide();
+            displayFolders();
+            alert('Subfolder created successfully!');
+        }
+        
+        function deleteSubfolder(subfolderId, event) {
+            event.stopPropagation();
+            if (confirm('Are you sure you want to delete this subfolder? Questions inside will be moved back to the main activity folder.')) {
+                subfolders = subfolders.filter(s => s.id !== subfolderId);
+                saveSubfolders();
+                
+                // Remove subfolder association from questions
+                wrongQuestions.forEach(q => {
+                    if (q.subfolderId === subfolderId) {
+                        delete q.subfolderId;
+                    }
+                });
+                localStorage.setItem('physicsWrongQuestions', JSON.stringify(wrongQuestions));
+                
+                displayFolders();
+                displayQuestions();
+            }
+        }
+        
+        // Drag and Drop functionality removed - questions are now displayed in individual folder pages
+    </script>
+</body>
+</html>
+

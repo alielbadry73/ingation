@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Focus Mode Status</title>
+    <style>
+        body {
+            width: 350px;
+            padding: 15px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            margin: 0;
+        }
+        
+        h2 {
+            margin: 0 0 15px 0;
+            font-size: 1.3rem;
+        }
+        
+        .section {
+            background: rgba(255,255,255,0.1);
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+        
+        .timer {
+            font-size: 2rem;
+            font-weight: bold;
+            text-align: center;
+            margin: 10px 0;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .blocked-count {
+            text-align: center;
+            font-size: 1.1rem;
+            margin: 10px 0;
+        }
+        
+        .btn {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-bottom: 8px;
+            transition: all 0.3s;
+            font-size: 14px;
+        }
+        
+        .btn-primary {
+            background: white;
+            color: #667eea;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+        
+        .btn-secondary {
+            background: rgba(255,255,255,0.2);
+            color: white;
+        }
+        
+        .btn-secondary:hover {
+            background: rgba(255,255,255,0.3);
+        }
+        
+        .btn-danger {
+            background: #ef4444;
+            color: white;
+        }
+        
+        .info {
+            font-size: 0.85rem;
+            color: rgba(255,255,255,0.8);
+            text-align: center;
+            margin-top: 10px;
+        }
+        
+        .site-list {
+            max-height: 150px;
+            overflow-y: auto;
+            margin-top: 10px;
+        }
+        
+        .site-item {
+            background: rgba(255,255,255,0.1);
+            padding: 8px;
+            border-radius: 5px;
+            margin-bottom: 5px;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <h2>🎯 Focus Mode</h2>
+    
+    <div class="section">
+        <div id="statusText">Checking status...</div>
+        <div class="timer" id="timerDisplay">--:--</div>
+        <div class="blocked-count" id="blockedCount">0 sites blocked</div>
+    </div>
+    
+    <button class="btn btn-primary" onclick="quickStart()">
+        ⚡ Quick Start (5 min)
+    </button>
+    
+    <button class="btn btn-secondary" onclick="openFocusMode()">
+        📖 Open Focus Mode
+    </button>
+    
+    <button class="btn btn-danger" onclick="stopSession()">
+        ⏹️ Stop Session
+    </button>
+    
+    <div class="info">
+        Quick Start blocks Instagram & Facebook
+    </div>
+    
+    <script src="popup.js"></script>
+</body>
+</html>

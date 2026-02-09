@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Admin Sign In — IG Nation</title>
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="icon" type="image/png" sizes="32x32" href="images/favicon.png">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="css/vendor.css">
+    <link rel="stylesheet" type="text/css" href="style.css?v=4">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Jost:wght@400;600;700&family=Roboto+Slab&display=swap" rel="stylesheet">
+    <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
+    <style>
+        body { overflow-x: hidden; padding-top: 0 !important; }
+        .admin-login-page { min-height: 100vh; }
+        /* Hero-style section matching index.html */
+        .admin-hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 80px 0 100px;
+            position: relative;
+            overflow: hidden;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+        }
+        .admin-hero .parallax-element { position: absolute; z-index: 1; }
+        .admin-hero .float-1 { animation: float 6s ease-in-out infinite; }
+        .admin-hero .float-2 { animation: float 6s ease-in-out infinite; animation-delay: 3s; }
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+        .admin-hero .content-wrapper { position: relative; z-index: 3; }
+        .admin-hero .badge-pill {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            padding: 8px 20px;
+            border-radius: 25px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            font-size: 0.9rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+        .admin-hero h1 {
+            font-size: 2.75rem;
+            font-weight: 800;
+            color: white;
+            margin-bottom: 12px;
+            line-height: 1.2;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        .admin-hero .subtitle {
+            font-size: 1.1rem;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 0;
+        }
+        /* Login card - unified-card style like index */
+        .admin-login-card {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            padding: 2.5rem;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            border: none;
+        }
+        .admin-login-card:hover {
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+        .admin-login-card .card-title {
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 0.5rem;
+        }
+        .admin-login-card .form-label { color: #64748b; font-weight: 500; }
+        .admin-login-card .form-control {
+            border-radius: 12px;
+            border: 2px solid #e2e8f0;
+            padding: 12px 16px;
+        }
+        .admin-login-card .form-control:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+        }
+        .admin-login-btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border: none;
+            border-radius: 50px;
+            padding: 14px 28px;
+            color: white;
+            font-weight: 600;
+            width: 100%;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+        .admin-login-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+        .admin-login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.35);
+            color: white;
+        }
+        .admin-login-btn:hover::before { left: 100%; }
+        .admin-login-btn:disabled {
+            opacity: 0.8;
+            transform: none;
+        }
+        .admin-alert {
+            border-radius: 12px;
+            font-size: 0.9rem;
+        }
+        .admin-lockout {
+            background: rgba(220, 53, 69, 0.1);
+            border: 1px solid rgba(220, 53, 69, 0.3);
+            color: #b91c1c;
+            padding: 12px 16px;
+            border-radius: 12px;
+            margin-bottom: 1rem;
+            display: none;
+        }
+        .admin-lockout.show { display: block; }
+        .admin-back-link {
+            color: rgba(255,255,255,0.9);
+            text-decoration: none;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            margin-top: 1rem;
+            transition: opacity 0.2s;
+        }
+        .admin-back-link:hover { color: white; opacity: 1; }
+        .password-toggle-btn {
+            background: #f1f5f9;
+            border: 2px solid #e2e8f0;
+            border-left: 0;
+            border-radius: 0 12px 12px 0;
+            color: #64748b;
+            padding: 0 14px;
+        }
+        .password-toggle-btn:hover { background: #e2e8f0; color: #1e293b; }
+        .input-group .form-control { border-radius: 12px 0 0 12px; }
+        .input-group:focus-within .form-control,
+        .input-group:focus-within .password-toggle-btn { border-color: #667eea; }
+        /* Preserve exact casing as typed by user */
+        #adminEmail, #adminPassword {
+            text-transform: none !important;
+        }
+    </style>
+</head>
+<body class="admin-login-page">
+    <!-- Top bar - match index.html -->
+    <div class="top-utility-bar" style="position: relative; height: 60px; background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,0.08);">
+        <div class="container-fluid" style="position: relative; height: 100%;">
+            <div style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);">
+                <a href="index.html">
+                    <img src="images/ig-nation-logo-graduation.png" alt="IG Nation" style="height: 45px; width: auto;">
+                </a>
+            </div>
+            <div style="position: absolute; right: 20px; top: 50%; transform: translateY(-50%);">
+                <a href="index.html" class="admin-back-link" style="color: #333;">
+                    <iconify-icon icon="material-symbols:arrow-back"></iconify-icon>
+                    Back to site
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hero section with gradient - match index hero -->
+    <section class="admin-hero">
+        <div class="parallax-element float-1" style="top: -100px; right: -100px; width: 400px; height: 400px; background: rgba(255,255,255,0.1); border-radius: 50%;"></div>
+        <div class="parallax-element float-2" style="bottom: -150px; left: -150px; width: 500px; height: 500px; background: rgba(255,255,255,0.05); border-radius: 50%;"></div>
+        <div class="parallax-element" style="top: 50%; left: 50%; transform: translate(-50%, -50%); width: 300px; height: 300px; background: rgba(255,255,255,0.03); border-radius: 50%;"></div>
+        <div class="parallax-element float-1" style="top: 20%; left: 10%; width: 60px; height: 60px; background: rgba(255,255,255,0.1); border-radius: 15px; z-index: 2;"></div>
+        <div class="parallax-element float-2" style="top: 30%; right: 15%; width: 40px; height: 40px; background: rgba(255,255,255,0.08); border-radius: 50%; z-index: 2;"></div>
+
+        <div class="container content-wrapper">
+            <div class="row align-items-center justify-content-center">
+                <div class="col-lg-5 col-md-6 text-center text-lg-start mb-4 mb-lg-0">
+                    <div class="badge-pill">
+                        <iconify-icon icon="material-symbols:shield-lock" class="me-1" style="vertical-align: -0.2em;"></iconify-icon>
+                        Admin access
+                    </div>
+                    <h1>Admin Sign In</h1>
+                    <p class="subtitle">Use your administrator account to access the control panel. Sessions are secure and time-limited.</p>
+                </div>
+                <div class="col-lg-5 col-md-6">
+                    <div class="admin-login-card">
+                        <h2 class="card-title mb-1">
+                            <iconify-icon icon="material-symbols:admin-panel-settings" class="me-2" style="color: #667eea;"></iconify-icon>
+                            Control Panel
+                        </h2>
+                        <p class="text-muted small mb-4">Authorized personnel only</p>
+
+                        <div id="lockoutNotice" class="admin-lockout" role="alert">
+                            <iconify-icon icon="material-symbols:warning" class="me-1"></iconify-icon>
+                            Too many failed attempts. Try again in <span id="lockoutCountdown">2:00</span>.
+                        </div>
+                        <div id="loginError" class="alert alert-danger admin-alert" role="alert" style="display: none;"></div>
+                        <div id="loginSuccess" class="alert alert-success admin-alert" role="alert" style="display: none;"></div>
+
+                        <form id="adminLoginForm" novalidate>
+                            <div class="mb-3">
+                                <label for="adminEmail" class="form-label">Email address</label>
+                                <input type="email" id="adminEmail" name="email" class="form-control" placeholder="admin@example.com"
+                                       autocomplete="email" autocapitalize="off" autocorrect="off" required autofocus>
+                            </div>
+                            <div class="mb-4">
+                                <label for="adminPassword" class="form-label">Password</label>
+                                <div class="input-group">
+                                    <input type="password" id="adminPassword" name="password" class="form-control" placeholder="••••••••"
+                                           autocomplete="off" autocapitalize="off" autocorrect="off" required>
+                                    <button type="button" class="password-toggle-btn" id="togglePassword" aria-label="Show password">
+                                        <iconify-icon id="toggleIcon" icon="heroicons:eye-slash-20-solid"></iconify-icon>
+                                    </button>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn admin-login-btn" id="submitBtn">
+                                <span id="submitText">Sign in</span>
+                                <span id="submitSpinner" class="spinner-border spinner-border-sm ms-2" role="status" style="display: none;"></span>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        (function() {
+            // Clear stored admin login data on every visit/refresh so user must sign in again
+            localStorage.removeItem('adminToken');
+            localStorage.removeItem('adminLoggedIn');
+            localStorage.removeItem('adminEmail');
+
+            const MAX_FAILED_ATTEMPTS = 5;
+            const LOCKOUT_DURATION_MS = 2 * 60 * 1000;
+            const LOCKOUT_KEY = 'adminLoginLockoutUntil';
+            const FAILED_ATTEMPTS_KEY = 'adminLoginFailedCount';
+
+            function getApiUrl() {
+                if (window.API_CONFIG && window.API_CONFIG.apiURL) return window.API_CONFIG.apiURL;
+                return window.location.origin + '/api';
+            }
+
+            function isLockedOut() {
+                const until = localStorage.getItem(LOCKOUT_KEY);
+                if (!until) return false;
+                if (Date.now() >= parseInt(until, 10)) {
+                    localStorage.removeItem(LOCKOUT_KEY);
+                    localStorage.removeItem(FAILED_ATTEMPTS_KEY);
+                    return false;
+                }
+                return true;
+            }
+
+            function setLockout() {
+                const until = Date.now() + LOCKOUT_DURATION_MS;
+                localStorage.setItem(LOCKOUT_KEY, String(until));
+                localStorage.setItem(FAILED_ATTEMPTS_KEY, '0');
+                showLockout(until);
+            }
+
+            function getFailedCount() {
+                return parseInt(localStorage.getItem(FAILED_ATTEMPTS_KEY) || '0', 10);
+            }
+
+            function incrementFailed() {
+                const n = getFailedCount() + 1;
+                localStorage.setItem(FAILED_ATTEMPTS_KEY, String(n));
+                if (n >= MAX_FAILED_ATTEMPTS) setLockout();
+            }
+
+            function showLockout(untilMs) {
+                const el = document.getElementById('lockoutNotice');
+                const countEl = document.getElementById('lockoutCountdown');
+                el.classList.add('show');
+                document.getElementById('loginError').style.display = 'none';
+                function update() {
+                    const left = Math.max(0, untilMs - Date.now());
+                    if (left <= 0) {
+                        el.classList.remove('show');
+                        document.getElementById('submitBtn').disabled = false;
+                        return;
+                    }
+                    const m = Math.floor(left / 60000);
+                    const s = Math.floor((left % 60000) / 1000);
+                    countEl.textContent = m + ':' + (s < 10 ? '0' : '') + s;
+                    requestAnimationFrame(update);
+                }
+                update();
+                document.getElementById('submitBtn').disabled = true;
+            }
+
+            function showError(msg) {
+                const el = document.getElementById('loginError');
+                el.textContent = msg;
+                el.style.display = 'block';
+                document.getElementById('loginSuccess').style.display = 'none';
+            }
+            function showSuccess(msg) {
+                const el = document.getElementById('loginSuccess');
+                el.textContent = msg;
+                el.style.display = 'block';
+                document.getElementById('loginError').style.display = 'none';
+            }
+            function hideMessages() {
+                document.getElementById('loginError').style.display = 'none';
+                document.getElementById('loginSuccess').style.display = 'none';
+            }
+
+            document.getElementById('togglePassword').addEventListener('click', function() {
+                const input = document.getElementById('adminPassword');
+                const icon = document.getElementById('toggleIcon');
+                if (input.type === 'password') {
+                    input.type = 'text';
+                    icon.setAttribute('icon', 'heroicons:eye-20-solid');
+                    this.setAttribute('aria-label', 'Hide password');
+                } else {
+                    input.type = 'password';
+                    icon.setAttribute('icon', 'heroicons:eye-slash-20-solid');
+                    this.setAttribute('aria-label', 'Show password');
+                }
+            });
+
+            document.getElementById('adminLoginForm').addEventListener('submit', async function(e) {
+                e.preventDefault();
+                hideMessages();
+                const email = document.getElementById('adminEmail').value.trim();
+                const password = document.getElementById('adminPassword').value;
+                const submitBtn = document.getElementById('submitBtn');
+                const submitText = document.getElementById('submitText');
+                const submitSpinner = document.getElementById('submitSpinner');
+
+                if (!email) {
+                    showError('Please enter your email address.');
+                    return;
+                }
+                if (!password) {
+                    showError('Please enter your password.');
+                    return;
+                }
+                if (isLockedOut()) {
+                    showError('Too many failed attempts. Please wait before trying again.');
+                    return;
+                }
+
+                submitBtn.disabled = true;
+                submitText.textContent = 'Signing in…';
+                submitSpinner.style.display = 'inline-block';
+
+                try {
+                    const apiUrl = getApiUrl();
+                    const response = await fetch(apiUrl + '/login', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            email: email,
+                            password: password,
+                            userType: 'admin'
+                        })
+                    });
+                    const data = await response.json().catch(function() { return {}; });
+
+                    if (!response.ok) {
+                        incrementFailed();
+                        showError(data.error || data.message || 'Sign in failed. Check your credentials.');
+                        submitBtn.disabled = false;
+                        submitText.textContent = 'Sign in';
+                        submitSpinner.style.display = 'none';
+                        return;
+                    }
+
+                    if (!data.token || !data.user) {
+                        showError('Invalid response from server. Please try again.');
+                        submitBtn.disabled = false;
+                        submitText.textContent = 'Sign in';
+                        submitSpinner.style.display = 'none';
+                        return;
+                    }
+
+                    if (data.user.role !== 'admin' && data.user.userType !== 'admin') {
+                        showError('Access denied. This area is for administrators only.');
+                        submitBtn.disabled = false;
+                        submitText.textContent = 'Sign in';
+                        submitSpinner.style.display = 'none';
+                        return;
+                    }
+
+                    localStorage.setItem('adminToken', data.token);
+                    localStorage.setItem('adminLoggedIn', 'true');
+                    localStorage.setItem('adminEmail', email);
+                    localStorage.removeItem(FAILED_ATTEMPTS_KEY);
+                    localStorage.removeItem(LOCKOUT_KEY);
+                    showSuccess('Sign in successful. Redirecting…');
+                    submitText.textContent = 'Redirecting…';
+                    window.location.replace('admin-panel.html');
+                } catch (err) {
+                    showError('Network error. Please check your connection and try again.');
+                    submitBtn.disabled = false;
+                    submitText.textContent = 'Sign in';
+                    submitSpinner.style.display = 'none';
+                }
+            });
+
+            if (isLockedOut()) {
+                const until = parseInt(localStorage.getItem(LOCKOUT_KEY), 10);
+                showLockout(until);
+            }
+        })();
+    </script>
+</body>
+</html>

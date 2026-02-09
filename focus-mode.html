@@ -1,0 +1,929 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Focus Mode - ElBadry</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.iconify.design/3/3.1.1/iconify.min.js"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f0f9ff;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #0891b2 0%, #0e7490 100%);
+            color: white;
+            padding: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .back-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+        }
+        
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+        
+        .header h1 {
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin: 0;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .banner {
+            background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 16px;
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .banner-content h3 {
+            margin: 0 0 0.5rem 0;
+            font-size: 1.2rem;
+        }
+        
+        .banner-content p {
+            margin: 0;
+            opacity: 0.9;
+        }
+        
+        .install-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 500;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+        }
+        
+        .install-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+            color: white;
+        }
+        
+        .dismiss-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            padding: 0.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-left: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .dismiss-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+        
+        .main-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            border: 1px solid #e2e8f0;
+        }
+        
+        .card h2 {
+            color: #0e7490;
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .timer-modes {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .timer-mode-btn {
+            background: #f1f5f9;
+            border: 2px solid transparent;
+            padding: 1rem;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            font-weight: 500;
+        }
+        
+        .timer-mode-btn:hover {
+            background: #e2e8f0;
+            transform: translateY(-2px);
+        }
+        
+        .timer-mode-btn.active {
+            background: #0891b2;
+            color: white;
+            border-color: #0e7490;
+        }
+        
+        .timer-mode-btn small {
+            display: block;
+            font-size: 0.8rem;
+            opacity: 0.8;
+            margin-top: 0.25rem;
+        }
+        
+        .custom-timer-input {
+            display: none;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            background: #f8fafc;
+            border-radius: 12px;
+        }
+        
+        .custom-timer-input input {
+            padding: 0.5rem;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+        
+        .timer-display {
+            text-align: center;
+            margin: 2rem 0;
+        }
+        
+        .timer-display h3 {
+            font-size: 3rem;
+            font-weight: 700;
+            color: #0e7490;
+            margin-bottom: 1.5rem;
+        }
+        
+        .timer-controls {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+        }
+        
+        .timer-btn {
+            background: #0891b2;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .timer-btn:hover {
+            background: #0e7490;
+            transform: translateY(-2px);
+        }
+        
+        .timer-btn.secondary {
+            background: #64748b;
+        }
+        
+        .timer-btn.secondary:hover {
+            background: #475569;
+        }
+        
+        .timer-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .music-categories {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .music-category {
+            background: #f8fafc;
+            border: 2px solid #e2e8f0;
+            padding: 1rem;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+        
+        .music-category:hover {
+            background: #f1f5f9;
+            border-color: #0891b2;
+            transform: translateY(-2px);
+        }
+        
+        .music-category.active {
+            background: #0891b2;
+            color: white;
+            border-color: #0e7490;
+        }
+        
+        .music-category-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .music-category-name {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+        
+        .music-category-desc {
+            font-size: 0.8rem;
+            opacity: 0.8;
+        }
+        
+        .playlist {
+            max-height: 200px;
+            overflow-y: auto;
+            margin-bottom: 1.5rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 0.5rem;
+        }
+        
+        .playlist-item {
+            padding: 0.75rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .playlist-item:hover {
+            background: #f1f5f9;
+        }
+        
+        .playlist-item.active {
+            background: #0891b2;
+            color: white;
+        }
+        
+        .playlist-controls {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+        
+        .playlist-btn {
+            background: #0891b2;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+        
+        .playlist-btn:hover {
+            background: #0e7490;
+            transform: translateY(-2px);
+        }
+        
+        @media (max-width: 768px) {
+            .main-layout {
+                grid-template-columns: 1fr;
+            }
+            
+            .timer-modes {
+                grid-template-columns: 1fr;
+            }
+            
+            .music-categories {
+                grid-template-columns: 1fr;
+            }
+            
+            .timer-controls {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .playlist-controls {
+                flex-wrap: wrap;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button class="back-btn" onclick="window.location.href='index.html'">
+            ← Back
+        </button>
+        <h1>🎯 Focus Mode</h1>
+        <div></div>
+    </div>
+
+    <div class="container">
+        <!-- BlockSite Extension Banner -->
+        <div class="banner" id="blocksiteBanner">
+            <div class="banner-content">
+                <h3>🚀 Boost Your Focus with BlockSite</h3>
+                <p>Block distracting websites and stay focused on your goals</p>
+            </div>
+            <div>
+                <a href="https://chrome.google.com/webstore/detail/blocksite-website-blocker/eiimnmioipafcokbfiklfighhkaadclc" 
+                   class="install-btn" target="_blank" onclick="trackInstallClick()">
+                    📥 Get Extension
+                </a>
+                <button class="dismiss-btn" onclick="dismissBanner()">
+                    ✕
+                </button>
+            </div>
+        </div>
+        
+        <!-- Main Layout -->
+        <div class="main-layout">
+            <!-- Timer Section -->
+            <div class="card">
+                <h2>⏱️ Focus Timer</h2>
+                
+                <div class="timer-modes">
+                    <button class="timer-mode-btn active" onclick="setTimerMode('pomodoro')">
+                        🍅 Pomodoro<br><small id="pomodoroTime">25 min</small>
+                    </button>
+                    <button class="timer-mode-btn" onclick="setTimerMode('short')">
+                        ☕ Short Break<br><small>5 min</small>
+                    </button>
+                    <button class="timer-mode-btn" onclick="setTimerMode('long')">
+                        🌟 Long Break<br><small>15 min</small>
+                    </button>
+                    <button class="timer-mode-btn" onclick="setTimerMode('custom')">
+                        ⚙️ Custom
+                    </button>
+                </div>
+                
+                <!-- Custom Timer Input -->
+                <div id="customTimerInput" class="custom-timer-input">
+                    <input type="number" id="customMinutes" placeholder="Minutes" min="1" max="180">
+                    <button class="timer-btn secondary" onclick="setCustomTimer()">Set Timer</button>
+                </div>
+                
+                <!-- Pomodoro Progress Indicator -->
+                <div id="pomodoroProgress" style="display: none; text-align: center; margin: 1rem 0; padding: 1rem; background: #f0f9ff; border-radius: 12px;">
+                    <div style="font-size: 0.9rem; color: #64748b; margin-bottom: 0.5rem;">Pomodoro Session</div>
+                    <div style="display: flex; justify-content: center; gap: 0.5rem;">
+                        <span class="pomodoro-dot" id="pom1">🍅</span>
+                        <span class="pomodoro-dot" id="pom2">⚪</span>
+                        <span class="pomodoro-dot" id="pom3">⚪</span>
+                        <span class="pomodoro-dot" id="pom4">⚪</span>
+                    </div>
+                    <div style="font-size: 0.85rem; color: #64748b; margin-top: 0.5rem;" id="pomodoroStatus">Session 1 of 4</div>
+                </div>
+                
+                <div class="timer-display">
+                    <h3 id="timerDisplay">25:00</h3>
+                    <div class="timer-controls">
+                        <button class="timer-btn" id="startBtn" onclick="startTimer()">
+                            ▶️ Start
+                        </button>
+                        <button class="timer-btn secondary" onclick="pauseTimer()">
+                            ⏸️ Pause
+                        </button>
+                        <button class="timer-btn secondary" onclick="resetTimer()">
+                            🔄 Reset
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Music Section -->
+            <div class="card">
+                <h2>🎵 Focus Sounds</h2>
+                
+                <div class="music-categories" id="musicCategories">
+                    <!-- Music categories will be dynamically loaded here -->
+                </div>
+                
+                <div class="playlist" id="playlist">
+                    <!-- Playlist items will be dynamically loaded here -->
+                </div>
+                
+                <div class="playlist-controls">
+                    <button class="playlist-btn" onclick="playPrevious()">⏮️ Previous</button>
+                    <button class="playlist-btn" onclick="togglePlay()" id="playPauseBtn">▶️ Play</button>
+                    <button class="playlist-btn" onclick="playNext()">⏭️ Next</button>
+                    <button class="playlist-btn" onclick="toggleMute()" id="muteBtn">🔊 Unmute</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Timer Variables
+        let timerInterval = null;
+        let timeRemaining = 25 * 60; // 25 minutes in seconds
+        let totalTime = 25 * 60; // Store original total time
+        let isRunning = false;
+        let currentMode = 'pomodoro';
+        let sessionStartTime = null;
+        let pomodoroCount = 1;
+        let pomodoroDuration = 25;
+        let isBreakTime = false;
+        
+        // Music Variables
+        let currentCategory = null;
+        let currentTrackIndex = 0;
+        let isPlaying = false;
+        let currentAudio = null;
+        
+        // Music Library
+        const musicLibrary = [
+            { 
+                name: 'Lo-Fi Beats', 
+                description: 'Relaxing study beats', 
+                icon: '🎧',
+                playlist: [
+                    { title: 'Lo-Fi Study Beats', url: 'https://www.youtube.com/watch?v=5qap5aO4i9A', stream: 'https://stream.zeno.fm/f3wvbbqmdg8uv' },
+                    { title: 'Chill Lofi Study Music', url: 'https://www.youtube.com/watch?v=Dx5qFachd3A', stream: 'https://stream.zeno.fm/f3wvbbqmdg8uv' },
+                    { title: 'Peaceful Lo-Fi Hip Hop', url: 'https://www.youtube.com/watch?v=lTRiuFIWV54', stream: 'https://stream.zeno.fm/f3wvbbqmdg8uv' },
+                    { title: 'Study Lo-Fi Music Playlist', url: 'https://www.youtube.com/watch?v=PJL_mVgT0Ao', stream: 'https://stream.zeno.fm/f3wvbbqmdg8uv' },
+                    { title: 'Focus Music for Studying', url: 'https://www.youtube.com/watch?v=gaJWW413_3s', stream: 'https://stream.zeno.fm/f3wvbbqmdg8uv' }
+                ]
+            },
+            { 
+                name: 'Nature Sounds', 
+                description: 'Forest & wildlife', 
+                icon: '🌲',
+                playlist: [
+                    { title: 'Forest Ambience with Birds', url: 'https://www.youtube.com/watch?v=eKFTSSKCzWA', stream: 'https://stream.zeno.fm/f3wvbbqmdg8uv' },
+                    { title: 'Mountain Stream Sounds', url: 'https://www.youtube.com/watch?v=emEJvdQWRgY', stream: 'https://stream.zeno.fm/f3wvbbqmdg8uv' },
+                    { title: 'Jungle Sounds at Night', url: 'https://www.youtube.com/watch?v=UEQ-FNSbAhQ', stream: 'https://stream.zeno.fm/f3wvbbqmdg8uv' },
+                    { title: 'Campfire Crackling', url: 'https://www.youtube.com/watch?v=L_LUpnjgPso', stream: 'https://stream.zeno.fm/f3wvbbqmdg8uv' },
+                    { title: 'Wind Through Trees', url: 'https://www.youtube.com/watch?v=eKFTSSKCzWA', stream: 'https://stream.zeno.fm/f3wvbbqmdg8uv' }
+                ]
+            },
+            { 
+                name: 'Coffee Shop', 
+                description: 'Cafe atmosphere', 
+                icon: '☕',
+                playlist: [
+                    { title: 'Coffee Shop Ambience', url: 'https://www.youtube.com/watch?v=gaJWW413_3s', stream: 'https://stream.zeno.fm/f3wvbbqmdg8uv' },
+                    { title: 'Cozy Cafe Jazz', url: 'https://www.youtube.com/watch?v=Dx5qFachd3A', stream: 'https://stream.zeno.fm/f3wvbbqmdg8uv' },
+                    { title: 'Rainy Cafe Sounds', url: 'https://www.youtube.com/watch?v=5qap5aO4i9A', stream: 'https://stream.zeno.fm/f3wvbbqmdg8uv' },
+                    { title: 'Busy Coffee Shop', url: 'https://www.youtube.com/watch?v=gaJWW413_3s', stream: 'https://stream.zeno.fm/f3wvbbqmdg8uv' },
+                    { title: 'Morning Cafe Vibes', url: 'https://www.youtube.com/watch?v=Dx5qFachd3A', stream: 'https://stream.zeno.fm/f3wvbbqmdg8uv' }
+                ]
+            },
+            { 
+                name: 'Ocean Waves', 
+                description: 'Calming waves', 
+                icon: '🌊',
+                playlist: [
+                    { title: 'Ocean Waves - 10 Hours', url: 'https://www.youtube.com/watch?v=V1Pl8CzNzCw', stream: 'https://stream.zeno.fm/f3wvbbqmdg8uv' },
+                    { title: 'Beach Waves at Sunset', url: 'https://www.youtube.com/watch?v=bn9F19Hi1Lk', stream: 'https://stream.zeno.fm/f3wvbbqmdg8uv' },
+                    { title: 'Tropical Beach Sounds', url: 'https://www.youtube.com/watch?v=WHPEKLQID4U', stream: 'https://stream.zeno.fm/f3wvbbqmdg8uv' },
+                    { title: 'Gentle Ocean Waves', url: 'https://www.youtube.com/watch?v=V1Pl8CzNzCw', stream: 'https://stream.zeno.fm/f3wvbbqmdg8uv' },
+                    { title: 'Seagulls & Waves', url: 'https://www.youtube.com/watch?v=bn9F19Hi1Lk', stream: 'https://stream.zeno.fm/f3wvbbqmdg8uv' }
+                ]
+            },
+            { 
+                name: 'Piano Music', 
+                description: 'Classical piano', 
+                icon: '🎹',
+                playlist: [
+                    { title: 'Peaceful Piano Study Music', url: 'https://www.youtube.com/watch?v=lTRiuFIWV54', stream: 'https://stream.zeno.fm/f3wvbbqmdg8uv' },
+                    { title: 'Classical Piano Playlist', url: 'https://www.youtube.com/watch?v=PJL_mVgT0Ao', stream: 'https://stream.zeno.fm/f3wvbbqmdg8uv' },
+                    { title: 'Relaxing Piano Jazz', url: 'https://www.youtube.com/watch?v=Dx5qFachd3A', stream: 'https://stream.zeno.fm/f3wvbbqmdg8uv' },
+                    { title: 'Chopin Study Music', url: 'https://www.youtube.com/watch?v=wygy721nzRc', stream: 'https://stream.zeno.fm/f3wvbbqmdg8uv' },
+                    { title: 'Modern Piano Covers', url: 'https://www.youtube.com/watch?v=lTRiuFIWV54', stream: 'https://stream.zeno.fm/f3wvbbqmdg8uv' }
+                ]
+            },
+            { 
+                name: 'Binaural Beats', 
+                description: 'Focus frequencies', 
+                icon: '🔊',
+                playlist: [
+                    { title: 'Alpha Waves - Focus', url: 'https://www.youtube.com/watch?v=WPni755-Krg', stream: 'https://stream.zeno.fm/f3wvbbqmdg8uv' },
+                    { title: 'Beta Waves - Concentration', url: 'https://www.youtube.com/watch?v=N7x6TYUkjWs', stream: 'https://stream.zeno.fm/f3wvbbqmdg8uv' },
+                    { title: 'Theta Waves - Creativity', url: 'https://www.youtube.com/watch?v=2Cqh8l8FmP4', stream: 'https://stream.zeno.fm/f3wvbbqmdg8uv' },
+                    { title: '40Hz Gamma Waves', url: 'https://www.youtube.com/watch?v=iAYgPHF3KiY', stream: 'https://stream.zeno.fm/f3wvbbqmdg8uv' },
+                    { title: 'Study Focus Frequency', url: 'https://www.youtube.com/watch?v=WPni755-Krg', stream: 'https://stream.zeno.fm/f3wvbbqmdg8uv' }
+                ]
+            }
+        ];
+        
+        // Initialize music categories
+        function initializeMusicCategories() {
+            const container = document.getElementById('musicCategories');
+            container.innerHTML = '';
+            
+            musicLibrary.forEach((category, index) => {
+                const categoryDiv = document.createElement('div');
+                categoryDiv.className = 'music-category';
+                categoryDiv.onclick = () => selectCategory(index);
+                
+                categoryDiv.innerHTML = `
+                    <div class="music-category-icon">${category.icon}</div>
+                    <div class="music-category-name">${category.name}</div>
+                    <div class="music-category-desc">${category.description}</div>
+                `;
+                
+                container.appendChild(categoryDiv);
+            });
+        }
+        
+        // Select music category
+        function selectCategory(index) {
+            currentCategory = index;
+            currentTrackIndex = 0;
+            
+            // Update UI
+            document.querySelectorAll('.music-category').forEach((cat, i) => {
+                cat.classList.toggle('active', i === index);
+            });
+            
+            // Update playlist
+            updatePlaylist();
+        }
+        
+        // Update playlist display
+        function updatePlaylist() {
+            const playlistContainer = document.getElementById('playlist');
+            const category = musicLibrary[currentCategory];
+            
+            playlistContainer.innerHTML = '';
+            
+            category.playlist.forEach((track, index) => {
+                const trackDiv = document.createElement('div');
+                trackDiv.className = 'playlist-item';
+                trackDiv.onclick = () => selectTrack(index);
+                
+                trackDiv.innerHTML = `
+                    <span>${track.title}</span>
+                    <span>${index === currentTrackIndex && isPlaying ? '▶️' : ''}</span>
+                `;
+                
+                playlistContainer.appendChild(trackDiv);
+            });
+        }
+        
+        // Select track
+        function selectTrack(index) {
+            currentTrackIndex = index;
+            if (isPlaying) {
+                playCurrentTrack();
+            }
+            updatePlaylist();
+        }
+        
+        // Play current track
+        function playCurrentTrack() {
+            if (currentAudio) {
+                currentAudio.pause();
+            }
+            
+            const category = musicLibrary[currentCategory];
+            const track = category.playlist[currentTrackIndex];
+            
+            // For demo, we'll just update the UI
+            // In a real implementation, you'd load the audio
+            isPlaying = true;
+            updatePlaylist();
+            updatePlayPauseButton();
+        }
+        
+        // Toggle play/pause
+        function togglePlay() {
+            if (!currentCategory) {
+                selectCategory(0);
+            }
+            
+            if (isPlaying) {
+                pauseMusic();
+            } else {
+                playMusic();
+            }
+        }
+        
+        // Play music
+        function playMusic() {
+            isPlaying = true;
+            playCurrentTrack();
+        }
+        
+        // Pause music
+        function pauseMusic() {
+            isPlaying = false;
+            if (currentAudio) {
+                currentAudio.pause();
+            }
+            updatePlaylist();
+            updatePlayPauseButton();
+        }
+        
+        // Play previous track
+        function playPrevious() {
+            if (!currentCategory) return;
+            
+            currentTrackIndex = (currentTrackIndex - 1 + musicLibrary[currentCategory].playlist.length) % musicLibrary[currentCategory].playlist.length;
+            if (isPlaying) {
+                playCurrentTrack();
+            }
+            updatePlaylist();
+        }
+        
+        // Play next track
+        function playNext() {
+            if (!currentCategory) return;
+            
+            currentTrackIndex = (currentTrackIndex + 1) % musicLibrary[currentCategory].playlist.length;
+            if (isPlaying) {
+                playCurrentTrack();
+            }
+            updatePlaylist();
+        }
+        
+        // Toggle mute
+        function toggleMute() {
+            // For demo, just update the button
+            const muteBtn = document.getElementById('muteBtn');
+            muteBtn.textContent = muteBtn.textContent === '🔊 Unmute' ? '🔇 Mute' : '🔊 Unmute';
+        }
+        
+        // Update play/pause button
+        function updatePlayPauseButton() {
+            const btn = document.getElementById('playPauseBtn');
+            btn.textContent = isPlaying ? '⏸️ Pause' : '▶️ Play';
+        }
+        
+        // Timer Functions
+        function setTimerMode(mode) {
+            currentMode = mode;
+            
+            // Update UI
+            document.querySelectorAll('.timer-mode-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // Set timer based on mode
+            switch(mode) {
+                case 'pomodoro':
+                    timeRemaining = pomodoroDuration * 60;
+                    totalTime = timeRemaining;
+                    document.getElementById('pomodoroProgress').style.display = 'block';
+                    updatePomodoroProgress();
+                    break;
+                case 'short':
+                    timeRemaining = 5 * 60;
+                    totalTime = timeRemaining;
+                    document.getElementById('pomodoroProgress').style.display = 'none';
+                    break;
+                case 'long':
+                    timeRemaining = 15 * 60;
+                    totalTime = timeRemaining;
+                    document.getElementById('pomodoroProgress').style.display = 'none';
+                    break;
+                case 'custom':
+                    document.getElementById('customTimerInput').style.display = 'flex';
+                    document.getElementById('pomodoroProgress').style.display = 'none';
+                    break;
+            }
+            
+            updateTimerDisplay();
+            resetTimer();
+        }
+        
+        function setCustomTimer() {
+            const minutes = parseInt(document.getElementById('customMinutes').value);
+            if (minutes > 0 && minutes <= 180) {
+                timeRemaining = minutes * 60;
+                totalTime = timeRemaining;
+                updateTimerDisplay();
+                resetTimer();
+            }
+        }
+        
+        function startTimer() {
+            if (!isRunning) {
+                isRunning = true;
+                sessionStartTime = Date.now();
+                timerInterval = setInterval(updateTimer, 1000);
+                saveTimerState();
+                
+                document.getElementById('startBtn').disabled = true;
+                document.getElementById('startBtn').textContent = '⏸️ Running';
+            }
+        }
+        
+        function pauseTimer() {
+            if (isRunning) {
+                isRunning = false;
+                clearInterval(timerInterval);
+                saveTimerState();
+                
+                document.getElementById('startBtn').disabled = false;
+                document.getElementById('startBtn').textContent = '▶️ Start';
+            }
+        }
+        
+        function resetTimer() {
+            isRunning = false;
+            clearInterval(timerInterval);
+            
+            // Reset to original time based on mode
+            switch(currentMode) {
+                case 'pomodoro':
+                    timeRemaining = pomodoroDuration * 60;
+                    break;
+                case 'short':
+                    timeRemaining = 5 * 60;
+                    break;
+                case 'long':
+                    timeRemaining = 15 * 60;
+                    break;
+                case 'custom':
+                    const minutes = parseInt(document.getElementById('customMinutes').value);
+                    if (minutes > 0 && minutes <= 180) {
+                        timeRemaining = minutes * 60;
+                    }
+                    break;
+            }
+            
+            totalTime = timeRemaining;
+            sessionStartTime = null;
+            saveTimerState();
+            updateTimerDisplay();
+            
+            document.getElementById('startBtn').disabled = false;
+            document.getElementById('startBtn').textContent = '▶️ Start';
+        }
+        
+        function updateTimer() {
+            if (timeRemaining > 0) {
+                timeRemaining--;
+                updateTimerDisplay();
+                saveTimerState();
+            } else {
+                // Timer completed
+                pauseTimer();
+                alert('Timer completed! Take a break.');
+                
+                // Handle Pomodoro progression
+                if (currentMode === 'pomodoro') {
+                    pomodoroCount++;
+                    if (pomodoroCount <= 4) {
+                        updatePomodoroProgress();
+                    }
+                }
+            }
+        }
+        
+        function updateTimerDisplay() {
+            const minutes = Math.floor(timeRemaining / 60);
+            const seconds = timeRemaining % 60;
+            document.getElementById('timerDisplay').textContent = 
+                `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+        
+        function updatePomodoroProgress() {
+            const dots = document.querySelectorAll('.pomodoro-dot');
+            const status = document.getElementById('pomodoroStatus');
+            
+            dots.forEach((dot, index) => {
+                dot.textContent = index < pomodoroCount ? '🍅' : '⚪';
+            });
+            
+            status.textContent = `Session ${pomodoroCount} of 4`;
+        }
+        
+        // LocalStorage Functions
+        function saveTimerState() {
+            const state = {
+                mode: currentMode,
+                timeRemaining: timeRemaining,
+                totalTime: totalTime,
+                isRunning: isRunning,
+                sessionStartTime: sessionStartTime,
+                pomodoroCount: pomodoroCount,
+                pomodoroDuration: pomodoroDuration,
+                isBreakTime: isBreakTime
+            };
+            localStorage.setItem('focusTimerState', JSON.stringify(state));
+        }
+        
+        function loadTimerState() {
+            const savedState = localStorage.getItem('focusTimerState');
+            if (savedState) {
+                const state = JSON.parse(savedState);
+                currentMode = state.mode;
+                isRunning = state.isRunning;
+                sessionStartTime = state.sessionStartTime;
+                totalTime = state.totalTime || timeRemaining;
+                
+                if (state.pomodoroCount !== undefined) {
+                    pomodoroCount = state.pomodoroCount;
+                }
+                if (state.pomodoroDuration !== undefined) {
+                    pomodoroDuration = state.pomodoroDuration;
+                }
+                if (state.isBreakTime !== undefined) {
+                    isBreakTime = state.isBreakTime;
+                }
+                
+                if (currentMode === 'pomodoro') {
+                    document.getElementById('pomodoroProgress').style.display = 'block';
+                    updatePomodoroProgress();
+                }
+                
+                if (isRunning && sessionStartTime) {
+                    const elapsed = Math.floor((Date.now() - sessionStartTime) / 1000);
+                    timeRemaining = Math.max(0, state.totalTime - elapsed);
+                    
+                    if (timeRemaining > 0) {
+                        timerInterval = setInterval(updateTimer, 1000);
+                        document.getElementById('startBtn').disabled = true;
+                        document.getElementById('startBtn').textContent = '⏸️ Running';
+                    } else {
+                        timeRemaining = 0;
+                        updateTimerDisplay();
+                        pauseTimer();
+                    }
+                } else {
+                    timeRemaining = state.timeRemaining;
+                }
+                
+                updateTimerDisplay();
+            }
+        }
+        
+        // Banner Functions
+        function dismissBanner() {
+            document.getElementById('blocksiteBanner').style.display = 'none';
+            localStorage.setItem('bannerDismissed', 'true');
+        }
+        
+        function trackInstallClick() {
+            // Track installation clicks (for analytics)
+            console.log('Extension install clicked');
+        }
+        
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            loadTimerState();
+            initializeMusicCategories();
+            
+            // Check if banner was dismissed
+            if (localStorage.getItem('bannerDismissed') === 'true') {
+                document.getElementById('blocksiteBanner').style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>

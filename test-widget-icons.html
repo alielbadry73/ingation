@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Widget Icons Test</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            padding: 2rem;
+            color: white;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .demo-section {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .demo-section h2 {
+            margin-bottom: 1.5rem;
+            color: #667eea;
+        }
+        
+        /* Widget Preview */
+        .widget-preview {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 16px;
+            padding: 1.5rem 2rem;
+            box-shadow: 0 8px 32px rgba(102, 126, 234, 0.4);
+            display: inline-block;
+            min-width: 250px;
+        }
+        
+        .widget-header {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.85rem;
+            opacity: 0.9;
+            margin-bottom: 0.75rem;
+        }
+        
+        .widget-mode {
+            font-size: 1.2rem;
+        }
+        
+        .widget-timer {
+            font-size: 2.5rem;
+            font-weight: bold;
+            font-family: 'Courier New', monospace;
+            text-align: center;
+            letter-spacing: 2px;
+            margin-bottom: 0.75rem;
+        }
+        
+        .widget-actions {
+            display: flex;
+            gap: 0.5rem;
+            justify-content: center;
+        }
+        
+        .widget-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+        }
+        
+        .widget-btn i {
+            font-size: 1.1rem;
+            line-height: 1;
+        }
+        
+        .widget-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        
+        .widget-btn-open:hover {
+            background: rgba(34, 197, 94, 0.8);
+        }
+        
+        .widget-btn-pause:hover {
+            background: rgba(251, 191, 36, 0.8);
+        }
+        
+        .widget-btn-stop:hover {
+            background: rgba(239, 68, 68, 0.8);
+        }
+        
+        /* Icon Grid */
+        .icon-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+        
+        .icon-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.3s;
+        }
+        
+        .icon-card:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-4px);
+        }
+        
+        .icon-display {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: #667eea;
+        }
+        
+        .icon-name {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        
+        .icon-code {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 0.5rem;
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85rem;
+            margin-top: 0.5rem;
+        }
+        
+        /* Button States Demo */
+        .button-states {
+            display: flex;
+            gap: 2rem;
+            flex-wrap: wrap;
+            margin-top: 1.5rem;
+        }
+        
+        .button-demo {
+            text-align: center;
+        }
+        
+        .button-demo-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin: 0 auto 0.5rem;
+        }
+        
+        .button-demo-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+        }
+        
+        .demo-open:hover {
+            background: rgba(34, 197, 94, 0.8);
+        }
+        
+        .demo-pause:hover {
+            background: rgba(251, 191, 36, 0.8);
+        }
+        
+        .demo-stop:hover {
+            background: rgba(239, 68, 68, 0.8);
+        }
+        
+        .button-label {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+        
+        .color-badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            margin-top: 0.5rem;
+        }
+        
+        .badge-green {
+            background: rgba(34, 197, 94, 0.3);
+            color: #22c55e;
+        }
+        
+        .badge-yellow {
+            background: rgba(251, 191, 36, 0.3);
+            color: #fbbf24;
+        }
+        
+        .badge-red {
+            background: rgba(239, 68, 68, 0.3);
+            color: #ef4444;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎨 Focus Timer Widget - Icons Showcase</h1>
+        
+        <!-- Live Widget Preview -->
+        <div class="demo-section">
+            <h2>Live Widget Preview</h2>
+            <p>This is how the widget appears on dashboard pages:</p>
+            <div style="display: flex; justify-content: center; margin-top: 2rem;">
+                <div class="widget-preview">
+                    <div class="widget-header">
+                        <span class="widget-mode">🍅</span>
+                        <span class="widget-label">Focus Mode</span>
+                    </div>
+                    <div class="widget-timer">23:45</div>
+                    <div class="widget-actions">
+                        <button class="widget-btn widget-btn-open" title="Open Focus Mode">
+                            <i class="bi bi-box-arrow-up-right"></i>
+                        </button>
+                        <button class="widget-btn widget-btn-pause" title="Pause Timer">
+                            <i class="bi bi-pause-fill"></i>
+                        </button>
+                        <button class="widget-btn widget-btn-stop" title="Stop Timer">
+                            <i class="bi bi-x-lg"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <p style="text-align: center; margin-top: 1rem; opacity: 0.8;">
+                <small>Hover over the buttons to see the color effects!</small>
+            </p>
+        </div>
+        
+        <!-- Individual Icons -->
+        <div class="demo-section">
+            <h2>Widget Button Icons</h2>
+            <div class="icon-grid">
+                <div class="icon-card">
+                    <div class="icon-display">
+                        <i class="bi bi-box-arrow-up-right"></i>
+                    </div>
+                    <div class="icon-name">Open Focus Mode</div>
+                    <div class="icon-code">bi-box-arrow-up-right</div>
+                    <div class="color-badge badge-green">Green on Hover</div>
+                </div>
+                
+                <div class="icon-card">
+                    <div class="icon-display">
+                        <i class="bi bi-pause-fill"></i>
+                    </div>
+                    <div class="icon-name">Pause Timer</div>
+                    <div class="icon-code">bi-pause-fill</div>
+                    <div class="color-badge badge-yellow">Yellow on Hover</div>
+                </div>
+                
+                <div class="icon-card">
+                    <div class="icon-display">
+                        <i class="bi bi-x-lg"></i>
+                    </div>
+                    <div class="icon-name">Stop Timer</div>
+                    <div class="icon-code">bi-x-lg</div>
+                    <div class="color-badge badge-red">Red on Hover</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Button States -->
+        <div class="demo-section">
+            <h2>Interactive Button States</h2>
+            <p>Hover over each button to see the color change:</p>
+            <div class="button-states">
+                <div class="button-demo">
+                    <button class="button-demo-btn demo-open">
+                        <i class="bi bi-box-arrow-up-right"></i>
+                    </button>
+                    <div class="button-label">Open</div>
+                    <div class="color-badge badge-green">Green</div>
+                </div>
+                
+                <div class="button-demo">
+                    <button class="button-demo-btn demo-pause">
+                        <i class="bi bi-pause-fill"></i>
+                    </button>
+                    <div class="button-label">Pause</div>
+                    <div class="color-badge badge-yellow">Yellow</div>
+                </div>
+                
+                <div class="button-demo">
+                    <button class="button-demo-btn demo-stop">
+                        <i class="bi bi-x-lg"></i>
+                    </button>
+                    <div class="button-label">Stop</div>
+                    <div class="color-badge badge-red">Red</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Icon Details -->
+        <div class="demo-section">
+            <h2>Icon Details</h2>
+            <table style="width: 100%; border-collapse: collapse;">
+                <thead>
+                    <tr style="border-bottom: 2px solid rgba(255,255,255,0.1);">
+                        <th style="padding: 1rem; text-align: left;">Icon</th>
+                        <th style="padding: 1rem; text-align: left;">Name</th>
+                        <th style="padding: 1rem; text-align: left;">Action</th>
+                        <th style="padding: 1rem; text-align: left;">Hover Color</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+                        <td style="padding: 1rem; font-size: 1.5rem;">
+                            <i class="bi bi-box-arrow-up-right"></i>
+                        </td>
+                        <td style="padding: 1rem;">bi-box-arrow-up-right</td>
+                        <td style="padding: 1rem;">Opens Focus Mode page</td>
+                        <td style="padding: 1rem;">
+                            <span class="color-badge badge-green">Green</span>
+                        </td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+                        <td style="padding: 1rem; font-size: 1.5rem;">
+                            <i class="bi bi-pause-fill"></i>
+                        </td>
+                        <td style="padding: 1rem;">bi-pause-fill</td>
+                        <td style="padding: 1rem;">Pauses the countdown</td>
+                        <td style="padding: 1rem;">
+                            <span class="color-badge badge-yellow">Yellow</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 1rem; font-size: 1.5rem;">
+                            <i class="bi bi-x-lg"></i>
+                        </td>
+                        <td style="padding: 1rem;">bi-x-lg</td>
+                        <td style="padding: 1rem;">Stops and deletes timer</td>
+                        <td style="padding: 1rem;">
+                            <span class="color-badge badge-red">Red</span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- Test Links -->
+        <div class="demo-section">
+            <h2>Test the Widget</h2>
+            <p>Start a timer and see the widget in action:</p>
+            <div style="display: flex; gap: 1rem; flex-wrap: wrap; margin-top: 1rem;">
+                <a href="test-timer-widget.html" style="background: #667eea; color: white; padding: 0.75rem 1.5rem; border-radius: 8px; text-decoration: none; display: inline-block;">
+                    Start Test Timer
+                </a>
+                <a href="focus-mode.html" style="background: #764ba2; color: white; padding: 0.75rem 1.5rem; border-radius: 8px; text-decoration: none; display: inline-block;">
+                    Go to Focus Mode
+                </a>
+                <a href="physics-dashboard.html" style="background: #10b981; color: white; padding: 0.75rem 1.5rem; border-radius: 8px; text-decoration: none; display: inline-block;">
+                    View on Dashboard
+                </a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

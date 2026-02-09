@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cart Error Handling Test</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 800px;
+      margin: 50px auto;
+      padding: 20px;
+    }
+    .test-section {
+      margin: 20px 0;
+      padding: 15px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+    }
+    .test-section h3 {
+      margin-top: 0;
+      color: #333;
+    }
+    button {
+      margin: 5px;
+      padding: 10px 15px;
+      background: #007bff;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #0056b3;
+    }
+    #console-output {
+      background: #f5f5f5;
+      padding: 15px;
+      border-radius: 5px;
+      max-height: 400px;
+      overflow-y: auto;
+      font-family: monospace;
+      font-size: 12px;
+      white-space: pre-wrap;
+    }
+    .success { color: green; }
+    .error { color: red; }
+    .warning { color: orange; }
+  </style>
+</head>
+<body>
+  <h1>Cart Error Handling Test</h1>
+  <p>This page tests the error handling features implemented in tasks 14.1, 14.2, and 14.4</p>
+
+  <div class="test-section">
+    <h3>Task 14.1: CartErrorHandler Tests</h3>
+    <button onclick="testDuplicateError()">Test Duplicate Item Error</button>
+    <button onclick="testInvalidQuantity()">Test Invalid Quantity Error</button>
+    <button onclick="testRemoveNotFound()">Test Remove Not Found Error</button>
+    <button onclick="testValidationError()">Test Validation Error</button>
+  </div>
+
+  <div class="test-section">
+    <h3>Task 14.2: CartRecovery Tests</h3>
+    <button onclick="testRecoveryFromEnrollCourse()">Test Recovery from enrollCourse</button>
+    <button onclick="testRecoveryFromBookCart()">Test Recovery from bookCart</button>
+    <button onclick="testRecoveryPriority()">Test Recovery Priority</button>
+    <button onclick="testNoDataRecovery()">Test No Data Recovery</button>
+  </div>
+
+  <div class="test-section">
+    <h3>Task 14.4: InMemoryCart Tests</h3>
+    <button onclick="testInMemoryCart()">Test InMemoryCart Basic Operations</button>
+    <button onclick="testInMemoryCartNoPersistence()">Test No Persistence</button>
+  </div>
+
+  <div class="test-section">
+    <h3>Console Output</h3>
+    <button onclick="clearConsole()">Clear Console</button>
+    <button onclick="window.cartManager.debug()">Debug Cart</button>
+    <div id="console-output"></div>
+  </div>
+
+  <script src="backend/public/js/cart-manager.js"></script>
+  <script>
+    // Capture console output
+    const consoleOutput = document.getElementById('console-output');
+    const originalLog = console.log;
+    const originalError = console.error;
+    const originalWarn = console.warn;
+
+    function addToConsole(message, type = 'log') {
+      const line = document.createElement('div');
+      line.className = type;
+      line.textContent = message;
+      consoleOutput.appendChild(line);
+      consoleOutput.scrollTop = consoleOutput.scrollHeight;
+    }
+
+    console.log = function(...args) {
+      originalLog.apply(console, args);
+      addToConsole(args.join(' '), 'log');
+    };
+
+    console.error = function(...args) {
+      originalError.apply(console, args);
+      addToConsole('ERROR: ' + args.join(' '), 'error');
+    };
+
+    console.warn = function(...args) {
+      originalWarn.apply(console, args);
+      addToConsole('WARN: ' + args.join(' '), 'warning');
+    };
+
+    function clearConsole() {
+      consoleOutput.innerHTML = '';
+    }
+
+    // Task 14.1 Tests
+    function testDuplicateError() {
+      console.log('\n=== Testing Duplicate Item Error ===');
+      const item = {
+        id: 'test-course',
+        type: 'course',
+        title: 'Test Course',
+        price: 100,
+        quantity: 1
+      };
+      
+      window.cartManager.clearCart();
+      const result1 = window.cartManager.addToCart(item);
+      console.log('First add result:', result1);
+      
+      const result2 = window.cartManager.addToCart(item);
+      console.log('Second add result (should be false):', result2);
+      console.log('Expected: Error message about duplicate item');
+    }
+
+    function testInvalidQuantity() {
+      console.log('\n=== Testing Invalid Quantity Error ===');
+      const item = {
+        id: 'test-course-2',
+        type: 'course',
+        title: 'Test Course 2',
+        price: 100,
+        quantity: 1
+      };
+      
+      window.cartManager.clearCart();
+      window.cartManager.addToCart(item);
+      
+      console.log('Attempting to set quantity to -5...');
+      window.cartManager.updateQuantity('test-course-2', -5);
+      console.log('Expected: Error message about invalid quantity');
+      
+      console.log('Attempting to set quantity to NaN...');
+      window.cartManager.updateQuantity('test-course-2', NaN);
+      console.log('Expected: Error message about invalid quantity');
+    }
+
+    function testRemoveNotFound() {
+      console.log('\n=== Testing Remove Not Found Error ===');
+      window.cartManager.clearCart();
+      
+      console.log('Attempting to remove non-existent item...');
+      window.cartManager.removeFromCart('non-existent-id');
+      console.log('Expected: Error message about item not found');
+    }
+
+    function testValidationError() {
+      console.log('\n=== Testing Validation Error ===');
+      window.cartManager.clearCart();
+      
+      // Manually add invalid items to cart
+      window.cartManager.cart = [
+        { id: '1', type: 'course', title: 'Valid', price: 100 },
+        { type: 'course', title: 'Invalid - no id', price: 100 },
+        { id: '2', title: 'Invalid - no type', price: 100 },
+        { id: '3', type: 'course', price: 100 } // Invalid - no title
+      ];
+      
+      console.log('Cart before validation:', window.cartManager.cart.length, 'items');
+      window.cartManager.validateCart();
+      console.log('Cart after validation:', window.cartManager.cart.length, 'items');
+      console.log('Expected: 1 valid item remaining, warnings logged');
+    }
+
+    // Task 14.2 Tests
+    function testRecoveryFromEnrollCourse() {
+      console.log('\n=== Testing Recovery from enrollCourse ===');
+      window.cartManager.clearCart();
+      
+      const legacyData = {
+        id: 'physics',
+        title: 'Physics Course',
+        price: 150,
+        instructor: 'Dr. Smith'
+      };
+      
+      localStorage.setItem('enrollCourse', JSON.stringify(legacyData));
+      console.log('Set legacy enrollCourse data');
+      
+      const result = window.cartManager.recover();
+      console.log('Recovery result:', result);
+      console.log('Cart after recovery:', window.cartManager.getCart());
+      console.log('Expected: 1 item recovered from enrollCourse');
+    }
+
+    function testRecoveryFromBookCart() {
+      console.log('\n=== Testing Recovery from bookCart ===');
+      window.cartManager.clearCart();
+      
+      const bookData = [
+        { id: 'book1', type: 'book', title: 'Physics Book', price: 50, quantity: 1 }
+      ];
+      
+      localStorage.setItem('bookCart', JSON.stringify(bookData));
+      console.log('Set legacy bookCart data');
+      
+      const result = window.cartManager.recover();
+      console.log('Recovery result:', result);
+      console.log('Cart after recovery:', window.cartManager.getCart());
+      console.log('Expected: 1 item recovered from bookCart');
+    }
+
+    function testRecoveryPriority() {
+      console.log('\n=== Testing Recovery Priority ===');
+      window.cartManager.clearCart();
+      
+      const mainCart = [{ id: 'main', type: 'course', title: 'Main Cart', price: 100, quantity: 1 }];
+      const legacyCourse = { id: 'legacy', title: 'Legacy Course', price: 50 };
+      
+      localStorage.setItem('cart', JSON.stringify(mainCart));
+      localStorage.setItem('enrollCourse', JSON.stringify(legacyCourse));
+      console.log('Set both main cart and legacy data');
+      
+      const recovered = CartRecovery.attemptRecovery();
+      console.log('Recovered data:', recovered);
+      console.log('Expected: Main cart data (id: main), not legacy data');
+    }
+
+    function testNoDataRecovery() {
+      console.log('\n=== Testing No Data Recovery ===');
+      window.cartManager.clearCart();
+      localStorage.removeItem('enrollCourse');
+      localStorage.removeItem('bookCart');
+      sessionStorage.clear();
+      
+      const result = window.cartManager.recover();
+      console.log('Recovery result:', result);
+      console.log('Expected: false, no data to recover');
+    }
+
+    // Task 14.4 Tests
+    function testInMemoryCart() {
+      console.log('\n=== Testing InMemoryCart Basic Operations ===');
+      
+      const inMemoryCart = new InMemoryCart();
+      console.log('Created InMemoryCart instance');
+      
+      const item = {
+        id: 'test',
+        type: 'course',
+        title: 'Test Course',
+        price: 100,
+        quantity: 1
+      };
+      
+      inMemoryCart.addToCart(item);
+      console.log('Added item, cart count:', inMemoryCart.getCartCount());
+      
+      inMemoryCart.updateQuantity('test', 3);
+      console.log('Updated quantity to 3, cart count:', inMemoryCart.getCartCount());
+      
+      console.log('Cart total:', inMemoryCart.getCartTotal());
+      
+      inMemoryCart.removeFromCart('test');
+      console.log('Removed item, cart count:', inMemoryCart.getCartCount());
+      
+      console.log('Expected: All operations work without localStorage');
+    }
+
+    function testInMemoryCartNoPersistence() {
+      console.log('\n=== Testing InMemoryCart No Persistence ===');
+      
+      const inMemoryCart = new InMemoryCart();
+      
+      const item = {
+        id: 'test',
+        type: 'course',
+        title: 'Test Course',
+        price: 100,
+        quantity: 1
+      };
+      
+      inMemoryCart.addToCart(item);
+      console.log('Added item to InMemoryCart');
+      console.log('Cart count:', inMemoryCart.getCartCount());
+      
+      // Check localStorage
+      const stored = localStorage.getItem('cart');
+      console.log('localStorage.cart:', stored);
+      console.log('Expected: null (no persistence)');
+      console.log('InMemoryCart.persistent:', inMemoryCart.persistent);
+      console.log('Expected: false');
+    }
+
+    // Initial message
+    console.log('Cart Error Handling Test Page Loaded');
+    console.log('CartManager initialized:', !!window.cartManager);
+    console.log('Click buttons above to run tests');
+  </script>
+</body>
+</html>

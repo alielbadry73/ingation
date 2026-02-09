@@ -1,0 +1,27 @@
+{
+  "manifest_version": 3,
+  "name": "IG Nation Focus Mode Blocker",
+  "version": "1.0",
+  "description": "Blocks distracting websites during focus sessions",
+  "permissions": [
+    "storage",
+    "webNavigation",
+    "tabs"
+  ],
+  "host_permissions": [
+    "<all_urls>"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"],
+      "run_at": "document_start"
+    }
+  ],
+  "action": {
+    "default_popup": "popup.html"
+  }
+}

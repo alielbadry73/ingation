@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Site Blocked - Focus Mode Active</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+        
+        .container {
+            text-align: center;
+            padding: 3rem;
+            max-width: 600px;
+        }
+        
+        .icon {
+            font-size: 8rem;
+            margin-bottom: 2rem;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+        
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+        
+        p {
+            font-size: 1.3rem;
+            color: rgba(255,255,255,0.8);
+            margin-bottom: 1rem;
+            line-height: 1.6;
+        }
+        
+        .blocked-site {
+            background: rgba(239, 68, 68, 0.2);
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            font-size: 1.2rem;
+            color: #fca5a5;
+            margin: 2rem 0;
+            font-weight: 600;
+        }
+        
+        .timer {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #667eea;
+            margin: 2rem 0;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 3rem;
+        }
+        
+        .btn {
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+            border: none;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn-secondary {
+            background: rgba(255,255,255,0.1);
+            color: white;
+            border: 2px solid rgba(255,255,255,0.3);
+        }
+        
+        .btn-secondary:hover {
+            background: rgba(255,255,255,0.2);
+        }
+        
+        .motivational {
+            margin-top: 3rem;
+            font-size: 1.1rem;
+            color: rgba(255,255,255,0.6);
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="icon">🚫</div>
+        <h1>Website Blocked</h1>
+        <p>This site is blocked during your focus session.</p>
+        
+        <div class="blocked-site" id="blockedSite">Loading...</div>
+        
+        <p>Stay focused on your studies! 📚</p>
+        
+        <div class="timer" id="timeRemaining">Loading...</div>
+        
+        <div class="buttons">
+            <a href="http://localhost:3000/focus-mode.html" class="btn btn-primary">
+                Return to Focus Mode
+            </a>
+            <button onclick="endSession()" class="btn btn-secondary">
+                End Session Early
+            </button>
+        </div>
+        
+        <div class="motivational">
+            "Success is the sum of small efforts repeated day in and day out."
+        </div>
+    </div>
+    
+    <script>
+        // Get blocked site from URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const blockedSite = urlParams.get('site');
+        if (blockedSite) {
+            document.getElementById('blockedSite').textContent = blockedSite;
+        }
+        
+        function updateTimer() {
+            chrome.storage.local.get(['focusTimerState'], (data) => {
+                if (!data.focusTimerState) {
+                    document.getElementById('timeRemaining').textContent = 'No active session';
+                    return;
+                }
+                
+                try {
+                    const state = JSON.parse(data.focusTimerState);
+                    if (!state.isRunning || !state.sessionStartTime) {
+                        document.getElementById('timeRemaining').textContent = 'Session paused';
+                        return;
+                    }
+                    
+                    const elapsed = Math.floor((Date.now() - state.sessionStartTime) / 1000);
+                    const remaining = Math.max(0, state.totalTime - elapsed);
+                    
+                    if (remaining === 0) {
+                        document.getElementById('timeRemaining').textContent = 'Session Complete!';
+                        setTimeout(() => {
+                            window.location.href = 'http://localhost:3000/focus-mode.html';
+                        }, 2000);
+                        return;
+                    }
+                    
+                    const minutes = Math.floor(remaining / 60);
+                    const seconds = remaining % 60;
+                    
+                    document.getElementById('timeRemaining').textContent = 
+                        `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                } catch (e) {
+                    document.getElementById('timeRemaining').textContent = 'Error loading timer';
+                }
+            });
+        }
+        
+        function endSession() {
+            if (confirm('Are you sure you want to end your focus session early?')) {
+                chrome.storage.local.remove('focusTimerState', () => {
+                    alert('Focus session ended. Great effort!');
+                    window.location.href = 'http://localhost:3000/student-dashboard.html';
+                });
+            }
+        }
+        
+        // Update timer every second
+        updateTimer();
+        setInterval(updateTimer, 1000);
+    </script>
+</body>
+</html>

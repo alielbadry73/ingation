@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debug Flashcards</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-4">
+        <h2>Flashcards Debug</h2>
+        
+        <div class="row">
+            <div class="col-md-6">
+                <h3>Physics Categories</h3>
+                <pre id="physicsCategories"></pre>
+            </div>
+            <div class="col-md-6">
+                <h3>Physics Flashcards</h3>
+                <pre id="physicsFlashcards"></pre>
+            </div>
+        </div>
+        
+        <div class="row mt-4">
+            <div class="col-12">
+                <button class="btn btn-primary" onclick="clearAll()">Clear All Data</button>
+                <button class="btn btn-success" onclick="reload()">Reload</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function loadData() {
+            // Load categories
+            const categories = localStorage.getItem('physicsFlashcardsCategories');
+            document.getElementById('physicsCategories').textContent = categories || 'No categories found';
+            
+            // Load all flashcards
+            let allFlashcards = {};
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                if (key.startsWith('physicsFlashcards_')) {
+                    allFlashcards[key] = localStorage.getItem(key);
+                }
+            }
+            document.getElementById('physicsFlashcards').textContent = JSON.stringify(allFlashcards, null, 2);
+        }
+        
+        function clearAll() {
+            if (confirm('Clear all physics flashcard data?')) {
+                localStorage.removeItem('physicsFlashcardsCategories');
+                for (let i = 0; i < localStorage.length; i++) {
+                    const key = localStorage.key(i);
+                    if (key.startsWith('physicsFlashcards_')) {
+                        localStorage.removeItem(key);
+                    }
+                }
+                loadData();
+            }
+        }
+        
+        function reload() {
+            loadData();
+        }
+        
+        loadData();
+    </script>
+</body>
+</html>

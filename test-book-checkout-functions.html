@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Test Book Checkout Functions</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; }
+    button { padding: 10px 20px; margin: 5px; cursor: pointer; }
+    #output { margin-top: 20px; }
+    .book-card { border: 1px solid #ccc; padding: 10px; margin: 10px 0; border-radius: 5px; }
+  </style>
+</head>
+<body>
+  <h1>Test Book Checkout Functions</h1>
+  
+  <h2>Test Scenarios:</h2>
+  <button onclick="testScenario1()">Scenario 1: Empty Cart</button>
+  <button onclick="testScenario2()">Scenario 2: Physics Book in Cart</button>
+  <button onclick="testScenario3()">Scenario 3: All Books in Cart</button>
+  <button onclick="clearTestCart()">Clear Cart</button>
+  
+  <div id="output"></div>
+
+  <script>
+    // Simulate localStorage
+    localStorage.setItem('userEmail', 'alielbadry279@gmail.com');
+    localStorage.setItem('userId', '1');
+    localStorage.setItem('enrolledCourses', JSON.stringify([4, 1, 2])); // English, Physics, Math
+
+    let cart = [];
+
+    function testScenario1() {
+      cart = [];
+      localStorage.setItem('bookCart', JSON.stringify(cart));
+      showTestResults('Scenario 1: Empty Cart', 'Should show all 3 books (Physics, Math, English)');
+      testShowEnrolledCoursesBooks();
+    }
+
+    function testScenario2() {
+      cart = [{
+        id: 'physics-book-1',
+        title: 'IGCSE Physics Complete Guide',
+        author: 'Dr. Ahmed Hassan',
+        price: 150,
+        subject: 'Physics',
+        quantity: 1,
+        type: 'book'
+      }];
+      localStorage.setItem('bookCart', JSON.stringify(cart));
+      showTestResults('Scenario 2: Physics Book in Cart', 'Should show only 2 books (Math, English). Physics should be hidden.');
+      testShowEnrolledCoursesBooks();
+    }
+
+    function testScenario3() {
+      cart = [
+        {
+          id: 'physics-book-1',
+          title: 'IGCSE Physics Complete Guide',
+          author: 'Dr. Ahmed Hassan',
+          price: 150,
+          subject: 'Physics',
+          quantity: 1,
+          type: 'book'
+        },
+        {
+          id: 'math-book-1',
+          title: 'IGCSE Mathematics Mastery',
+          author: 'Dr. Mohamed Ali',
+          price: 150,
+          subject: 'Mathematics',
+          quantity: 1,
+          type: 'book'
+        },
+        {
+          id: 'english-book-1',
+          title: 'IGCSE English Language & Literature',
+          author: 'Ms. Fatima Ibrahim',
+          price: 150,
+          subject: 'English',
+          quantity: 1,
+          type: 'book'
+        }
+      ];
+      localStorage.setItem('bookCart', JSON.stringify(cart));
+      showTestResults('Scenario 3: All Books in Cart', 'Should show "All books already in cart!" message');
+      testShowEnrolledCoursesBooks();
+    }
+
+    function clearTestCart() {
+      cart = [];
+      localStorage.setItem('bookCart', JSON.stringify(cart));
+      document.getElementById('output').innerHTML = '<p style="color: green;">Cart cleared!</p>';
+    }
+
+    function showTestResults(title, expected) {
+      const output = document.getElementById('output');
+      output.innerHTML = `
+        <h3>${title}</h3>
+        <p><strong>Expected:</strong> ${expected}</p>
+        <p><strong>Current Cart:</strong> ${cart.length} item(s)</p>
+        <div id="testOutput"></div>
+      `;
+    }
+
+    async function getEnrolledCourses() {
+      const enrolledCourses = localStorage.getItem('enrolledCourses');
+      if (enrolledCourses) {
+        const courses = JSON.parse(enrolledCourses);
+        return Array.isArray(courses) ? courses : [];
+      }
+      return [];
+    }
+
+    async function testShowEnrolledCoursesBooks() {
+      const enrolledCourseIds = await getEnrolledCourses();
+      console.log('📚 Enrolled course IDs:', enrolledCourseIds);
+      
+      if (enrolledCourseIds.length === 0) {
+        document.getElementById('testOutput').innerHTML = '<p style="color: red;">No enrolled courses found</p>';
+        return;
+      }
+      
+      // Get list of book IDs already in cart
+      const booksInCart = new Set(
+        cart
+          .filter(item => item.type === 'book')
+          .map(item => item.id)
+      );
+      console.log('📦 Books already in cart:', Array.from(booksInCart));
+      
+      // Define available books for each subject
+      const availableBooks = {
+        'physics': {
+          id: 'physics-book-1',
+          title: 'IGCSE Physics Complete Guide',
+          author: 'Dr. Ahmed Hassan',
+          price: 150,
+          subject: 'Physics'
+        },
+        'mathematics': {
+          id: 'math-book-1',
+          title: 'IGCSE Mathematics Mastery',
+          author: 'Dr. Mohamed Ali',
+          price: 150,
+          subject: 'Mathematics'
+        },
+        'english': {
+          id: 'english-book-1',
+          title: 'IGCSE English Language & Literature',
+          author: 'Ms. Fatima Ibrahim',
+          price: 150,
+          subject: 'English'
+        }
+      };
+      
+      let booksHTML = '<h4>Available Books:</h4>';
+      let booksFound = false;
+      let booksSkipped = 0;
+      
+      enrolledCourseIds.forEach(courseId => {
+        let subject = '';
+        const courseIdStr = String(courseId);
+        
+        if (courseIdStr === '1') {
+          subject = 'physics';
+        } else if (courseIdStr === '2') {
+          subject = 'mathematics';
+        } else if (courseIdStr === '4') {
+          subject = 'english';
+        }
+        
+        if (subject && availableBooks[subject]) {
+          const book = availableBooks[subject];
+          
+          // Check if book is already in cart
+          if (booksInCart.has(book.id)) {
+            console.log('⏭️ Skipping book already in cart:', book.title);
+            booksSkipped++;
+            booksHTML += `<div class="book-card" style="background: #f0f0f0; opacity: 0.6;">
+              <strong>${book.title}</strong> - ${book.author}<br>
+              <em style="color: #666;">Already in cart (hidden in actual modal)</em>
+            </div>`;
+            return;
+          }
+          
+          booksFound = true;
+          booksHTML += `<div class="book-card" style="background: #e8f5e9;">
+            <strong>${book.title}</strong> - ${book.author}<br>
+            Subject: ${book.subject} | Price: ${book.price} EGP<br>
+            <button onclick="alert('Would add to cart')">Add to Cart</button>
+          </div>`;
+        }
+      });
+      
+      if (!booksFound) {
+        if (booksSkipped > 0) {
+          booksHTML += `<div style="background: #d4edda; padding: 15px; border-radius: 5px; color: #155724;">
+            <strong>✓ All books already in cart!</strong><br>
+            You've already added all available books for your enrolled courses to the cart.
+          </div>`;
+        } else {
+          booksHTML += `<div style="background: #d1ecf1; padding: 15px; border-radius: 5px; color: #0c5460;">
+            <strong>No books available yet</strong><br>
+            Books for your enrolled courses will be available soon.
+          </div>`;
+        }
+      }
+      
+      document.getElementById('testOutput').innerHTML = booksHTML;
+    }
+  </script>
+</body>
+</html>

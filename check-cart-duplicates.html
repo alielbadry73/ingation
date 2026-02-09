@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Check Cart Duplicates</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; }
+    pre { background: #f5f5f5; padding: 10px; border-radius: 5px; }
+    button { padding: 10px 20px; margin: 5px; cursor: pointer; }
+  </style>
+</head>
+<body>
+  <h1>Cart Duplicate Checker</h1>
+  
+  <button onclick="checkCart()">Check Cart</button>
+  <button onclick="removeDuplicates()">Remove Duplicates</button>
+  <button onclick="clearCart()">Clear Cart</button>
+  
+  <h2>Cart Contents:</h2>
+  <pre id="cartDisplay">Click "Check Cart" to see contents</pre>
+  
+  <h2>Analysis:</h2>
+  <div id="analysis"></div>
+
+  <script>
+    function checkCart() {
+      const bookCart = localStorage.getItem('bookCart');
+      const cart = localStorage.getItem('cart');
+      const enrollCourse = localStorage.getItem('enrollCourse');
+      
+      const display = document.getElementById('cartDisplay');
+      const analysis = document.getElementById('analysis');
+      
+      let output = '=== BOOK CART ===\n';
+      if (bookCart) {
+        const parsed = JSON.parse(bookCart);
+        output += `Length: ${parsed.length}\n`;
+        output += JSON.stringify(parsed, null, 2);
+      } else {
+        output += 'Empty or not found\n';
+      }
+      
+      output += '\n\n=== CART ===\n';
+      if (cart) {
+        const parsed = JSON.parse(cart);
+        output += `Length: ${parsed.length}\n`;
+        output += JSON.stringify(parsed, null, 2);
+      } else {
+        output += 'Empty or not found\n';
+      }
+      
+      output += '\n\n=== ENROLL COURSE ===\n';
+      if (enrollCourse) {
+        output += JSON.stringify(JSON.parse(enrollCourse), null, 2);
+      } else {
+        output += 'Empty or not found\n';
+      }
+      
+      display.textContent = output;
+      
+      // Analyze duplicates
+      if (bookCart) {
+        const parsed = JSON.parse(bookCart);
+        const ids = parsed.map(item => item.id);
+        const duplicates = ids.filter((id, index) => ids.indexOf(id) !== index);
+        
+        if (duplicates.length > 0) {
+          analysis.innerHTML = `<p style="color: red;"><strong>⚠️ DUPLICATES FOUND!</strong></p>
+            <p>Duplicate IDs: ${[...new Set(duplicates)].join(', ')}</p>
+            <p>Total items: ${parsed.length}</p>
+            <p>Unique items: ${new Set(ids).size}</p>`;
+        } else {
+          analysis.innerHTML = `<p style="color: green;"><strong>✓ No duplicates found</strong></p>
+            <p>Total items: ${parsed.length}</p>`;
+        }
+      }
+    }
+    
+    function removeDuplicates() {
+      const bookCart = localStorage.getItem('bookCart');
+      if (!bookCart) {
+        alert('No cart found');
+        return;
+      }
+      
+      const parsed = JSON.parse(bookCart);
+      console.log('Original cart:', parsed);
+      
+      // Remove duplicates by ID, keeping the first occurrence
+      const seen = new Set();
+      const unique = parsed.filter(item => {
+        if (seen.has(item.id)) {
+          console.log('Removing duplicate:', item);
+          return false;
+        }
+        seen.add(item.id);
+        return true;
+      });
+      
+      console.log('Unique cart:', unique);
+      
+      localStorage.setItem('bookCart', JSON.stringify(unique));
+      alert(`Removed ${parsed.length - unique.length} duplicate(s). Cart now has ${unique.length} item(s).`);
+      checkCart();
+    }
+    
+    function clearCart() {
+      if (confirm('Are you sure you want to clear the cart?')) {
+        localStorage.removeItem('bookCart');
+        localStorage.removeItem('cart');
+        localStorage.removeItem('enrollCourse');
+        alert('Cart cleared!');
+        checkCart();
+      }
+    }
+    
+    // Auto-check on load
+    window.onload = checkCart;
+  </script>
+</body>
+</html>

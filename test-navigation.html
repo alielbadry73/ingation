@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Navigation Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+        button {
+            padding: 15px 30px;
+            font-size: 16px;
+            margin: 10px;
+            cursor: pointer;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+        button:hover {
+            background: #45a049;
+        }
+        .info {
+            background: #f0f0f0;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Navigation Test Page</h1>
+    
+    <div class="info">
+        <h3>Current Page Info:</h3>
+        <p><strong>URL:</strong> <span id="currentUrl"></span></p>
+        <p><strong>Timestamp:</strong> <span id="timestamp"></span></p>
+    </div>
+
+    <h3>Test Navigation Methods:</h3>
+    <button onclick="testReplace()">Test window.location.replace()</button>
+    <button onclick="testHref()">Test window.location.href</button>
+    <button onclick="testAssign()">Test window.location.assign()</button>
+
+    <h3>Test Book Checkout:</h3>
+    <button onclick="goToBookCheckout()">Go to Book Checkout</button>
+
+    <script>
+        // Display current page info
+        document.getElementById('currentUrl').textContent = window.location.href;
+        document.getElementById('timestamp').textContent = new Date().toLocaleString();
+
+        function testReplace() {
+            console.log('Testing window.location.replace()');
+            window.location.replace('book-checkout.html');
+        }
+
+        function testHref() {
+            console.log('Testing window.location.href');
+            window.location.href = 'book-checkout.html';
+        }
+
+        function testAssign() {
+            console.log('Testing window.location.assign()');
+            window.location.assign('book-checkout.html');
+        }
+
+        function goToBookCheckout() {
+            // Simulate the exact code from library pages
+            sessionStorage.setItem('validNavigation', 'true');
+            
+            if (typeof window.allowNavigation === 'function') {
+                window.allowNavigation();
+            }
+            
+            console.log('Navigating to book-checkout.html');
+            window.location.replace('book-checkout.html');
+        }
+
+        console.log('Test page loaded at:', new Date().toLocaleString());
+        console.log('No navigation blocking on this page');
+    </script>
+</body>
+</html>

@@ -1,0 +1,1313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Physics Daily Practice - IG Nation</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/iconify-icon@1.0.7/dist/iconify-icon.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Jost:wght@400;600;700&family=Roboto+Slab:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/iconify-icon@1.0.7/dist/iconify-icon.min.js"></script>
+    <script src="js/notifications.js"></script>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Jost', sans-serif;
+            background: #F8F8F8;
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+
+        /* Dashboard Header Styles */
+        .dashboard-header {
+            background: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .dashboard-header .container-fluid {
+            padding: 0;
+        }
+
+        .dashboard-header .row {
+            margin: 0;
+            align-items: center;
+            min-height: 70px;
+        }
+
+        .dashboard-nav {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .dashboard-nav .nav-link {
+            color: #333;
+            text-decoration: none;
+            font-weight: 600;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .dashboard-nav .nav-link:hover {
+            background: #f8f9fa;
+            color: #667eea;
+        }
+
+        .dashboard-nav .nav-link.active {
+            background: #667eea;
+            color: white;
+        }
+
+        .dashboard-nav .nav-link:active {
+            background: #5a6fd8;
+            color: white;
+        }
+
+        .main-content {
+            padding: 0;
+        }
+
+        /* Hero Section */
+        .hero-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 4rem 0;
+            color: white;
+        }
+
+        .page-title {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .page-title h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: white;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .page-title p {
+            font-size: 1.3rem;
+            color: rgba(255,255,255,0.9);
+            opacity: 1;
+            font-weight: 400;
+        }
+
+        /* Progress Overview Cards */
+        .progress-overview {
+            margin-top: 2rem;
+        }
+
+        .progress-card {
+            background: rgba(255,255,255,0.15);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 1.5rem;
+            text-align: center;
+            border: 1px solid rgba(255,255,255,0.2);
+            transition: all 0.3s ease;
+            height: 100%;
+        }
+
+        .progress-card:hover {
+            transform: translateY(-4px);
+            background: rgba(255,255,255,0.25);
+        }
+
+        .progress-card .progress-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: white;
+        }
+
+        .progress-card .progress-info h3 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin: 0;
+            color: white;
+        }
+
+        .progress-card .progress-info p {
+            margin: 0.5rem 0 0 0;
+            color: rgba(255,255,255,0.8);
+            font-size: 0.9rem;
+        }
+
+        /* Sections */
+        .quick-actions-section,
+        .practice-folders-section {
+            padding: 4rem 0;
+        }
+
+        .quick-actions-section {
+            background: #f8f9fa;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .section-header h3 {
+            color: #1e293b;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            font-size: 2rem;
+        }
+
+        .section-header p {
+            color: #64748b;
+            margin: 0;
+            font-size: 1.1rem;
+        }
+
+        /* Wrong Questions Folder Styles */
+        .wrong-questions-folder {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            margin: 2rem auto;
+            max-width: 800px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e2e8f0;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border-left: 5px solid #ef4444;
+        }
+
+        .wrong-questions-folder:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+        }
+
+        .folder-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+        }
+
+        .folder-info {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .folder-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3);
+        }
+
+        .folder-details h4 {
+            color: #1e293b;
+            font-weight: 700;
+            margin: 0;
+            font-size: 1.3rem;
+        }
+
+        .folder-details p {
+            color: #64748b;
+            margin: 0.5rem 0 0 0;
+            font-size: 0.9rem;
+        }
+
+        .folder-stats {
+            background: rgba(239, 68, 68, 0.1);
+            padding: 1rem;
+            border-radius: 12px;
+            text-align: center;
+            min-width: 100px;
+        }
+
+        .stats-number {
+            color: #ef4444;
+            font-weight: 700;
+            font-size: 1.5rem;
+            margin: 0;
+        }
+
+        .stats-label {
+            color: #64748b;
+            font-size: 0.8rem;
+            margin: 0.25rem 0 0 0;
+        }
+
+        .folder-arrow {
+            font-size: 1.5rem;
+            color: #cbd5e1;
+            transition: all 0.3s ease;
+        }
+
+        .wrong-questions-folder:hover .folder-arrow {
+            color: #ef4444;
+            transform: translateX(5px);
+        }
+
+
+        /* Practice Folders Section */
+        .practice-folders-section {
+            margin-top: 3rem;
+            padding: 2rem 0;
+        }
+
+        .folders-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        .folder-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: 2px solid transparent;
+        }
+
+        .folder-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            border-color: #667eea;
+        }
+
+        .folder-card-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .folder-card-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1rem;
+            font-size: 1.2rem;
+        }
+
+        .folder-card-title {
+            font-weight: 600;
+            color: #333;
+            margin: 0;
+        }
+
+        .folder-card-stats {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid #f0f0f0;
+        }
+
+        .folder-question-count {
+            color: #667eea;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .folder-questions-preview {
+            margin-top: 1rem;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .question-preview-item {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 0.75rem;
+            margin-bottom: 0.5rem;
+            border-left: 3px solid #667eea;
+            transition: all 0.2s ease;
+        }
+
+        .question-preview-item:hover {
+            background: #e9ecef;
+            transform: translateX(4px);
+        }
+
+        .question-preview-text {
+            font-size: 0.85rem;
+            color: #333;
+            margin: 0;
+            line-height: 1.4;
+        }
+
+        .question-preview-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 0.5rem;
+            font-size: 0.75rem;
+            color: #666;
+        }
+
+        .question-type-badge {
+            background: #667eea;
+            color: white;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            font-weight: 600;
+        }
+
+        .question-difficulty-badge {
+            background: #f59e0b;
+            color: white;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            font-weight: 600;
+        }
+
+        .empty-folder-state {
+            text-align: center;
+            padding: 2rem;
+            color: #666;
+        }
+
+        .empty-folder-state iconify-icon {
+            font-size: 3rem;
+            color: #ccc;
+            margin-bottom: 1rem;
+        }
+
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .page-title h1 {
+                font-size: 2.5rem;
+            }
+
+            .progress-overview .row {
+                margin: 0 -0.5rem;
+            }
+
+            .progress-overview .col-md-3 {
+                padding: 0 0.5rem;
+                margin-bottom: 1rem;
+            }
+
+            .progress-card {
+                padding: 1rem;
+            }
+
+            .progress-card .progress-info h3 {
+                font-size: 1.5rem;
+            }
+
+            .section-header h3 {
+                font-size: 1.5rem;
+            }
+
+            .folders-container {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .activity-item {
+                padding: 1rem;
+            }
+
+            .activity-stats {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Dashboard Header -->
+    <header class="dashboard-header">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-6">
+                    <div class="dashboard-nav">
+                        <!-- Hamburger Menu Button -->
+                        <button class="hamburger-menu-btn" onclick="toggleSidebar()" style="width: 45px; height: 45px; background: white; border: 1px solid #e9ecef; border-radius: 8px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.1); margin-right: 1rem;" onmouseover="this.style.boxShadow='0 4px 8px rgba(0,0,0,0.15)'" onmouseout="this.style.boxShadow='0 2px 4px rgba(0,0,0,0.1)'">
+                            <iconify-icon icon="material-symbols:menu" style="font-size: 1.5rem; color: #333;"></iconify-icon>
+                        </button>
+                        
+                        <!-- Page Title -->
+                        <h2 style="margin: 0; color: #333; font-weight: 700; font-size: 1.5rem;">Physics Daily Practice</h2>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="d-flex justify-content-end align-items-center gap-2">
+                        <!-- IG Nation Logo -->
+                        <a href="student-dashboard.html" style="margin-right: 2rem; display: flex; align-items: center; text-decoration: none;">
+                            <img src="images/ig-nation-logo-graduation.png" alt="IG Nation" style="height: 45px; width: auto;">
+                        </a>
+                        
+                        <!-- Focus Mode Button -->
+                        <button class="nav-icon-btn" onclick="navigateToFocusMode()" style="width: 45px; height: 45px; background: white; border: 1px solid #e9ecef; border-radius: 8px; cursor: pointer; transition: all 0.3s ease; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 4px rgba(0,0,0,0.1);" onmouseover="this.style.boxShadow='0 4px 8px rgba(0,0,0,0.15)'" onmouseout="this.style.boxShadow='0 2px 4px rgba(0,0,0,0.1)'">
+                            <img src="images/7898418_focus_business_finance_office_marketing_icon.png" alt="Focus" style="width: 20px; height: 20px; filter: brightness(0) invert(0);">
+                        </button>
+                        
+                        <!-- Notifications Button -->
+                        <button class="nav-icon-btn" onclick="showNotificationsModal()" style="width: 45px; height: 45px; background: white; border: 1px solid #e9ecef; border-radius: 8px; cursor: pointer; transition: all 0.3s ease; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 4px rgba(0,0,0,0.1); position: relative;" onmouseover="this.style.boxShadow='0 4px 8px rgba(0,0,0,0.15)'" onmouseout="this.style.boxShadow='0 2px 4px rgba(0,0,0,0.1)'">
+                            <iconify-icon icon="material-symbols:notifications" style="font-size: 1.2rem; color: #333;"></iconify-icon>
+                            <span id="notificationBadge" style="position: absolute; top: -5px; right: -5px; background: #ef4444; color: white; border-radius: 50%; width: 18px; height: 18px; font-size: 0.7rem; display: flex; align-items: center; justify-content: center; font-weight: 700;">0</span>
+                        </button>
+                        
+                        <!-- Community Button -->
+                        <button class="nav-icon-btn" onclick="navigateToCommunity()" style="width: 45px; height: 45px; background: white; border: 1px solid #e9ecef; border-radius: 8px; cursor: pointer; transition: all 0.3s ease; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 4px rgba(0,0,0,0.1);" onmouseover="this.style.boxShadow='0 4px 8px rgba(0,0,0,0.15)'" onmouseout="this.style.boxShadow='0 2px 4px rgba(0,0,0,0.1)'">
+                            <img src="images/4213440_community_group_leader_people_team_icon.png" alt="Community" style="width: 20px; height: 20px; filter: brightness(0) invert(0);">
+                        </button>
+                        
+                        <!-- Profile Button -->
+                        <button class="nav-icon-btn" onclick="navigateToProfile()" style="width: 45px; height: 45px; background: white; border: 1px solid #e9ecef; border-radius: 8px; cursor: pointer; transition: all 0.3s ease; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 4px rgba(0,0,0,0.1);" onmouseover="this.style.boxShadow='0 4px 8px rgba(0,0,0,0.15)'" onmouseout="this.style.boxShadow='0 2px 4px rgba(0,0,0,0.1)'">
+                            <img src="images/4092564_profile_about_mobile ui_user_icon.png" alt="Profile" style="width: 20px; height: 20px; filter: brightness(0) invert(0);">
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Hero Section -->
+        <section class="hero-section">
+            <div class="container">
+        <div class="page-title">
+            <h1>🎯 Physics Daily Practice</h1>
+                    <p>Sharpen your skills with daily practice questions and track your progress</p>
+        </div>
+
+                <!-- Progress Overview Cards -->
+                <div class="progress-overview">
+                    <div class="row g-4">
+                        <div class="col-md-3">
+                            <div class="progress-card">
+                                <div class="progress-icon">
+                                    <iconify-icon icon="material-symbols:quiz"></iconify-icon>
+                                </div>
+                                <div class="progress-info">
+                                    <h3 id="totalQuestions">0</h3>
+                                    <p>Total Questions</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="progress-card">
+                                <div class="progress-icon">
+                                    <iconify-icon icon="material-symbols:check-circle"></iconify-icon>
+                                </div>
+                                <div class="progress-info">
+                                    <h3 id="correctlySolved">0</h3>
+                                    <p>Correctly Solved</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="progress-card">
+                                <div class="progress-icon">
+                                    <iconify-icon icon="material-symbols:trending-up"></iconify-icon>
+                                </div>
+                                <div class="progress-info">
+                                    <h3 id="streakDays">0</h3>
+                                    <p>Day Streak</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="progress-card">
+                                <div class="progress-icon">
+                                    <iconify-icon icon="material-symbols:star"></iconify-icon>
+                                </div>
+                                <div class="progress-info">
+                                    <h3 id="accuracyRate">0%</h3>
+                                    <p>Accuracy Rate</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Practice Questions Folders Section -->
+        <section class="practice-folders-section">
+            <div class="container">
+            <div class="section-header">
+                    <h3>📚 Practice Question Folders</h3>
+                    <p>Organized practice questions by topics and difficulty levels</p>
+            </div>
+            
+            <div id="foldersContainer" class="folders-container">
+                <!-- Folders will be loaded here -->
+            </div>
+        </div>
+        </section>
+
+        <!-- Wrong Questions Section -->
+        <section class="quick-actions-section">
+            <div class="container">
+                <div class="row g-4 justify-content-center">
+                    <div class="col-md-8">
+                        <!-- Wrong Questions Folder -->
+                        <div class="wrong-questions-folder" onclick="navigateToWrongQuestions()">
+                            <div class="folder-content">
+                                <div class="folder-info">
+                                    <div class="folder-icon">
+                                        <iconify-icon icon="material-symbols:close-rounded"></iconify-icon>
+                                    </div>
+                                    <div class="folder-details">
+                                        <h4>Review Wrong Questions</h4>
+                                        <p>Learn from your mistakes and improve</p>
+                                    </div>
+                                </div>
+                                <div class="folder-stats">
+                                    <div class="stats-number" id="wrongQuestionsCount">0</div>
+                                    <div class="stats-label">Questions to review</div>
+                                </div>
+                                <iconify-icon icon="material-symbols:arrow-forward-rounded" class="folder-arrow"></iconify-icon>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+    </main>
+
+    <script>
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            loadWrongQuestionsCount();
+            loadPracticeFolders();
+            loadProgressStats();
+            
+            // Listen for localStorage changes to update wrong questions count
+            window.addEventListener('storage', function() {
+                loadWrongQuestionsCount();
+                loadProgressStats();
+            });
+            
+            // Also listen for custom event for same-tab updates
+            document.addEventListener('localStorageUpdated', function() {
+                loadWrongQuestionsCount();
+                loadProgressStats();
+            });
+            
+            // Update count every 5 seconds to ensure it stays current
+            setInterval(function() {
+                loadWrongQuestionsCount();
+                loadProgressStats();
+            }, 5000);
+        });
+
+        // Header navigation functions
+        function toggleSidebar() {
+            // Toggle sidebar functionality
+            console.log('Toggle sidebar');
+        }
+
+        function navigateToFocusMode() {
+            window.location.href = 'focus-mode.html';
+        }
+
+        function navigateToNotifications() {
+            window.location.href = 'notifications.html';
+        }
+
+        function navigateToCommunity() {
+            window.location.href = 'physics-community.html';
+        }
+
+        function navigateToProfile() {
+            window.location.href = 'student-profile.html';
+        }
+
+        // Wrong Questions functionality
+        function navigateToWrongQuestions() {
+            // Load wrong questions from localStorage
+            const answeredQuestions = JSON.parse(localStorage.getItem('physicsAnsweredQuestions') || '[]');
+            const wrongQuestions = answeredQuestions.filter(q => q.isCorrect === false);
+            
+            // Show modal with wrong questions (even if empty)
+            showWrongQuestionsModal(wrongQuestions);
+        }
+        
+        function showWrongQuestionsModal(wrongQuestions) {
+            const modalHtml = `
+                <div id="wrongQuestionsModal" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 9999; display: flex; align-items: center; justify-content: center; animation: fadeIn 0.3s ease;" onclick="if(event.target.id==='wrongQuestionsModal') closeWrongQuestionsModal()">
+                    <div style="background: white; border-radius: 16px; max-width: 900px; width: 90%; max-height: 85vh; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.3);" onclick="event.stopPropagation()">
+                        <div style="padding: 1.5rem; border-bottom: 1px solid #e9ecef; display: flex; justify-content: space-between; align-items: center; background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);">
+                            <div>
+                                <h3 style="margin: 0; font-size: 1.5rem; color: white;">❌ Review Wrong Questions</h3>
+                                <p style="margin: 0; font-size: 0.85rem; color: rgba(255,255,255,0.9);">${wrongQuestions.length} question${wrongQuestions.length !== 1 ? 's' : ''} to review</p>
+                            </div>
+                            <button onclick="closeWrongQuestionsModal()" style="background: rgba(255,255,255,0.2); border: none; width: 30px; height: 30px; border-radius: 50%; font-size: 1.5rem; cursor: pointer; color: white; display: flex; align-items: center; justify-content: center;">×</button>
+                        </div>
+                        <div style="padding: 1rem; max-height: 70vh; overflow-y: auto;">
+                            ${wrongQuestions.length === 0 ? `
+                                <div style="text-align: center; padding: 4rem 2rem;">
+                                    <div style="background: linear-gradient(135deg, rgba(239, 68, 68, 0.1), rgba(220, 38, 38, 0.1)); width: 120px; height: 120px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 2rem auto;">
+                                        <iconify-icon icon="material-symbols:check-circle" style="font-size: 4rem; color: #16a981;"></iconify-icon>
+                                    </div>
+                                    <h3 style="margin: 0 0 1rem 0; color: #1e293b; font-weight: 700; font-size: 1.5rem;">No Wrong Questions! 🎉</h3>
+                                    <p style="margin: 0; font-size: 1.1rem; color: #64748b; max-width: 500px; margin: 0 auto;">Great job! You haven't answered any questions incorrectly yet. Keep up the excellent work!</p>
+                                    <button onclick="closeWrongQuestionsModal()" style="background: linear-gradient(135deg, #ef4444, #dc2626); color: white; border: none; padding: 0.75rem 2rem; border-radius: 8px; font-weight: 600; cursor: pointer; margin-top: 2rem; transition: all 0.3s ease;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 8px 25px rgba(239, 68, 68, 0.3)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'">
+                                        Close
+                                    </button>
+                                </div>
+                            ` : `
+                            ${wrongQuestions.map((answeredQuestion, index) => {
+                                const q = answeredQuestion.question;
+                                if (!q) return '';
+                                
+                                // Debug logging
+                                console.log('Displaying wrong question:', {
+                                    type: q.type,
+                                    userAnswer: answeredQuestion.userAnswer,
+                                    isCorrect: answeredQuestion.isCorrect
+                                });
+                                
+                                return `
+                                    <div style="padding: 1.5rem; border-radius: 12px; margin-bottom: 1rem; border: 2px solid #fee2e2; background: #fef2f2;">
+                                        <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 1rem;">
+                                            <div style="flex: 1;">
+                                                <h5 style="margin: 0 0 0.5rem 0; color: #1e293b; font-weight: 700;">Question ${index + 1}</h5>
+                                                ${q.type && q.difficulty ? `
+                                                    <div style="display: flex; gap: 0.5rem; margin-bottom: 0.75rem;">
+                                                        <span style="background: #ef4444; color: white; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.7rem; font-weight: 600;">${q.type}</span>
+                                                        <span style="background: #f59e0b; color: white; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.7rem; font-weight: 600;">${q.difficulty}</span>
+                                                        ${q.topic ? `<span style="background: #10b981; color: white; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.7rem; font-weight: 600;">${q.topic}</span>` : ''}
+                                                    </div>
+                                                ` : ''}
+                                                <p style="margin: 0; color: #1e293b; line-height: 1.6; font-size: 1rem;">${q.question || q.questionText || 'No question text available'}</p>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Show user's answer if it's not a multiple choice -->
+                                        ${!q.options || q.options.length === 0 ? `
+                                            <div style="margin-bottom: 1rem; padding: 1rem; background: #fee2e2; border-radius: 8px; border-left: 4px solid #dc2626;">
+                                                <p style="font-weight: 600; margin-bottom: 0.5rem; color: #991b1b;">❌ Your Answer:</p>
+                                                ${(q.type === 'bullet-points' || q.type === 'bullet-point') ? `
+                                                    <div style="padding-left: 1.5rem;">
+                                                        ${answeredQuestion.userAnswer ? answeredQuestion.userAnswer.split('\n').filter(line => line.trim()).map(line => `
+                                                            <div style="margin-bottom: 0.5rem; color: #991b1b;">• ${line.trim()}</div>
+                                                        `).join('') : '<p style="color: #991b1b; font-style: italic;">No answer provided</p>'}
+                                                    </div>
+                                                ` : ''}
+                                                ${(q.type === 'short-answer' || q.type === 'short-answer-text') ? `
+                                                    <div style="padding: 0.75rem; background: white; border-radius: 6px; color: #1e293b; border: 1px solid #fca5a5;">
+                                                        ${answeredQuestion.userAnswer || '<span style="color: #999; font-style: italic;">No answer provided</span>'}
+                                                    </div>
+                                                ` : ''}
+                                                ${q.type === 'file-upload' ? `
+                                                    <div style="padding: 0.75rem; background: white; border-radius: 6px; border: 1px solid #fca5a5;">
+                                                        <iconify-icon icon="material-symbols:attach-file" style="font-size: 1.5rem; vertical-align: middle; color: #dc2626;"></iconify-icon>
+                                                        <span style="margin-left: 0.5rem; color: #1e293b; font-weight: 600;">${answeredQuestion.userAnswer || 'No file uploaded'}</span>
+                                                    </div>
+                                                ` : ''}
+                                                ${(!q.type || (q.type !== 'bullet-points' && q.type !== 'bullet-point' && q.type !== 'short-answer' && q.type !== 'short-answer-text' && q.type !== 'file-upload')) && answeredQuestion.userAnswer ? `
+                                                    <div style="padding: 0.75rem; background: white; border-radius: 6px; color: #1e293b; border: 1px solid #fca5a5;">
+                                                        ${answeredQuestion.userAnswer}
+                                                    </div>
+                                                ` : ''}
+                                            </div>
+                                        ` : ''}
+                                        
+                                        ${q.options && q.options.length > 0 ? `
+                                            <div style="margin-bottom: 1rem;">
+                                                <p style="font-weight: 600; margin-bottom: 0.5rem; color: #dc2626;">Options:</p>
+                                                <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                                                    ${q.options.map((option, i) => {
+                                                        const letter = String.fromCharCode(65 + i);
+                                                        const isUserAnswer = answeredQuestion.userAnswer === option;
+                                                        const correctAnswer = q.correctAnswer || q.answer || q.correctAnswerIndex;
+                                                        let isCorrectAnswer = false;
+                                                        
+                                                        // Determine if this option is the correct answer
+                                                        if (typeof correctAnswer === 'number') {
+                                                            isCorrectAnswer = i === correctAnswer;
+                                                        } else if (typeof correctAnswer === 'string' && correctAnswer.match(/^[A-D]$/)) {
+                                                            const letterIndex = correctAnswer.charCodeAt(0) - 65;
+                                                            isCorrectAnswer = i === letterIndex;
+                                                        } else {
+                                                            isCorrectAnswer = option === correctAnswer;
+                                                        }
+                                                        
+                                                        let bgColor = '#ffffff';
+                                                        let borderColor = '#e9ecef';
+                                                        if (isUserAnswer && isCorrectAnswer) {
+                                                            bgColor = '#dcfce7';
+                                                            borderColor = '#16a34a';
+                                                        } else if (isUserAnswer) {
+                                                            bgColor = '#fee2e2';
+                                                            borderColor = '#dc2626';
+                                                        } else if (isCorrectAnswer) {
+                                                            bgColor = '#dcfce7';
+                                                            borderColor = '#16a34a';
+                                                        }
+                                                        
+                                                        return `
+                                                            <div style="padding: 0.75rem; border: 2px solid ${borderColor}; border-radius: 8px; background: ${bgColor};">
+                                                                <span style="font-weight: 600; color: #1e293b;">${letter}. ${option}</span>
+                                                                ${isUserAnswer && !isCorrectAnswer ? '<span style="color: #dc2626; font-weight: 600; margin-left: 0.5rem;">❌ Your Answer</span>' : ''}
+                                                                ${isCorrectAnswer ? '<span style="color: #16a34a; font-weight: 600; margin-left: 0.5rem;">✅ Correct Answer</span>' : ''}
+                                                            </div>
+                                                        `;
+                                                    }).join('')}
+                                                </div>
+                                            </div>
+                                        ` : ''}
+                                        
+                                        <!-- Show correct answer for non-multiple choice questions -->
+                                        ${!q.options || q.options.length === 0 ? `
+                                            <div style="margin-bottom: 1rem; padding: 1rem; background: #dcfce7; border-radius: 8px; border-left: 4px solid #16a34a;">
+                                                <p style="font-weight: 600; margin-bottom: 0.5rem; color: #166534;">✅ Correct Answer:</p>
+                                                ${(q.type === 'bullet-points' || q.type === 'bullet-point') ? `
+                                                    <div style="padding-left: 1.5rem;">
+                                                        ${(q.correctAnswer || q.answer) ? (q.correctAnswer || q.answer).split('\n').filter(line => line.trim()).map(line => `
+                                                            <div style="margin-bottom: 0.5rem; color: #166534;">• ${line.trim()}</div>
+                                                        `).join('') : '<p style="color: #166534; font-style: italic;">No correct answer provided</p>'}
+                                                    </div>
+                                                ` : ''}
+                                                ${(q.type === 'short-answer' || q.type === 'short-answer-text') ? `
+                                                    <div style="padding: 0.75rem; background: white; border-radius: 6px; color: #166534; border: 1px solid #86efac;">
+                                                        ${q.correctAnswer || q.answer || '<span style="color: #999; font-style: italic;">No answer provided</span>'}
+                                                    </div>
+                                                ` : ''}
+                                                ${q.type === 'file-upload' ? `
+                                                    <div style="padding: 0.75rem; background: white; border-radius: 6px; border: 1px solid #86efac;">
+                                                        <iconify-icon icon="material-symbols:attach-file" style="font-size: 1.5rem; vertical-align: middle; color: #16a34a;"></iconify-icon>
+                                                        <span style="margin-left: 0.5rem; color: #166534; font-weight: 600;">${q.correctAnswer || q.answer || 'No file specified'}</span>
+                                                    </div>
+                                                ` : ''}
+                                                ${(!q.type || (q.type !== 'bullet-points' && q.type !== 'bullet-point' && q.type !== 'short-answer' && q.type !== 'short-answer-text' && q.type !== 'file-upload')) && (q.correctAnswer || q.answer) ? `
+                                                    <div style="padding: 0.75rem; background: white; border-radius: 6px; color: #166534; border: 1px solid #86efac;">
+                                                        ${q.correctAnswer || q.answer}
+                                                    </div>
+                                                ` : ''}
+                                            </div>
+                                        ` : ''}
+                                        
+                                        ${q.explanation ? `
+                                            <div style="padding: 1rem; background: #fff7ed; border-radius: 8px; border-left: 4px solid #f59e0b; margin-top: 1rem;">
+                                                <p style="margin: 0; font-weight: 600; color: #1e293b;">Explanation:</p>
+                                                <p style="margin: 0.5rem 0 0 0; color: #333; line-height: 1.6;">${q.explanation}</p>
+                                            </div>
+                                        ` : ''}
+                                    </div>
+                                `;
+                            }).join('')}
+                            `}
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            document.body.insertAdjacentHTML('beforeend', modalHtml);
+        }
+        
+        function closeWrongQuestionsModal() {
+            const modal = document.getElementById('wrongQuestionsModal');
+            if (modal) modal.remove();
+            // Refresh the count after closing the modal
+            loadWrongQuestionsCount();
+        }
+
+        function loadWrongQuestionsCount() {
+            try {
+                // Load answered questions from localStorage
+                const answeredQuestions = JSON.parse(localStorage.getItem('physicsAnsweredQuestions') || '[]');
+                console.log('Total answered questions:', answeredQuestions.length);
+                
+                // Filter to get only wrong questions
+                const wrongQuestions = answeredQuestions.filter(q => {
+                    // Check if the question object exists and if isCorrect is explicitly false
+                    return q !== null && q !== undefined && q.isCorrect === false;
+                });
+                
+                console.log('Wrong questions found:', wrongQuestions.length);
+                
+                // Update the count display
+                const countElement = document.getElementById('wrongQuestionsCount');
+                if (countElement) {
+                    countElement.textContent = wrongQuestions.length;
+                    console.log('Updated count display to:', wrongQuestions.length);
+                } else {
+                    console.log('Count element not found');
+                }
+            } catch (error) {
+                console.error('Error loading wrong questions count:', error);
+                // Set count to 0 if there's an error
+                const countElement = document.getElementById('wrongQuestionsCount');
+                if (countElement) {
+                    countElement.textContent = '0';
+                }
+            }
+        }
+
+        // Practice Folders Functions
+        function loadPracticeFolders() {
+            try {
+                // Load folders from localStorage
+                const foldersData = localStorage.getItem('physics_practice_folders') || '[]';
+                const folders = JSON.parse(foldersData);
+                
+                // Load questions from localStorage
+                const questionsData = localStorage.getItem('physics_practice_questions') || '[]';
+                const questions = JSON.parse(questionsData);
+                
+                console.log('📁 Loaded folders:', folders.length);
+                console.log('📝 Loaded questions:', questions.length);
+                
+                displayPracticeFolders(folders, questions);
+            } catch (error) {
+                console.error('Error loading practice folders:', error);
+                displayEmptyState();
+            }
+        }
+
+        function displayPracticeFolders(folders, questions) {
+            const container = document.getElementById('foldersContainer');
+            if (!container) return;
+
+            if (folders.length === 0) {
+                displayEmptyState();
+                return;
+            }
+
+            let html = '';
+            
+            folders.forEach(folder => {
+                const folderQuestions = questions.filter(q => q.folderId === folder.id);
+                
+                html += `
+                    <div class="folder-card" onclick="viewFolderQuestions('${folder.id}', '${folder.name}')">
+                        <div class="folder-card-header">
+                            <div class="folder-card-icon" style="background: linear-gradient(135deg, #667eea, #764ba2); color: white;">
+                                <iconify-icon icon="material-symbols:folder"></iconify-icon>
+                            </div>
+                            <h4 class="folder-card-title">${folder.name}</h4>
+                        </div>
+                        
+                        <div class="folder-card-stats">
+                            <span class="folder-question-count">${folderQuestions.length} question${folderQuestions.length !== 1 ? 's' : ''}</span>
+                            <iconify-icon icon="material-symbols:arrow-forward" style="color: #ccc;"></iconify-icon>
+                        </div>
+                        
+                        ${folderQuestions.length > 0 ? `
+                            <div class="folder-questions-preview">
+                                ${folderQuestions.slice(0, 3).map(question => `
+                                    <div class="question-preview-item">
+                                        <p class="question-preview-text">${truncateText(question.question || question.questionText, 60)}</p>
+                                        <div class="question-preview-meta">
+                                            <span class="question-type-badge">${question.type || 'multiple-choice'}</span>
+                                            <span class="question-difficulty-badge">${question.difficulty || 'Medium'}</span>
+                                        </div>
+                                    </div>
+                                `).join('')}
+                                ${folderQuestions.length > 3 ? `<p style="text-align: center; color: #666; font-size: 0.8rem; margin: 0.5rem 0 0 0;">+${folderQuestions.length - 3} more questions</p>` : ''}
+                            </div>
+                        ` : `
+                            <div class="empty-folder-state">
+                                <iconify-icon icon="material-symbols:quiz"></iconify-icon>
+                                <p>No questions in this folder</p>
+                            </div>
+                        `}
+                    </div>
+                `;
+            });
+            
+            container.innerHTML = html;
+        }
+
+        function displayEmptyState() {
+            const container = document.getElementById('foldersContainer');
+            if (!container) return;
+            
+            container.innerHTML = `
+                <div class="empty-folder-state" style="grid-column: 1 / -1;">
+                    <iconify-icon icon="material-symbols:folder-open"></iconify-icon>
+                    <h4>No Practice Folders Found</h4>
+                    <p>Practice questions folders will appear here when created by teachers.</p>
+                </div>
+            `;
+        }
+
+        function viewFolderQuestions(folderId, folderName) {
+            // Load questions for this folder
+            const questionsData = localStorage.getItem('physics_practice_questions') || '[]';
+            const allQuestions = JSON.parse(questionsData);
+            const folderQuestions = allQuestions.filter(q => q.folderId === folderId);
+            
+            console.log(`📁 Viewing folder: ${folderName}`, folderQuestions);
+            
+            // Create a modal to display questions
+            const modalHtml = `
+                <div id="folderQuestionsModal" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 9999; display: flex; align-items: center; justify-content: center; animation: fadeIn 0.3s ease;" onclick="if(event.target.id==='folderQuestionsModal') closeFolderModal()">
+                    <div style="background: white; border-radius: 16px; max-width: 800px; width: 90%; max-height: 85vh; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.3);" onclick="event.stopPropagation()">
+                        <div style="padding: 1.5rem; border-bottom: 1px solid #e9ecef; display: flex; justify-content: space-between; align-items: center; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                            <div>
+                                <h3 style="margin: 0; font-size: 1.5rem; color: white;">📁 ${folderName}</h3>
+                                <p style="margin: 0; font-size: 0.85rem; color: rgba(255,255,255,0.9);">${folderQuestions.length} question${folderQuestions.length !== 1 ? 's' : ''}</p>
+                            </div>
+                            <button onclick="closeFolderModal()" style="background: rgba(255,255,255,0.2); border: none; width: 30px; height: 30px; border-radius: 50%; font-size: 1.5rem; cursor: pointer; color: white; display: flex; align-items: center; justify-content: center;">×</button>
+                        </div>
+                        <div style="padding: 1rem; max-height: 60vh; overflow-y: auto;">
+                            ${folderQuestions.length > 0 ? folderQuestions.map((question, index) => `
+                                <div style="padding: 1rem; border-radius: 12px; margin-bottom: 0.75rem; cursor: pointer; transition: all 0.2s; border: 1px solid #e9ecef; background: white;" onmouseover="this.style.background='#f9fafb'; this.style.transform='translateX(4px)'; this.style.borderColor='#667eea'" onmouseout="this.style.background='white'; this.style.transform='translateX(0)'; this.style.borderColor='#e9ecef'" onclick="startQuestionPractice('${question.id}')">
+                                    <div style="display: flex; align-items: start; gap: 0.75rem;">
+                                        <div style="font-size: 1.8rem; width: 40px; text-align: center;">📝</div>
+                                        <div style="flex: 1;">
+                                            <div style="font-weight: 600; color: #333; margin-bottom: 0.25rem;">Question ${index + 1}</div>
+                                            <div style="font-size: 0.9rem; color: #666; margin-bottom: 0.5rem;">${question.question || question.questionText || 'No question text'}</div>
+                                            <div style="display: flex; gap: 0.5rem; margin-bottom: 0.5rem;">
+                                                <span style="background: #667eea; color: white; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.7rem; font-weight: 600;">${question.type || 'multiple-choice'}</span>
+                                                <span style="background: #f59e0b; color: white; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.7rem; font-weight: 600;">${question.difficulty || 'Medium'}</span>
+                                                ${question.topic ? `<span style="background: #10b981; color: white; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.7rem; font-weight: 600;">${question.topic}</span>` : ''}
+                                            </div>
+                                            <div style="font-size: 0.75rem; color: #999;">Click to practice this question</div>
+                                        </div>
+                                        <iconify-icon icon="material-symbols:chevron-right" style="font-size: 1.2rem; color: #ccc;"></iconify-icon>
+                                    </div>
+                                </div>
+                            `).join('') : '<div style="text-align: center; padding: 3rem; color: #666;">No questions in this folder</div>'}
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            document.body.insertAdjacentHTML('beforeend', modalHtml);
+        }
+
+        function closeFolderModal() {
+            const modal = document.getElementById('folderQuestionsModal');
+            if (modal) modal.remove();
+        }
+
+        function startQuestionPractice(questionId) {
+            // Load the specific question and start practice
+            const questionsData = localStorage.getItem('physics_practice_questions') || '[]';
+            const allQuestions = JSON.parse(questionsData);
+            const question = allQuestions.find(q => q.id === questionId);
+            
+            if (question) {
+                console.log('🎯 Starting practice for question:', question);
+                // Close folder modal first
+                closeFolderModal();
+                // Open question practice window
+                openQuestionPracticeWindow(question);
+            }
+        }
+
+        function openQuestionPracticeWindow(question) {
+            // Create question practice modal
+            const modalHtml = `
+                <div id="questionPracticeModal" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 10000; display: flex; align-items: center; justify-content: center; animation: fadeIn 0.3s ease;" onclick="if(event.target.id==='questionPracticeModal') closeQuestionPracticeModal()">
+                    <div style="background: white; border-radius: 16px; max-width: 600px; width: 90%; max-height: 90vh; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.3);" onclick="event.stopPropagation()">
+                        <div style="padding: 1.5rem; border-bottom: 1px solid #e9ecef; display: flex; justify-content: space-between; align-items: center; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                            <div>
+                                <h3 style="margin: 0; font-size: 1.5rem; color: white;">📝 Practice Question</h3>
+                                <p style="margin: 0; font-size: 0.85rem; color: rgba(255,255,255,0.9);">${question.type || 'Multiple Choice'} • ${question.difficulty || 'Medium'}</p>
+                            </div>
+                            <button onclick="closeQuestionPracticeModal()" style="background: rgba(255,255,255,0.2); border: none; width: 30px; height: 30px; border-radius: 50%; font-size: 1.5rem; cursor: pointer; color: white; display: flex; align-items: center; justify-content: center;">×</button>
+                        </div>
+                        <div style="padding: 1.5rem; max-height: 70vh; overflow-y: auto;">
+                            ${generateQuestionContent(question)}
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            document.body.insertAdjacentHTML('beforeend', modalHtml);
+        }
+
+        function generateQuestionContent(question) {
+            const questionText = question.question || question.questionText || 'No question text available';
+            const questionType = question.type || 'multiple-choice';
+            const difficulty = question.difficulty || 'Medium';
+            const topic = question.topic || 'General';
+            
+            let content = `
+                <div style="margin-bottom: 1.5rem;">
+                    <div style="display: flex; gap: 0.5rem; margin-bottom: 1rem;">
+                        <span style="background: #667eea; color: white; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.7rem; font-weight: 600;">${questionType}</span>
+                        <span style="background: #f59e0b; color: white; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.7rem; font-weight: 600;">${difficulty}</span>
+                        <span style="background: #10b981; color: white; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.7rem; font-weight: 600;">${topic}</span>
+                    </div>
+                    <h4 style="color: #333; margin-bottom: 1rem; line-height: 1.5;">${questionText}</h4>
+            `;
+
+            if (questionType === 'multiple-choice' && question.options) {
+                content += `
+                    <div style="margin-bottom: 1.5rem;">
+                        <p style="font-weight: 600; margin-bottom: 0.75rem; color: #333;">Select your answer:</p>
+                        <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                `;
+                
+                question.options.forEach((option, index) => {
+                    const optionLetter = String.fromCharCode(65 + index); // A, B, C, D
+                    content += `
+                        <label style="display: flex; align-items: center; padding: 0.75rem; border: 2px solid #e9ecef; border-radius: 8px; cursor: pointer; transition: all 0.2s ease; background: white;" onmouseover="this.style.borderColor='#667eea'; this.style.backgroundColor='#f8f9ff'" onmouseout="this.style.borderColor='#e9ecef'; this.style.backgroundColor='white'">
+                            <input type="radio" name="questionAnswer" value="${optionLetter}" style="margin-right: 0.75rem; accent-color: #667eea;">
+                            <span style="font-weight: 500; color: #333;">${optionLetter}. ${option}</span>
+                        </label>
+                    `;
+                });
+                
+                content += `
+                        </div>
+                    </div>
+                `;
+            } else if (questionType === 'short-answer') {
+                content += `
+                    <div style="margin-bottom: 1.5rem;">
+                        <p style="font-weight: 600; margin-bottom: 0.75rem; color: #333;">Your answer:</p>
+                        <textarea id="shortAnswerInput" placeholder="Type your answer here..." style="width: 100%; padding: 0.75rem; border: 2px solid #e9ecef; border-radius: 8px; font-size: 1rem; resize: vertical; min-height: 80px; font-family: inherit;" onfocus="this.style.borderColor='#667eea'" onblur="this.style.borderColor='#e9ecef'"></textarea>
+                    </div>
+                `;
+            } else if (questionType === 'bullet-points') {
+                content += `
+                    <div style="margin-bottom: 1.5rem;">
+                        <p style="font-weight: 600; margin-bottom: 0.75rem; color: #333;">Your answer (bullet points):</p>
+                        <textarea id="bulletPointsInput" placeholder="Enter your bullet points here..." style="width: 100%; padding: 0.75rem; border: 2px solid #e9ecef; border-radius: 8px; font-size: 1rem; resize: vertical; min-height: 100px; font-family: inherit;" onfocus="this.style.borderColor='#667eea'" onblur="this.style.borderColor='#e9ecef'"></textarea>
+                    </div>
+                `;
+            }
+
+            content += `
+                <div style="display: flex; gap: 1rem; justify-content: center; margin-top: 2rem;">
+                    <button onclick="submitQuestionAnswer('${question.id}')" style="background: linear-gradient(135deg, #667eea, #764ba2); color: white; border: none; padding: 0.75rem 2rem; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.3s ease; font-size: 1rem;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 8px 25px rgba(102, 126, 234, 0.3)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'">
+                        Submit Answer
+                    </button>
+                    <button onclick="showQuestionAnswer('${question.id}')" style="background: transparent; color: #667eea; border: 2px solid #667eea; padding: 0.75rem 2rem; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.3s ease; font-size: 1rem;" onmouseover="this.style.backgroundColor='#667eea'; this.style.color='white'" onmouseout="this.style.backgroundColor='transparent'; this.style.color='#667eea'">
+                        Show Answer
+                    </button>
+                </div>
+                
+                <div id="answerDisplay" style="margin-top: 1.5rem; padding: 1rem; background: #f8f9fa; border-radius: 8px; display: none;">
+                    <h5 style="color: #333; margin-bottom: 0.75rem;">Answer & Explanation:</h5>
+                    <div id="answerContent"></div>
+                </div>
+            `;
+
+            return content;
+        }
+
+        function submitQuestionAnswer(questionId) {
+            const questionsData = localStorage.getItem('physics_practice_questions') || '[]';
+            const allQuestions = JSON.parse(questionsData);
+            const question = allQuestions.find(q => q.id === questionId);
+            
+            if (!question) return;
+
+            const questionType = question.type || 'multiple-choice';
+            let userAnswer = '';
+            let isCorrect = false;
+
+            if (questionType === 'multiple-choice') {
+                const selectedOption = document.querySelector('input[name="questionAnswer"]:checked');
+                if (!selectedOption) {
+                    alert('Please select an answer!');
+                    return;
+                }
+                userAnswer = selectedOption.value;
+                const correctAnswer = question.correctAnswer || question.answer;
+                isCorrect = userAnswer === correctAnswer;
+            } else if (questionType === 'short-answer') {
+                const textarea = document.getElementById('shortAnswerInput');
+                userAnswer = textarea.value.trim();
+                if (!userAnswer) {
+                    alert('Please enter your answer!');
+                    return;
+                }
+                const correctAnswer = question.correctAnswer || question.answer;
+                isCorrect = userAnswer.toLowerCase() === correctAnswer.toLowerCase();
+            } else if (questionType === 'bullet-points') {
+                const textarea = document.getElementById('bulletPointsInput');
+                userAnswer = textarea.value.trim();
+                if (!userAnswer) {
+                    alert('Please enter your answer!');
+                    return;
+                }
+                const correctAnswer = question.correctAnswer || question.answer;
+                isCorrect = userAnswer.toLowerCase().includes(correctAnswer.toLowerCase());
+            }
+
+            // Show result
+            const answerDisplay = document.getElementById('answerDisplay');
+            const answerContent = document.getElementById('answerContent');
+            
+            answerDisplay.style.display = 'block';
+            
+            if (isCorrect) {
+                answerContent.innerHTML = `
+                    <div style="color: #10b981; font-weight: 600; margin-bottom: 0.5rem;">
+                        ✅ Correct! Well done!
+                    </div>
+                    <div style="color: #333;">
+                        <strong>Your answer:</strong> ${userAnswer}<br>
+                        <strong>Correct answer:</strong> ${question.correctAnswer || question.answer}
+                        ${question.explanation ? `<br><br><strong>Explanation:</strong> ${question.explanation}` : ''}
+                    </div>
+                `;
+            } else {
+                answerContent.innerHTML = `
+                    <div style="color: #ef4444; font-weight: 600; margin-bottom: 0.5rem;">
+                        ❌ Incorrect. Keep practicing!
+                    </div>
+                    <div style="color: #333;">
+                        <strong>Your answer:</strong> ${userAnswer}<br>
+                        <strong>Correct answer:</strong> ${question.correctAnswer || question.answer}
+                        ${question.explanation ? `<br><br><strong>Explanation:</strong> ${question.explanation}` : ''}
+                    </div>
+                `;
+            }
+
+            // Disable submit button
+            const submitBtn = document.querySelector('button[onclick="submitQuestionAnswer(\'' + questionId + '\')"]');
+            if (submitBtn) {
+                submitBtn.disabled = true;
+                submitBtn.style.opacity = '0.5';
+                submitBtn.style.cursor = 'not-allowed';
+            }
+        }
+
+        function showQuestionAnswer(questionId) {
+            const questionsData = localStorage.getItem('physics_practice_questions') || '[]';
+            const allQuestions = JSON.parse(questionsData);
+            const question = allQuestions.find(q => q.id === questionId);
+            
+            if (!question) return;
+
+            const answerDisplay = document.getElementById('answerDisplay');
+            const answerContent = document.getElementById('answerContent');
+            
+            answerDisplay.style.display = 'block';
+            
+            answerContent.innerHTML = `
+                <div style="color: #333;">
+                    <strong>Correct answer:</strong> ${question.correctAnswer || question.answer}
+                    ${question.explanation ? `<br><br><strong>Explanation:</strong> ${question.explanation}` : ''}
+                </div>
+            `;
+
+            // Disable submit button
+            const submitBtn = document.querySelector('button[onclick="submitQuestionAnswer(\'' + questionId + '\')"]');
+            if (submitBtn) {
+                submitBtn.disabled = true;
+                submitBtn.style.opacity = '0.5';
+                submitBtn.style.cursor = 'not-allowed';
+            }
+        }
+
+        function closeQuestionPracticeModal() {
+            const modal = document.getElementById('questionPracticeModal');
+            if (modal) modal.remove();
+        }
+
+        function truncateText(text, maxLength) {
+            if (!text) return 'No question text';
+            return text.length > maxLength ? text.substring(0, maxLength) + '...' : text;
+        }
+
+        // Progress Statistics Functions
+        function loadProgressStats() {
+            try {
+                // Load answered questions from localStorage
+                const answeredQuestions = JSON.parse(localStorage.getItem('physicsAnsweredQuestions') || '[]');
+                
+                // Calculate total questions and correctly solved
+                const totalQuestions = answeredQuestions.length;
+                const correctlySolved = answeredQuestions.filter(q => q.isCorrect === true).length;
+                
+                // Calculate day streak based on consecutive days with answered questions
+                const streak = calculateConsecutiveDaysStreak(answeredQuestions);
+                
+                // Calculate accuracy rate as percentage of total questions solved correctly
+                const accuracy = totalQuestions > 0 ? Math.round((correctlySolved / totalQuestions) * 100) : 0;
+
+                // Update progress cards
+                document.getElementById('totalQuestions').textContent = totalQuestions;
+                document.getElementById('correctlySolved').textContent = correctlySolved;
+                document.getElementById('streakDays').textContent = streak;
+                document.getElementById('accuracyRate').textContent = accuracy + '%';
+
+                console.log('Progress stats loaded:', {
+                    totalQuestions,
+                    correctlySolved,
+                    streak,
+                    accuracy: accuracy + '%'
+                });
+            } catch (error) {
+                console.error('Error loading progress stats:', error);
+            }
+        }
+        
+        // Calculate consecutive days streak
+        function calculateConsecutiveDaysStreak(answeredQuestions) {
+            if (!answeredQuestions || answeredQuestions.length === 0) return 0;
+            
+            // Get unique dates from answered questions
+            const dates = answeredQuestions
+                .filter(q => q.timestamp)
+                .map(q => {
+                    const date = new Date(q.timestamp);
+                    return date.toDateString();
+                })
+                .filter((value, index, self) => self.indexOf(value) === index) // Get unique dates
+                .sort((a, b) => new Date(b) - new Date(a)); // Sort descending (most recent first)
+            
+            if (dates.length === 0) return 0;
+            
+            // Check if the most recent date is today or yesterday
+            const today = new Date().toDateString();
+            const yesterday = new Date();
+            yesterday.setDate(yesterday.getDate() - 1);
+            const yesterdayStr = yesterday.toDateString();
+            
+            if (dates[0] !== today && dates[0] !== yesterdayStr) {
+                return 0; // No recent activity
+            }
+            
+            // Count consecutive days starting from today
+            let streak = 0;
+            let currentDate = new Date();
+            
+            for (let i = 0; i < dates.length; i++) {
+                const expectedDate = currentDate.toDateString();
+                
+                if (dates.includes(expectedDate)) {
+                    streak++;
+                    currentDate.setDate(currentDate.getDate() - 1);
+                } else {
+                    break;
+                }
+            }
+            
+            return streak;
+        }
+
+
+
+    </script>
+</body>
+</html>

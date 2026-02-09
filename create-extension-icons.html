@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Extension Icons</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 2rem;
+            color: white;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 3rem;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+        
+        .subtitle {
+            text-align: center;
+            font-size: 1.2rem;
+            color: rgba(255,255,255,0.8);
+            margin-bottom: 3rem;
+        }
+        
+        .icon-preview {
+            display: flex;
+            gap: 2rem;
+            justify-content: center;
+            margin: 3rem 0;
+            flex-wrap: wrap;
+        }
+        
+        .icon-box {
+            text-align: center;
+        }
+        
+        .icon-canvas {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+            margin-bottom: 1rem;
+        }
+        
+        .icon-label {
+            font-size: 0.9rem;
+            color: rgba(255,255,255,0.9);
+            font-weight: 600;
+        }
+        
+        .controls {
+            background: rgba(255,255,255,0.1);
+            padding: 2rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+        }
+        
+        .control-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+        
+        input[type="text"],
+        input[type="color"],
+        select {
+            width: 100%;
+            padding: 0.75rem;
+            border-radius: 8px;
+            border: none;
+            font-size: 1rem;
+        }
+        
+        input[type="color"] {
+            height: 50px;
+            cursor: pointer;
+        }
+        
+        .btn {
+            background: white;
+            color: #667eea;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            width: 100%;
+            margin-top: 1rem;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+        }
+        
+        .instructions {
+            background: rgba(255,255,255,0.1);
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin-top: 2rem;
+        }
+        
+        .instructions h3 {
+            margin-bottom: 1rem;
+        }
+        
+        .instructions ol {
+            margin-left: 1.5rem;
+        }
+        
+        .instructions li {
+            margin-bottom: 0.5rem;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎯 Create Extension Icons</h1>
+        <p class="subtitle">Generate icons for the Focus Mode Browser Extension</p>
+        
+        <div class="controls">
+            <div class="control-group">
+                <label>Icon Symbol</label>
+                <select id="symbolSelect" onchange="updateIcons()">
+                    <option value="🎯">🎯 Target (Focus)</option>
+                    <option value="🔒">🔒 Lock (Blocking)</option>
+                    <option value="⏱️">⏱️ Timer</option>
+                    <option value="🚫">🚫 No Entry</option>
+                    <option value="📚">📚 Books (Study)</option>
+                    <option value="⚡">⚡ Lightning (Energy)</option>
+                    <option value="🧠">🧠 Brain (Focus)</option>
+                    <option value="FM">FM Text</option>
+                </select>
+            </div>
+            
+            <div class="control-group">
+                <label>Background Color</label>
+                <input type="color" id="bgColor" value="#667eea" onchange="updateIcons()">
+            </div>
+            
+            <div class="control-group">
+                <label>Symbol Color</label>
+                <input type="color" id="symbolColor" value="#ffffff" onchange="updateIcons()">
+            </div>
+        </div>
+        
+        <div class="icon-preview">
+            <div class="icon-box">
+                <canvas id="icon16" class="icon-canvas" width="16" height="16"></canvas>
+                <div class="icon-label">16x16 (Toolbar)</div>
+            </div>
+            <div class="icon-box">
+                <canvas id="icon48" class="icon-canvas" width="48" height="48"></canvas>
+                <div class="icon-label">48x48 (Management)</div>
+            </div>
+            <div class="icon-box">
+                <canvas id="icon128" class="icon-canvas" width="128" height="128"></canvas>
+                <div class="icon-label">128x128 (Store)</div>
+            </div>
+        </div>
+        
+        <button class="btn" onclick="downloadIcons()">📥 Download All Icons</button>
+        
+        <div class="instructions">
+            <h3>📋 Next Steps</h3>
+            <ol>
+                <li>Click "Download All Icons" button above</li>
+                <li>Three PNG files will be downloaded to your Downloads folder</li>
+                <li>Move these files to the <code>focus-mode-extension</code> folder</li>
+                <li>Follow the installation guide in <code>FOCUS-MODE-SETUP-GUIDE.md</code></li>
+            </ol>
+        </div>
+    </div>
+    
+    <script>
+        function updateIcons() {
+            const symbol = document.getElementById('symbolSelect').value;
+            const bgColor = document.getElementById('bgColor').value;
+            const symbolColor = document.getElementById('symbolColor').value;
+            
+            drawIcon('icon16', 16, symbol, bgColor, symbolColor);
+            drawIcon('icon48', 48, symbol, bgColor, symbolColor);
+            drawIcon('icon128', 128, symbol, bgColor, symbolColor);
+        }
+        
+        function drawIcon(canvasId, size, symbol, bgColor, symbolColor) {
+            const canvas = document.getElementById(canvasId);
+            const ctx = canvas.getContext('2d');
+            
+            // Clear canvas
+            ctx.clearRect(0, 0, size, size);
+            
+            // Draw background
+            ctx.fillStyle = bgColor;
+            ctx.fillRect(0, 0, size, size);
+            
+            // Draw symbol
+            ctx.fillStyle = symbolColor;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            
+            // Adjust font size based on canvas size
+            const fontSize = size * 0.6;
+            ctx.font = `${fontSize}px Arial`;
+            
+            ctx.fillText(symbol, size / 2, size / 2);
+        }
+        
+        function downloadIcons() {
+            downloadCanvas('icon16', 'icon16.png');
+            setTimeout(() => downloadCanvas('icon48', 'icon48.png'), 100);
+            setTimeout(() => downloadCanvas('icon128', 'icon128.png'), 200);
+            
+            alert('✅ Icons downloaded!\n\nCheck your Downloads folder for:\n- icon16.png\n- icon48.png\n- icon128.png\n\nMove these files to the focus-mode-extension folder.');
+        }
+        
+        function downloadCanvas(canvasId, filename) {
+            const canvas = document.getElementById(canvasId);
+            const link = document.createElement('a');
+            link.download = filename;
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+        }
+        
+        // Initialize icons on page load
+        updateIcons();
+    </script>
+</body>
+</html>

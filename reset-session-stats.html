@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reset Session Stats</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            padding: 2rem;
+        }
+        .container {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 3rem;
+            max-width: 500px;
+            text-align: center;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+        }
+        h1 {
+            margin-bottom: 1rem;
+            font-size: 2rem;
+        }
+        p {
+            margin-bottom: 2rem;
+            opacity: 0.9;
+            line-height: 1.6;
+        }
+        .btn {
+            background: white;
+            color: #667eea;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 1rem;
+            margin: 0.5rem;
+            transition: all 0.3s;
+        }
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+        .btn-danger {
+            background: #ef4444;
+            color: white;
+        }
+        .status {
+            margin-top: 2rem;
+            padding: 1rem;
+            border-radius: 12px;
+            display: none;
+        }
+        .status.success {
+            background: rgba(34, 197, 94, 0.2);
+            border: 1px solid #22c55e;
+        }
+        .status.info {
+            background: rgba(59, 130, 246, 0.2);
+            border: 1px solid #3b82f6;
+        }
+        .stats-display {
+            background: rgba(255,255,255,0.05);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            text-align: left;
+        }
+        .stat-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        .stat-item:last-child {
+            border-bottom: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔄 Reset Session Stats</h1>
+        <p>This will clear all your focus session history and statistics. This action cannot be undone.</p>
+        
+        <div class="stats-display">
+            <h3 style="margin-top: 0;">Current Stats:</h3>
+            <div class="stat-item">
+                <span>Total Sessions:</span>
+                <span id="totalSessions">-</span>
+            </div>
+            <div class="stat-item">
+                <span>Total Time:</span>
+                <span id="totalTime">-</span>
+            </div>
+            <div class="stat-item">
+                <span>Today:</span>
+                <span id="todayTime">-</span>
+            </div>
+            <div class="stat-item">
+                <span>This Week:</span>
+                <span id="weekTime">-</span>
+            </div>
+        </div>
+        
+        <button class="btn" onclick="showCurrentStats()">
+            📊 Refresh Stats
+        </button>
+        <button class="btn btn-danger" onclick="confirmReset()">
+            🗑️ Reset All Stats
+        </button>
+        <button class="btn" onclick="goToFocusMode()">
+            ← Back to Focus Mode
+        </button>
+        
+        <div class="status" id="status"></div>
+    </div>
+    
+    <script>
+        function showCurrentStats() {
+            const sessions = JSON.parse(localStorage.getItem('focusSessions') || '[]');
+            
+            // Calculate total time
+            const totalSeconds = sessions.reduce((sum, session) => sum + session.duration, 0);
+            const totalHours = Math.floor(totalSeconds / 3600);
+            const totalMinutes = Math.floor((totalSeconds % 3600) / 60);
+            
+            // Calculate today's time
+            const today = new Date().toDateString();
+            const todaySeconds = sessions
+                .filter(s => new Date(s.date).toDateString() === today)
+                .reduce((sum, session) => sum + session.duration, 0);
+            const todayHours = Math.floor(todaySeconds / 3600);
+            const todayMinutes = Math.floor((todaySeconds % 3600) / 60);
+            
+            // Calculate this week's time
+            const weekStart = new Date();
+            weekStart.setDate(weekStart.getDate() - weekStart.getDay());
+            weekStart.setHours(0, 0, 0, 0);
+            
+            const weekSeconds = sessions
+                .filter(s => new Date(s.date) >= weekStart)
+                .reduce((sum, session) => sum + session.duration, 0);
+            const weekHours = Math.floor(weekSeconds / 3600);
+            const weekMinutes = Math.floor((weekSeconds % 3600) / 60);
+            
+            // Update display
+            document.getElementById('totalSessions').textContent = sessions.length;
+            document.getElementById('totalTime').textContent = `${totalHours}h ${totalMinutes}m`;
+            document.getElementById('todayTime').textContent = `${todayHours}h ${todayMinutes}m`;
+            document.getElementById('weekTime').textContent = `${weekHours}h ${weekMinutes}m`;
+            
+            showStatus('Stats refreshed!', 'info');
+        }
+        
+        function confirmReset() {
+            if (confirm('⚠️ Are you sure you want to reset ALL session statistics?\n\nThis will permanently delete:\n• All session history\n• Total time tracked\n• Today\'s stats\n• This week\'s stats\n\nThis action CANNOT be undone!')) {
+                resetStats();
+            }
+        }
+        
+        function resetStats() {
+            // Clear session history
+            localStorage.removeItem('focusSessions');
+            
+            // Show success message
+            showStatus('✅ All session statistics have been reset to zero!', 'success');
+            
+            // Update display
+            document.getElementById('totalSessions').textContent = '0';
+            document.getElementById('totalTime').textContent = '0h 0m';
+            document.getElementById('todayTime').textContent = '0h 0m';
+            document.getElementById('weekTime').textContent = '0h 0m';
+        }
+        
+        function showStatus(message, type) {
+            const status = document.getElementById('status');
+            status.textContent = message;
+            status.className = 'status ' + type;
+            status.style.display = 'block';
+            
+            setTimeout(() => {
+                status.style.display = 'none';
+            }, 5000);
+        }
+        
+        function goToFocusMode() {
+            window.location.href = 'focus-mode.html';
+        }
+        
+        // Load stats on page load
+        showCurrentStats();
+    </script>
+</body>
+</html>

@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Site Blocked - Focus Mode Active</title>
+    <link href="https://fonts.googleapis.com/css2?family=Jost:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Jost', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+        
+        .container {
+            text-align: center;
+            padding: 3rem;
+            max-width: 600px;
+        }
+        
+        .icon {
+            font-size: 8rem;
+            margin-bottom: 2rem;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+        
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+        
+        p {
+            font-size: 1.3rem;
+            color: rgba(255,255,255,0.8);
+            margin-bottom: 1rem;
+            line-height: 1.6;
+        }
+        
+        .timer {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #667eea;
+            margin: 2rem 0;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 3rem;
+        }
+        
+        .btn {
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+            border: none;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn-secondary {
+            background: rgba(255,255,255,0.1);
+            color: white;
+            border: 2px solid rgba(255,255,255,0.3);
+        }
+        
+        .btn-secondary:hover {
+            background: rgba(255,255,255,0.2);
+        }
+        
+        .warning {
+            background: rgba(239, 68, 68, 0.1);
+            border: 2px solid rgba(239, 68, 68, 0.3);
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin-top: 2rem;
+        }
+        
+        .warning p {
+            color: #fca5a5;
+            font-size: 1rem;
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="icon">🚫</div>
+        <h1>Website Blocked</h1>
+        <p>This site is blocked during your focus session.</p>
+        <p>Stay focused on your studies! 📚</p>
+        
+        <div class="timer" id="timeRemaining">Loading...</div>
+        
+        <div class="buttons">
+            <a href="focus-mode.html" class="btn btn-primary">
+                Return to Focus Mode
+            </a>
+            <button onclick="endSession()" class="btn btn-secondary">
+                End Session Early
+            </button>
+        </div>
+        
+        <div class="warning">
+            <p><strong>⚠️ Note:</strong> To properly block external websites like Instagram, Facebook, etc., you need to install a browser extension. This page can only block navigation within your study dashboard.</p>
+        </div>
+    </div>
+    
+    <script>
+        function updateTimer() {
+            const timerState = localStorage.getItem('focusTimerState');
+            if (!timerState) {
+                document.getElementById('timeRemaining').textContent = 'No active session';
+                return;
+            }
+            
+            const state = JSON.parse(timerState);
+            if (!state.isRunning || !state.sessionStartTime) {
+                document.getElementById('timeRemaining').textContent = 'Session paused';
+                return;
+            }
+            
+            const elapsed = Math.floor((Date.now() - state.sessionStartTime) / 1000);
+            const remaining = Math.max(0, state.totalTime - elapsed);
+            
+            if (remaining === 0) {
+                document.getElementById('timeRemaining').textContent = 'Session Complete!';
+                setTimeout(() => {
+                    window.location.href = 'focus-mode.html';
+                }, 2000);
+                return;
+            }
+            
+            const minutes = Math.floor(remaining / 60);
+            const seconds = remaining % 60;
+            
+            document.getElementById('timeRemaining').textContent = 
+                `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+        
+        function endSession() {
+            if (confirm('Are you sure you want to end your focus session early?')) {
+                localStorage.removeItem('focusTimerState');
+                alert('Focus session ended. Great effort!');
+                window.location.href = 'student-dashboard.html';
+            }
+        }
+        
+        // Update timer every second
+        updateTimer();
+        setInterval(updateTimer, 1000);
+        
+        // Prevent back navigation
+        history.pushState(null, null, location.href);
+        window.onpopstate = function () {
+            history.go(1);
+        };
+    </script>
+</body>
+</html>

@@ -1,0 +1,1706 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Physics Flashcards - IG Nation</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/iconify-icon@1.0.7/dist/iconify-icon.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Jost:wght@400;600;700&family=Roboto+Slab&display=swap" rel="stylesheet">
+    <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Jost', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            color: #333;
+            padding: 1rem 0;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            margin: 0;
+            position: relative;
+            top: 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            z-index: 999;
+        }
+
+        .header h1 {
+            color: #10b981;
+            font-weight: 700;
+            margin: 0;
+        }
+
+        .stats-row {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 1.5rem;
+            flex: 1;
+            min-width: 200px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #10b981, #059669);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: #6c757d;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .chapter-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .chapter-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .chapter-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(135deg, #10b981, #059669);
+        }
+
+        .chapter-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 12px 40px rgba(16, 185, 129, 0.3);
+        }
+
+        .chapter-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .chapter-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 0.5rem;
+        }
+
+        .chapter-info {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .chapter-info-item {
+            text-align: center;
+        }
+
+        .chapter-info-number {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #10b981;
+        }
+
+        .chapter-info-label {
+            font-size: 0.8rem;
+            color: #6c757d;
+        }
+
+        .progress-bar-custom {
+            height: 8px;
+            background: rgba(16, 185, 129, 0.2);
+            border-radius: 10px;
+            overflow: hidden;
+            margin-top: 1rem;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(135deg, #10b981, #059669);
+            border-radius: 10px;
+            transition: width 0.5s ease;
+        }
+
+        .forgotten-cards-banner {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            color: white;
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 8px 32px rgba(239, 68, 68, 0.3);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .forgotten-cards-banner::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .forgotten-cards-banner:hover::before {
+            left: 100%;
+        }
+
+        .forgotten-cards-banner:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px rgba(239, 68, 68, 0.4);
+        }
+
+        .forgotten-cards-content h2 {
+            margin: 0 0 0.5rem 0;
+            font-size: 1.8rem;
+        }
+
+        .forgotten-cards-count {
+            font-size: 3rem;
+            font-weight: 700;
+        }
+
+        .btn-custom {
+            background: linear-gradient(135deg, #10b981, #059669);
+            border: none;
+            color: white;
+            padding: 0.75rem 2rem;
+            border-radius: 12px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-custom:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(16, 185, 129, 0.3);
+            color: white;
+        }
+
+        /* Forgotten Cards Action Card */
+        .forgotten-cards-action-card {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 8px 32px rgba(239, 68, 68, 0.3);
+            transition: transform 0.3s ease;
+            cursor: pointer;
+        }
+
+        .forgotten-cards-action-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px rgba(239, 68, 68, 0.4);
+        }
+
+        .action-card-content {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            color: white;
+        }
+
+        /* Tricky Flashcards Action Card */
+        .tricky-flashcards-action-card {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 8px 32px rgba(245, 158, 11, 0.3);
+            transition: transform 0.3s ease;
+            cursor: pointer;
+            color: white;
+        }
+
+        .tricky-flashcards-action-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px rgba(245, 158, 11, 0.4);
+        }
+
+        .action-card-icon {
+            width: 80px;
+            height: 80px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(10px);
+        }
+
+        .action-card-text {
+            flex: 1;
+        }
+
+        .btn-nav {
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-weight: 500;
+            font-size: 0.9rem;
+            border: 2px solid transparent;
+            min-width: 100px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .btn-nav:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .nav-icon {
+            font-size: 1.1rem;
+        }
+
+        .action-card-text h3 {
+            margin: 0 0 0.5rem 0;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .action-card-text p {
+            margin: 0;
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+
+        .action-card-button {
+            flex-shrink: 0;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            margin-top: 1rem;
+        }
+
+        .btn-forgotten-action {
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 0.75rem 2rem;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-forgotten-action:hover {
+            background: rgba(255, 255, 255, 0.3);
+            border-color: rgba(255, 255, 255, 0.5);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .btn-forgotten-action:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-forgotten-action iconify-icon {
+            font-size: 1.2rem;
+            transition: transform 0.2s ease;
+        }
+
+        .btn-forgotten-action:hover iconify-icon {
+            transform: translateX(2px);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-fade-in {
+            animation: fadeInUp 0.6s ease forwards;
+        }
+
+    </style>
+</head>
+<body>
+    <!-- Dashboard Header -->
+    <header class="header">
+        <div class="container-fluid">
+            <!-- Top Header with Hamburger Menu and Navigation Buttons -->
+            <div class="row align-items-center" style="padding: 0.5rem 0; border-bottom: 1px solid rgba(255, 255, 255, 0.1);">
+                <div class="col-6">
+                    <div class="d-flex align-items-center">
+                        <!-- Hamburger Menu Button -->
+                        <button class="hamburger-menu-btn" onclick="toggleSidebar()" style="width: 45px; height: 45px; background: white; border: 1px solid #e9ecef; border-radius: 8px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.1); margin-right: 1rem;" onmouseover="this.style.boxShadow='0 4px 8px rgba(0,0,0,0.15)'" onmouseout="this.style.boxShadow='0 2px 4px rgba(0,0,0,0.1)'">
+                            <iconify-icon icon="material-symbols:menu" style="font-size: 1.5rem; color: #333;"></iconify-icon>
+                        </button>
+                        
+                        <!-- Page Title -->
+                        <h1 style="margin: 0; color: #10b981; font-weight: 700; font-size: 1.8rem;">
+                            <iconify-icon icon="material-symbols:science" style="margin-right: 0.5rem;"></iconify-icon>
+                            Physics Flashcards
+                        </h1>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="d-flex justify-content-end align-items-center gap-2">
+                        <!-- IG Nation Logo -->
+                        <a href="physics-dashboard.html" style="margin-right: 2rem; display: flex; align-items: center; text-decoration: none;">
+                            <img src="images/ig-nation-logo-graduation.png" alt="IG Nation" style="height: 45px; width: auto;">
+                        </a>
+                        
+                        <!-- Focus Mode Button -->
+                        <button class="nav-icon-btn" onclick="navigateToFocusMode()" style="width: 45px; height: 45px; background: white; border: 1px solid #e9ecef; border-radius: 8px; cursor: pointer; transition: all 0.3s ease; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 4px rgba(0,0,0,0.1);" onmouseover="this.style.boxShadow='0 4px 8px rgba(0,0,0,0.15)'" onmouseout="this.style.boxShadow='0 2px 4px rgba(0,0,0,0.1)'">
+                            <img src="images/7898418_focus_business_finance_office_marketing_icon.png" alt="Focus" style="width: 20px; height: 20px; filter: brightness(0) invert(0);">
+                        </button>
+                        
+                        <!-- Notifications Button -->
+                        <button class="nav-icon-btn" onclick="navigateToNotifications()" style="width: 45px; height: 45px; background: white; border: 1px solid #e9ecef; border-radius: 8px; cursor: pointer; transition: all 0.3s ease; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 4px rgba(0,0,0,0.1); position: relative;" onmouseover="this.style.boxShadow='0 4px 8px rgba(0,0,0,0.15)'" onmouseout="this.style.boxShadow='0 2px 4px rgba(0,0,0,0.1)'">
+                            <iconify-icon icon="material-symbols:notifications" style="font-size: 1.2rem; color: #333;"></iconify-icon>
+                            <span id="notificationBadge" style="position: absolute; top: -5px; right: -5px; background: #ef4444; color: white; border-radius: 50%; width: 18px; height: 18px; font-size: 0.7rem; display: flex; align-items: center; justify-content: center; font-weight: 700;">0</span>
+                        </button>
+                        
+                        <!-- Community Button -->
+                        <button class="nav-icon-btn" onclick="navigateToCommunity()" style="width: 45px; height: 45px; background: white; border: 1px solid #e9ecef; border-radius: 8px; cursor: pointer; transition: all 0.3s ease; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 4px rgba(0,0,0,0.1);" onmouseover="this.style.boxShadow='0 4px 8px rgba(0,0,0,0.15)'" onmouseout="this.style.boxShadow='0 2px 4px rgba(0,0,0,0.1)'">
+                            <img src="images/4213440_community_group_leader_people_team_icon.png" alt="Community" style="width: 20px; height: 20px; filter: brightness(0) invert(0);">
+                        </button>
+                        
+                        <!-- Profile Button -->
+                        <button class="nav-icon-btn" onclick="navigateToProfile()" style="width: 45px; height: 45px; background: white; border: 1px solid #e9ecef; border-radius: 8px; cursor: pointer; transition: all 0.3s ease; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 4px rgba(0,0,0,0.1);" onmouseover="this.style.boxShadow='0 4px 8px rgba(0,0,0,0.15)'" onmouseout="this.style.boxShadow='0 2px 4px rgba(0,0,0,0.1)'">
+                            <img src="images/4092564_profile_about_mobile ui_user_icon.png" alt="Profile" style="width: 20px; height: 20px; filter: brightness(0) invert(0);">
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </header>
+
+    <!-- Sidebar Menu -->
+    <div id="sidebar" class="sidebar" style="position: fixed; top: 0; left: -350px; width: 350px; height: 100vh; background: white; box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1); transition: left 0.3s ease; z-index: 1000; overflow-y: auto;">
+        <!-- Sidebar Header -->
+        <div class="sidebar-header" style="padding: 1.5rem; border-bottom: 1px solid #e9ecef; display: flex; justify-content: space-between; align-items: center;">
+            <h4 style="margin: 0; color: #333; font-weight: 700;">My Courses</h4>
+            <button onclick="toggleSidebar()" style="background: none; border: none; color: #666; cursor: pointer; font-size: 1.5rem; padding: 0.25rem;" onmouseover="this.style.color='#333'" onmouseout="this.style.color='#666'">
+                <iconify-icon icon="material-symbols:close"></iconify-icon>
+            </button>
+        </div>
+
+        <!-- Sidebar Content -->
+        <div class="sidebar-content" style="padding: 1rem;">
+            <!-- Books Section -->
+            <div class="menu-section">
+                <div class="menu-item" onclick="window.location.href='physics-library.html'" style="display: flex; align-items: center; padding: 1rem; background: #f8f9fa; border-radius: 12px; margin-bottom: 0.5rem; cursor: pointer; transition: all 0.3s ease;" onmouseover="this.style.background='#e9ecef'" onmouseout="this.style.background='#f8f9fa'">
+                    <div class="menu-icon" style="width: 40px; height: 40px; background: linear-gradient(135deg, #10b981, #059669); border-radius: 8px; display: flex; align-items: center; justify-content: center; margin-right: 1rem;">
+                        <iconify-icon icon="material-symbols:menu-book" style="font-size: 1.5rem; color: white;"></iconify-icon>
+                    </div>
+                    <div class="menu-text" style="flex: 1;">
+                        <div class="menu-title" style="font-weight: 600; color: #333; font-size: 1rem;">Books</div>
+                        <div class="menu-subtitle" style="font-size: 0.8rem; color: #666;">Textbooks & Study Materials</div>
+                    </div>
+                    <iconify-icon icon="material-symbols:keyboard-arrow-right" style="font-size: 1.2rem; color: #666;"></iconify-icon>
+                </div>
+            </div>
+
+            <!-- Lectures Section -->
+            <div class="menu-section">
+                <div class="menu-item" onclick="window.location.href='physics-lectures.html'" style="display: flex; align-items: center; padding: 1rem; background: #f8f9fa; border-radius: 12px; margin-bottom: 0.5rem; cursor: pointer; transition: all 0.3s ease;" onmouseover="this.style.background='#e9ecef'" onmouseout="this.style.background='#f8f9fa'">
+                    <div class="menu-icon" style="width: 40px; height: 40px; background: linear-gradient(135deg, #10b981, #059669); border-radius: 8px; display: flex; align-items: center; justify-content: center; margin-right: 1rem;">
+                        <iconify-icon icon="material-symbols:play-circle" style="font-size: 1.5rem; color: white;"></iconify-icon>
+                    </div>
+                    <div class="menu-text" style="flex: 1;">
+                        <div class="menu-title" style="font-weight: 600; color: #333; font-size: 1rem;">Lectures</div>
+                        <div class="menu-subtitle" style="font-size: 0.8rem; color: #666;">Video Lessons & Tutorials</div>
+                    </div>
+                    <iconify-icon icon="material-symbols:keyboard-arrow-right" style="font-size: 1.2rem; color: #666;"></iconify-icon>
+                </div>
+            </div>
+
+            <!-- Track Progress Section -->
+            <div class="menu-section">
+                <div class="menu-item" onclick="toggleSubmenu('progress')" style="display: flex; align-items: center; padding: 1rem; background: #f8f9fa; border-radius: 12px; margin-bottom: 0.5rem; cursor: pointer; transition: all 0.3s ease;" onmouseover="this.style.background='#e9ecef'" onmouseout="this.style.background='#f8f9fa'">
+                    <div class="menu-icon" style="width: 40px; height: 40px; background: linear-gradient(135deg, #10b981, #059669); border-radius: 8px; display: flex; align-items: center; justify-content: center; margin-right: 1rem;">
+                        <iconify-icon icon="material-symbols:trending-up" style="font-size: 1.5rem; color: white;"></iconify-icon>
+                    </div>
+                    <div class="menu-text" style="flex: 1;">
+                        <div class="menu-title" style="font-weight: 600; color: #333; font-size: 1rem;">Track Progress</div>
+                        <div class="menu-subtitle" style="font-size: 0.8rem; color: #666;">Monitor Learning Journey</div>
+                    </div>
+                    <iconify-icon id="progress-arrow" icon="material-symbols:keyboard-arrow-down" style="font-size: 1.2rem; color: #666; transition: transform 0.3s ease;"></iconify-icon>
+                </div>
+                <div id="progress-submenu" class="submenu" style="display: none; margin-left: 1rem; margin-bottom: 0.5rem;">
+                    <div class="submenu-item" style="padding: 0.75rem; color: #666; font-size: 0.9rem; border-left: 2px solid #e9ecef; padding-left: 1rem; margin-bottom: 0.25rem;">Quiz Scores</div>
+                    <div class="submenu-item" style="padding: 0.75rem; color: #666; font-size: 0.9rem; border-left: 2px solid #e9ecef; padding-left: 1rem; margin-bottom: 0.25rem;">Assignment Grades</div>
+                    <div class="submenu-item" style="padding: 0.75rem; color: #666; font-size: 0.9rem; border-left: 2px solid #e9ecef; padding-left: 1rem;">Study Time</div>
+                </div>
+            </div>
+
+            <!-- Practice Section -->
+            <div class="menu-section">
+                <div class="menu-item" onclick="window.location.href='coming-soon.html'" style="display: flex; align-items: center; padding: 1rem; background: #f8f9fa; border-radius: 12px; margin-bottom: 0.5rem; cursor: pointer; transition: all 0.3s ease;" onmouseover="this.style.background='#e9ecef'" onmouseout="this.style.background='#f8f9fa'">
+                    <div class="menu-icon" style="width: 40px; height: 40px; background: linear-gradient(135deg, #10b981, #059669); border-radius: 8px; display: flex; align-items: center; justify-content: center; margin-right: 1rem;">
+                        <iconify-icon icon="material-symbols:fitness-center" style="font-size: 1.5rem; color: white;"></iconify-icon>
+                    </div>
+                    <div class="menu-text" style="flex: 1;">
+                        <div class="menu-title" style="font-weight: 600; color: #333; font-size: 1rem;">Practice on Topic</div>
+                        <div class="menu-subtitle" style="font-size: 0.8rem; color: #666;">Topic-based Practice</div>
+                    </div>
+                    <iconify-icon icon="material-symbols:keyboard-arrow-right" style="font-size: 1.2rem; color: #666;"></iconify-icon>
+                </div>
+            </div>
+
+            <!-- Badges Section -->
+            <div class="menu-section">
+                <div class="menu-item" onclick="toggleSubmenu('badges')" style="display: flex; align-items: center; padding: 1rem; background: #f8f9fa; border-radius: 12px; margin-bottom: 0.5rem; cursor: pointer; transition: all 0.3s ease;" onmouseover="this.style.background='#e9ecef'" onmouseout="this.style.background='#f8f9fa'">
+                    <div class="menu-icon" style="width: 40px; height: 40px; background: linear-gradient(135deg, #10b981, #059669); border-radius: 8px; display: flex; align-items: center; justify-content: center; margin-right: 1rem;">
+                        <iconify-icon icon="material-symbols:workspace-premium" style="font-size: 1.5rem; color: white;"></iconify-icon>
+                    </div>
+                    <div class="menu-text" style="flex: 1;">
+                        <div class="menu-title" style="font-weight: 600; color: #333; font-size: 1rem;">Badges</div>
+                        <div class="menu-subtitle" style="font-size: 0.8rem; color: #666;">Achievements & Rewards</div>
+                    </div>
+                    <iconify-icon id="badges-arrow" icon="material-symbols:keyboard-arrow-down" style="font-size: 1.2rem; color: #666; transition: transform 0.3s ease;"></iconify-icon>
+                </div>
+                <div id="badges-submenu" class="submenu" style="display: none; margin-left: 1rem; margin-bottom: 0.5rem;">
+                    <div class="submenu-item" style="padding: 0.75rem; color: #666; font-size: 0.9rem; border-left: 2px solid #e9ecef; padding-left: 1rem; margin-bottom: 0.25rem;">Quiz Master</div>
+                    <div class="submenu-item" style="padding: 0.75rem; color: #666; font-size: 0.9rem; border-left: 2px solid #e9ecef; padding-left: 1rem; margin-bottom: 0.25rem;">Study Streak</div>
+                    <div class="submenu-item" style="padding: 0.75rem; color: #666; font-size: 0.9rem; border-left: 2px solid #e9ecef; padding-left: 1rem;">Top Performer</div>
+                </div>
+        </div>
+
+            <!-- Flashcards Section -->
+            <div class="menu-section">
+                <div class="menu-item" onclick="window.location.href='physics-flashcards.html'" style="display: flex; align-items: center; padding: 1rem; background: #e8f5e8; border-radius: 12px; margin-bottom: 0.5rem; cursor: pointer; transition: all 0.3s ease; border: 2px solid #10b981;" onmouseover="this.style.background='#d4edda'" onmouseout="this.style.background='#e8f5e8'">
+                    <div class="menu-icon" style="width: 40px; height: 40px; background: linear-gradient(135deg, #10b981, #059669); border-radius: 8px; display: flex; align-items: center; justify-content: center; margin-right: 1rem;">
+                        <iconify-icon icon="material-symbols:style" style="font-size: 1.5rem; color: white;"></iconify-icon>
+                    </div>
+                    <div class="menu-text" style="flex: 1;">
+                        <div class="menu-title" style="font-weight: 600; color: #10b981; font-size: 1rem;">Flashcards</div>
+                        <div class="menu-subtitle" style="font-size: 0.8rem; color: #059669;">Interactive Study Cards</div>
+                    </div>
+                    <iconify-icon icon="material-symbols:keyboard-arrow-right" style="font-size: 1.2rem; color: #10b981;"></iconify-icon>
+                </div>
+                <!-- Tricky Flashcards Quick Access -->
+                <div class="menu-item" onclick="openTrickyFlashcards()" style="display: flex; align-items: center; padding: 0.85rem 1rem; background: #fef3c7; border-radius: 12px; margin-bottom: 0.5rem; cursor: pointer; transition: all 0.3s ease;" onmouseover="this.style.background='#fde68a'" onmouseout="this.style.background='#fef3c7'">
+                    <div class="menu-icon" style="width: 36px; height: 36px; background: linear-gradient(135deg, #f59e0b, #d97706); border-radius: 8px; display: flex; align-items: center; justify-content: center; margin-right: 0.75rem;">
+                        <iconify-icon icon="material-symbols:psychology" style="font-size: 1.5rem; color: white;"></iconify-icon>
+                    </div>
+                    <div class="menu-text" style="flex: 1;">
+                        <div class="menu-title" style="font-weight: 600; color: #92400e; font-size: 0.95rem;">Tricky Flashcards</div>
+                        <div class="menu-subtitle" style="font-size: 0.8rem; color: #92400e;">Review difficult cards fast</div>
+                    </div>
+                    <iconify-icon icon="material-symbols:arrow-forward" style="font-size: 1.2rem; color: #92400e;"></iconify-icon>
+                </div>
+        </div>
+
+            <!-- Past Papers Section -->
+            <div class="menu-section">
+                <div class="menu-item" onclick="window.location.href='physics-past-papers.html'" style="display: flex; align-items: center; padding: 1rem; background: #f8f9fa; border-radius: 12px; margin-bottom: 0.5rem; cursor: pointer; transition: all 0.3s ease;" onmouseover="this.style.background='#e9ecef'" onmouseout="this.style.background='#f8f9fa'">
+                    <div class="menu-icon" style="width: 40px; height: 40px; background: linear-gradient(135deg, #10b981, #059669); border-radius: 8px; display: flex; align-items: center; justify-content: center; margin-right: 1rem;">
+                        <iconify-icon icon="material-symbols:description" style="font-size: 1.5rem; color: white;"></iconify-icon>
+                    </div>
+                    <div class="menu-text" style="flex: 1;">
+                        <div class="menu-title" style="font-weight: 600; color: #333; font-size: 1rem;">Past Papers</div>
+                        <div class="menu-subtitle" style="font-size: 0.8rem; color: #666;">Exam Practice & Solutions</div>
+                    </div>
+                    <iconify-icon icon="material-symbols:keyboard-arrow-right" style="font-size: 1.2rem; color: #666;"></iconify-icon>
+                </div>
+            </div>
+
+            <!-- Community Section -->
+            <div class="menu-section">
+                <div class="menu-item" onclick="window.location.href='physics-community.html'" style="display: flex; align-items: center; padding: 1rem; background: #f8f9fa; border-radius: 12px; margin-bottom: 0.5rem; cursor: pointer; transition: all 0.3s ease;" onmouseover="this.style.background='#e9ecef'" onmouseout="this.style.background='#f8f9fa'">
+                    <div class="menu-icon" style="width: 40px; height: 40px; background: linear-gradient(135deg, #10b981, #059669); border-radius: 8px; display: flex; align-items: center; justify-content: center; margin-right: 1rem;">
+                        <iconify-icon icon="material-symbols:groups" style="font-size: 1.5rem; color: white;"></iconify-icon>
+                    </div>
+                    <div class="menu-text" style="flex: 1;">
+                        <div class="menu-title" style="font-weight: 600; color: #333; font-size: 1rem;">Community</div>
+                        <div class="menu-subtitle" style="font-size: 0.8rem; color: #666;">Study Groups & Discussions</div>
+                    </div>
+                    <iconify-icon icon="material-symbols:keyboard-arrow-right" style="font-size: 1.2rem; color: #666;"></iconify-icon>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sidebar Overlay -->
+    <div id="sidebarOverlay" class="sidebar-overlay" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); z-index: 999; display: none;" onclick="toggleSidebar()"></div>
+
+    <div class="container" style="margin-top: 2rem;">
+        <!-- Statistics Row -->
+        <div class="stats-row animate-fade-in">
+            <div class="stat-card">
+                <div class="stat-number" id="totalCards">0</div>
+                <div class="stat-label">Total Cards</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="masteredCards">0</div>
+                <div class="stat-label">Mastered</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="studyingCards">0</div>
+                <div class="stat-label">Studying</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="forgottenCardsCount">0</div>
+            </div>
+        </div>
+
+        <!-- Tricky Flashcards Quick Button (compact, aligned with stats) -->
+        <div class="d-flex justify-content-end align-items-center" style="margin: 0 0 1.5rem 0;">
+            <button
+                type="button"
+                onclick="openTrickyFlashcards()"
+                id="trickyFlashcardsCard"
+                class="btn btn-sm btn-warning d-inline-flex align-items-center"
+                style="border-radius: 999px; padding: 0.35rem 0.9rem; font-size: 0.8rem; font-weight: 500; box-shadow: 0 2px 6px rgba(0,0,0,0.15); gap: 0.25rem;"
+            >
+                <iconify-icon icon="material-symbols:psychology" style="font-size: 1rem;"></iconify-icon>
+                <span>Tricky Flashcards</span>
+            </button>
+        </div>
+
+        <!-- Forgotten Cards Banner -->
+        <div class="forgotten-cards-banner animate-fade-in" onclick="window.location.href='physics-flashcards-forgotten.html'" id="forgottenBanner" style="display: none;">
+            <div class="forgotten-cards-content">
+                <h2><iconify-icon icon="material-symbols:priority-high"></iconify-icon> Forgotten Cards</h2>
+                <p style="margin: 0;">Review cards you're having trouble with</p>
+            </div>
+            <div class="forgotten-cards-count" id="forgottenCountBanner">0</div>
+        </div>
+
+        <!-- Forgotten Cards Action Button -->
+        <div class="container" style="margin-bottom: 2rem;">
+            <div class="row justify-content-center">
+                <div class="col-md-8">
+                    <div class="forgotten-cards-action-card" id="forgottenActionCard" style="display: none;">
+                        <div class="action-card-content">
+                            <div class="action-card-icon">
+                                <iconify-icon icon="material-symbols:priority-high" style="font-size: 2rem; color: white;"></iconify-icon>
+                            </div>
+                            <div class="action-card-text">
+                                <h3>📚 Review Forgotten Cards</h3>
+                                <p>You have <strong id="forgottenCountAction">0</strong> cards that need review. Practice them to improve your retention!</p>
+                            </div>
+                            <div class="action-card-button">
+                                <button class="btn-forgotten-action" onclick="window.location.href='physics-flashcards-forgotten.html'">
+                                    <iconify-icon icon="material-symbols:play-arrow"></iconify-icon>
+                                    Start Review
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Chapter Grid -->
+        <div class="chapter-grid" id="chapterGrid"></div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/notifications.js"></script>
+    <script>
+        // Load chapters from localStorage (managed by teacher dashboard)
+        let chapters = [];
+        
+        function loadChaptersFromStorage() {
+            const storedCategories = localStorage.getItem('physicsFlashcardsCategories');
+            if (storedCategories) {
+                try {
+                    chapters = JSON.parse(storedCategories);
+                    // Update card counts based on actual flashcards
+                    chapters.forEach(chapter => {
+                        const flashcards = JSON.parse(localStorage.getItem(`physicsFlashcards_${chapter.id}`) || '[]');
+                        chapter.cardsCount = flashcards.length;
+                    });
+                } catch (e) {
+                    console.error('Error loading flashcard categories:', e);
+                    // Fallback to default categories
+                    chapters = [
+                        { id: 1, title: 'Mechanics', icon: 'material-symbols:settings', cardsCount: 0, color: '#10b981' },
+                        { id: 2, title: 'Electricity & Magnetism', icon: 'material-symbols:electrical-services', cardsCount: 0, color: '#059669' },
+                        { id: 3, title: 'Waves & Sound', icon: 'material-symbols:graphic-eq', cardsCount: 0, color: '#f59e0b' },
+                        { id: 4, title: 'Light & Optics', icon: 'material-symbols:lightbulb', cardsCount: 0, color: '#ef4444' },
+                        { id: 5, title: 'Thermal Physics', icon: 'material-symbols:thermostat', cardsCount: 0, color: '#8b5cf6' },
+                        { id: 6, title: 'Atomic Physics', icon: 'material-symbols:atom', cardsCount: 0, color: '#06b6d4' },
+                        { id: 7, title: 'Nuclear Physics', icon: 'material-symbols:radioactive', cardsCount: 0, color: '#ec4899' },
+                        { id: 8, title: 'Space Physics', icon: 'material-symbols:rocket-launch', cardsCount: 0, color: '#84cc16' }
+                    ];
+                }
+            } else {
+                // Default categories if none exist
+                chapters = [
+                    { id: 1, title: 'Mechanics', icon: 'material-symbols:settings', cardsCount: 0, color: '#10b981' },
+                    { id: 2, title: 'Electricity & Magnetism', icon: 'material-symbols:electrical-services', cardsCount: 0, color: '#059669' },
+                    { id: 3, title: 'Waves & Sound', icon: 'material-symbols:graphic-eq', cardsCount: 0, color: '#f59e0b' },
+                    { id: 4, title: 'Light & Optics', icon: 'material-symbols:lightbulb', cardsCount: 0, color: '#ef4444' },
+                    { id: 5, title: 'Thermal Physics', icon: 'material-symbols:thermostat', cardsCount: 0, color: '#8b5cf6' },
+                    { id: 6, title: 'Atomic Physics', icon: 'material-symbols:atom', cardsCount: 0, color: '#06b6d4' },
+                    { id: 7, title: 'Nuclear Physics', icon: 'material-symbols:radioactive', cardsCount: 0, color: '#ec4899' },
+                    { id: 8, title: 'Space Physics', icon: 'material-symbols:rocket-launch', cardsCount: 0, color: '#84cc16' }
+                ];
+            }
+        }
+
+        // Initialize flashcard progress in localStorage
+        function initializeFlashcardProgress() {
+            if (!localStorage.getItem('physicsFlashcardProgress')) {
+                const progress = {};
+                chapters.forEach(chapter => {
+                    progress[chapter.id] = {
+                        mastered: 0,
+                        studying: 0, // Start with 0, will be updated when teacher adds cards
+                        lastStudied: null
+                    };
+                });
+                localStorage.setItem('physicsFlashcardProgress', JSON.stringify(progress));
+            }
+        }
+
+        // Get flashcard progress
+        function getFlashcardProgress() {
+            return JSON.parse(localStorage.getItem('physicsFlashcardProgress') || '{}');
+        }
+
+        // Get forgotten cards
+        function getForgottenCards() {
+            return JSON.parse(localStorage.getItem('physicsForgottenCards') || '{}');
+        }
+
+        // Get chapter progress
+        function getChapterProgress(chapterId) {
+            const progress = getFlashcardProgress();
+            const chapter = chapters.find(c => c.id === chapterId);
+            const cardsCount = chapter ? (chapter.cardsCount || 0) : 0;
+            const raw = progress[chapterId] || { mastered: 0, studying: cardsCount };
+
+            const mastered = Math.min(raw.mastered || 0, cardsCount);
+            const studying = Math.min(raw.studying || cardsCount, Math.max(cardsCount - mastered, 0));
+
+            return { mastered, studying };
+        }
+
+        // Calculate statistics
+        function calculateStats() {
+            const progress = getFlashcardProgress();
+            const forgottenCards = getForgottenCards();
+            
+            let totalCards = 0;
+            let masteredCards = 0;
+            let studyingCards = 0;
+            let forgottenCount = 0;
+
+            chapters.forEach(chapter => {
+                const chapterTotal = chapter.cardsCount || 0;
+                totalCards += chapterTotal;
+
+                const chapterProgress = getChapterProgress(chapter.id);
+                masteredCards += chapterProgress.mastered || 0;
+                studyingCards += chapterProgress.studying || 0;
+            });
+
+            // Count forgotten cards
+            Object.keys(forgottenCards).forEach(chapterId => {
+                if (Array.isArray(forgottenCards[chapterId])) {
+                    forgottenCount += forgottenCards[chapterId].length;
+                }
+            });
+
+            return { totalCards, masteredCards, studyingCards, forgottenCount };
+        }
+
+        // Update statistics display
+        function updateStats() {
+            const stats = calculateStats();
+            document.getElementById('totalCards').textContent = stats.totalCards;
+            document.getElementById('masteredCards').textContent = stats.masteredCards;
+            document.getElementById('studyingCards').textContent = stats.studyingCards;
+            document.getElementById('forgottenCardsCount').textContent = stats.forgottenCount;
+            document.getElementById('forgottenCountBanner').textContent = stats.forgottenCount;
+            document.getElementById('forgottenCountAction').textContent = stats.forgottenCount;
+            
+            // Show/hide forgotten cards banner
+            if (stats.forgottenCount > 0) {
+                document.getElementById('forgottenBanner').style.display = 'flex';
+                document.getElementById('forgottenActionCard').style.display = 'block';
+            } else {
+                document.getElementById('forgottenBanner').style.display = 'none';
+                document.getElementById('forgottenActionCard').style.display = 'none';
+            }
+        }
+
+        // Render chapter cards
+        function renderChapters() {
+            const grid = document.getElementById('chapterGrid');
+            grid.innerHTML = chapters.map(chapter => `
+                <div class="chapter-card" onclick="openChapter('${chapter.id}')" style="cursor: pointer;">
+                    <div class="chapter-icon">
+                        <iconify-icon icon="${chapter.icon}" style="font-size: 3rem; color: ${chapter.color};"></iconify-icon>
+                    </div>
+                    <div class="chapter-content">
+                        <h3 class="chapter-title">${chapter.title}</h3>
+                        <div class="chapter-info">
+                            <div class="chapter-info-item">
+                                <div class="chapter-info-number">${chapter.cardsCount}</div>
+                                <div class="chapter-info-label">Total Cards</div>
+                            </div>
+                            <div class="chapter-info-item">
+                                <div class="chapter-info-number">${getChapterProgress(chapter.id).mastered || 0}</div>
+                                <div class="chapter-info-label">Mastered</div>
+                            </div>
+                            <div class="chapter-info-item">
+                                <div class="chapter-info-number">${getChapterProgress(chapter.id).studying || chapter.cardsCount}</div>
+                                <div class="chapter-info-label">Studying</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="progress-bar-custom">
+                        <div class="progress-fill" style="width: ${(getChapterProgress(chapter.id).mastered || 0) / chapter.cardsCount * 100}%"></div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Open chapter (for flashcard study)
+        function openChapter(chapterId) {
+            console.log('Opening chapter with ID:', chapterId);
+            console.log('Available chapters:', chapters);
+            
+            const chapter = chapters.find(c => c.id == chapterId); // Use == instead of === for type flexibility
+            console.log('Found chapter:', chapter);
+            
+            if (!chapter) {
+                showToast('Chapter not found!', 'error');
+                return;
+            }
+
+            // Get flashcards for this chapter from teacher dashboard
+            const flashcards = JSON.parse(localStorage.getItem(`physicsFlashcards_${chapterId}`) || '[]');
+            console.log('Found flashcards:', flashcards);
+            
+            if (flashcards.length === 0) {
+                showToast('No flashcards available for this chapter yet. Teachers need to add flashcards first!', 'info');
+                return;
+            }
+
+            // Directly open study mode with teacher-created flashcards
+            createStudyModal(chapter, flashcards);
+        }
+
+        // Load existing flashcards for display
+        function loadExistingFlashcards(chapterId) {
+            const flashcards = JSON.parse(localStorage.getItem(`physicsFlashcards_${chapterId}`) || '[]');
+            const container = document.getElementById('existingFlashcards');
+            
+            if (flashcards.length === 0) {
+                container.innerHTML = '<p class="text-muted">No flashcards yet. Add your first flashcard above!</p>';
+                return;
+            }
+            
+            container.innerHTML = flashcards.map((card, index) => `
+                <div class="card mb-2" style="background: rgba(255,255,255,0.9);">
+                    <div class="card-body p-3">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div class="flex-grow-1">
+                                <div class="d-flex align-items-center mb-2">
+                                    <span class="badge bg-primary me-2">${card.category}</span>
+                                    <span class="badge bg-secondary">${card.difficulty}</span>
+                                </div>
+                                <div class="mb-2">
+                                    <strong>Q:</strong> ${card.question}
+                                </div>
+                                <div class="text-muted small">
+                                    <strong>A:</strong> ${card.answer}
+                                </div>
+                            </div>
+                            <button class="btn btn-sm btn-outline-danger" onclick="deleteFlashcard('${chapterId}', ${card.id})">
+                                <iconify-icon icon="material-symbols:delete"></iconify-icon>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Delete a flashcard
+        function deleteFlashcard(chapterId, cardId) {
+            if (!confirm('Are you sure you want to delete this flashcard?')) return;
+            
+            const flashcards = JSON.parse(localStorage.getItem(`physicsFlashcards_${chapterId}`) || '[]');
+            const updatedFlashcards = flashcards.filter(card => card.id !== cardId);
+            localStorage.setItem(`physicsFlashcards_${chapterId}`, JSON.stringify(updatedFlashcards));
+            
+            // Update chapter card count
+            const chapter = chapters.find(c => c.id === chapterId);
+            if (chapter) {
+                chapter.cardsCount = updatedFlashcards.length;
+                saveChaptersToStorage();
+                renderChapters();
+                updateStats();
+            }
+            
+            // Reload flashcards display
+            loadExistingFlashcards(chapterId);
+            showToast('Flashcard deleted successfully!', 'success');
+        }
+
+        // Save chapters to localStorage
+        function saveChaptersToStorage() {
+            localStorage.setItem('physicsFlashcardsCategories', JSON.stringify(chapters));
+        }
+
+        // Add new flashcard
+        function addNewFlashcard(chapterId) {
+            const question = document.getElementById('newCardQuestion').value.trim();
+            const answer = document.getElementById('newCardAnswer').value.trim();
+            const category = document.getElementById('newCardCategory').value;
+            const difficulty = document.getElementById('newCardDifficulty').value;
+            
+            if (!question || !answer) {
+                showToast('Please enter both question and answer', 'error');
+                return;
+            }
+            
+            // Get existing flashcards for this chapter
+            const existingFlashcards = JSON.parse(localStorage.getItem(`physicsFlashcards_${chapterId}`) || '[]');
+            
+            // Create new flashcard object
+            const newFlashcard = {
+                id: Date.now(),
+                question: question,
+                answer: answer,
+                category: category,
+                difficulty: difficulty,
+                createdAt: new Date().toISOString(),
+                chapterId: chapterId
+            };
+            
+            // Add to array and save
+            existingFlashcards.push(newFlashcard);
+            localStorage.setItem(`physicsFlashcards_${chapterId}`, JSON.stringify(existingFlashcards));
+            
+            // Clear form
+            document.getElementById('newCardQuestion').value = '';
+            document.getElementById('newCardAnswer').value = '';
+            
+            // Show success message
+            showToast('Flashcard added successfully!', 'success');
+            
+            // Update chapter card count
+            const chapter = chapters.find(c => c.id === chapterId);
+            if (chapter) {
+                chapter.cardsCount = existingFlashcards.length;
+                
+                // Update localStorage chapters data
+                const updatedChapters = chapters.map(c => 
+                    c.id === chapter.id ? { ...c, cardsCount: existingFlashcards.length } : c
+                );
+                localStorage.setItem('physicsFlashcardsCategories', JSON.stringify(updatedChapters));
+                
+                // Refresh display
+                renderChapters();
+                updateStats();
+                
+                // Reload flashcards in modal
+                loadExistingFlashcards(chapterId);
+            }
+        }
+
+        // Save flashcards for chapter
+        function saveFlashcardsForChapter(chapterId) {
+            const modal = bootstrap.Modal.getInstance(document.getElementById('chapterModal'));
+            modal.hide();
+            showToast('Flashcards saved successfully!', 'success');
+        }
+
+        // Study flashcards for chapter
+        function studyFlashcards(chapterId) {
+            const chapter = chapters.find(c => c.id === chapterId);
+            if (!chapter) return;
+
+            // Get flashcards for this chapter
+            const flashcards = JSON.parse(localStorage.getItem(`physicsFlashcards_${chapterId}`) || '[]');
+            
+            if (flashcards.length === 0) {
+                showToast('No flashcards available for this chapter. Please add some flashcards first!', 'warning');
+                return;
+            }
+
+            // Close current modal
+            const modal = bootstrap.Modal.getInstance(document.getElementById('chapterModal'));
+            modal.hide();
+
+            // Create study modal
+            createStudyModal(chapter, flashcards);
+        }
+
+        // Create study modal with flashcard functionality
+        function createStudyModal(chapter, flashcards) {
+            let currentCardIndex = 0;
+            let isFlipped = false;
+
+            // Debug logging
+            console.log('Creating study modal for chapter:', chapter);
+            console.log('Flashcards data:', flashcards);
+
+            // Check if flashcards exist and have proper structure
+            if (!flashcards || flashcards.length === 0) {
+                showToast('No flashcards available for this chapter!', 'error');
+                return;
+            }
+
+            // Ensure flashcards have required fields
+            const validFlashcards = flashcards.filter(card => 
+                card && (card.question || card.answer)
+            );
+
+            if (validFlashcards.length === 0) {
+                showToast('Flashcards are not properly formatted. Please check the flashcard data!', 'error');
+                return;
+            }
+
+            // Use valid flashcards
+            flashcards = validFlashcards;
+
+            const modalHtml = `
+                <div class="modal fade" id="studyModal" tabindex="-1" data-bs-backdrop="static">
+                    <div class="modal-dialog modal-xl">
+                        <div class="modal-content" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 80vh;">
+                            <div class="modal-header" style="background: rgba(255,255,255,0.1); border: none; padding: 1.5rem;">
+                                <div class="d-flex align-items-center justify-content-between w-100">
+                                    <div>
+                                        <h5 class="modal-title text-white">
+                                            <iconify-icon icon="material-symbols:school" class="me-2"></iconify-icon>
+                                            Studying: ${chapter.title}
+                                        </h5>
+                                        <p class="text-white-50 mb-0">Card ${currentCardIndex + 1} of ${flashcards.length}</p>
+                                    </div>
+                                    <button type="button" class="btn btn-nav btn-outline-danger rounded-circle" onclick="exitStudyMode()" style="width: 45px; height: 45px; padding: 0; display: flex; align-items: center; justify-content: center;">
+                                        <iconify-icon icon="material-symbols:close-fullscreen" class="nav-icon" style="font-size: 1.3rem;"></iconify-icon>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="modal-body d-flex align-items-center justify-content-center" style="padding: 3rem;">
+                                <div class="flashcard-container" style="max-width: 600px; width: 100%;">
+                                    <div class="flashcard" id="studyFlashcard" onclick="flipCard()" style="width: 100%; height: 400px; position: relative; transform-style: preserve-3d; transition: transform 0.6s; cursor: pointer;">
+                                        <div class="flashcard-face flashcard-front" style="position: absolute; width: 100%; height: 100%; backface-visibility: hidden; border-radius: 20px; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 3rem; box-shadow: 0 15px 50px rgba(0, 0, 0, 0.3); background: rgba(255, 255, 255, 0.98);">
+                                            <div class="flashcard-label" style="font-size: 0.9rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 1.5rem; opacity: 0.7; color: #667eea;">Question</div>
+                                            <div class="flashcard-content" style="font-size: 1.5rem; font-weight: 700; text-align: center; line-height: 1.4; color: #333;">${flashcards[0].question || 'No question available'}</div>
+                                            <div class="flashcard-hint" style="position: absolute; bottom: 2rem; font-size: 0.9rem; opacity: 0.6;">Click to flip</div>
+                                        </div>
+                                        <div class="flashcard-face flashcard-back" style="position: absolute; width: 100%; height: 100%; backface-visibility: hidden; border-radius: 20px; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 3rem; box-shadow: 0 15px 50px rgba(0, 0, 0, 0.3); background: linear-gradient(135deg, #10b981, #059669); color: white; transform: rotateY(180deg);">
+                                            <div class="flashcard-label" style="font-size: 0.9rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 1.5rem; opacity: 0.8;">Answer</div>
+                                            <div class="flashcard-content" style="font-size: 1.5rem; font-weight: 700; text-align: center; line-height: 1.4;">${flashcards[0].answer || 'No answer available'}</div>
+                                            <div class="flashcard-category" style="position: absolute; top: 2rem; right: 2rem; background: rgba(255,255,255,0.2); padding: 0.5rem 1rem; border-radius: 20px; font-size: 0.8rem;">${flashcards[0].category || 'General'}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer" style="background: rgba(255,255,255,0.1); border: none; padding: 1.5rem;">
+                                <div class="d-flex justify-content-center align-items-center gap-3 w-100">
+                                    <button type="button" class="btn btn-nav btn-outline-light" onclick="previousCard()" ${currentCardIndex === 0 ? 'disabled' : ''}>
+                                        <iconify-icon icon="material-symbols:arrow-back" class="nav-icon me-2"></iconify-icon>
+                                        Previous
+                                    </button>
+                                    <button type="button" class="btn btn-nav btn-success" onclick="pushToTrickyFlashcards()" style="padding: 0.75rem 2rem; border-radius: 12px; font-weight: 500;">
+                                        <iconify-icon icon="material-symbols:psychology" class="nav-icon me-2"></iconify-icon>
+                                        Push to Tricky
+                                    </button>
+                                    <button type="button" class="btn btn-nav btn-outline-light" onclick="nextCard()" ${currentCardIndex === flashcards.length - 1 ? 'disabled' : ''}>
+                                        Next
+                                        <iconify-icon icon="material-symbols:arrow-forward" class="nav-icon ms-2"></iconify-icon>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            // Remove existing study modal if present
+            const existingModal = document.getElementById('studyModal');
+            if (existingModal) {
+                existingModal.remove();
+            }
+
+            // Add modal to body
+            document.body.insertAdjacentHTML('beforeend', modalHtml);
+
+            // Add global functions for the study modal
+            window.flipCard = function() {
+                const flashcard = document.getElementById('studyFlashcard');
+                isFlipped = !isFlipped;
+                flashcard.style.transform = isFlipped ? 'rotateY(180deg)' : 'rotateY(0deg)';
+            };
+
+            window.nextCard = function() {
+                if (currentCardIndex < flashcards.length - 1) {
+                    currentCardIndex++;
+                    isFlipped = false;
+                    updateStudyCard();
+                }
+            };
+
+            window.previousCard = function() {
+                if (currentCardIndex > 0) {
+                    currentCardIndex--;
+                    isFlipped = false;
+                    updateStudyCard();
+                }
+            };
+
+            window.markAsMastered = function() {
+                updateCardProgress('mastered');
+                if (currentCardIndex < flashcards.length - 1) {
+                    nextCard();
+                } else {
+                    showToast('Congratulations! You\'ve completed all flashcards!', 'success');
+                }
+            };
+
+            window.markAsStudying = function() {
+                updateCardProgress('studying');
+                if (currentCardIndex < flashcards.length - 1) {
+                    nextCard();
+                } else {
+                    showToast('Study session completed!', 'info');
+                }
+            };
+
+            window.markAsForgotten = function() {
+                updateCardProgress('forgotten');
+                if (currentCardIndex < flashcards.length - 1) {
+                    nextCard();
+                } else {
+                    showToast('Study session completed! Review forgotten cards later.', 'warning');
+                }
+            };
+
+            window.exitStudyMode = function() {
+                const modal = bootstrap.Modal.getInstance(document.getElementById('studyModal'));
+                modal.hide();
+            };
+
+            window.pushToTrickyFlashcards = function() {
+                const currentCard = flashcards[currentCardIndex];
+                if (!currentCard) return;
+
+                // Get current chapter info
+                const chapter = chapters.find(c => c.id === currentCard.chapterId);
+                if (!chapter) return;
+
+                // Add to tricky flashcards
+                let trickyFlashcards = JSON.parse(localStorage.getItem('physicsTrickyFlashcards') || '[]');
+                
+                // Check if card already exists in tricky flashcards
+                const exists = trickyFlashcards.find(card => card.id === currentCard.id);
+                if (!exists) {
+                    // Mark as tricky
+                    const trickyCard = {
+                        ...currentCard,
+                        chapterTitle: chapter.title,
+                        chapterIcon: chapter.icon,
+                        chapterColor: chapter.color,
+                        reason: 'Marked during study',
+                        addedAt: new Date().toISOString()
+                    };
+                    
+                    trickyFlashcards.push(trickyCard);
+                    localStorage.setItem('physicsTrickyFlashcards', JSON.stringify(trickyFlashcards));
+                    
+                    showToast('Card added to tricky flashcards!', 'success');
+                } else {
+                    showToast('Card already in tricky flashcards!', 'info');
+                }
+                
+                // Close study modal
+                const modal = bootstrap.Modal.getInstance(document.getElementById('studyModal'));
+                modal.hide();
+            };
+
+            window.updateStudyCard = function() {
+                const flashcard = document.getElementById('studyFlashcard');
+                const currentCard = flashcards[currentCardIndex];
+                
+                // Update front face with fallback
+                const frontContent = flashcard.querySelector('.flashcard-front .flashcard-content');
+                frontContent.textContent = currentCard.question || 'No question available';
+                
+                // Update back face with fallback
+                const backContent = flashcard.querySelector('.flashcard-back .flashcard-content');
+                backContent.textContent = currentCard.answer || 'No answer available';
+                
+                // Update category with fallback
+                const categoryElement = flashcard.querySelector('.flashcard-back .flashcard-category');
+                categoryElement.textContent = currentCard.category || 'General';
+                
+                // Update card counter
+                const counter = document.querySelector('.modal-title + p');
+                counter.textContent = `Card ${currentCardIndex + 1} of ${flashcards.length}`;
+                
+                // Update button states
+                document.querySelector('[onclick="previousCard()"]').disabled = currentCardIndex === 0;
+                document.querySelector('[onclick="nextCard()"]').disabled = currentCardIndex === flashcards.length - 1;
+                
+                // Reset flip state
+                flashcard.style.transform = 'rotateY(0deg)';
+                isFlipped = false;
+            };
+
+            window.updateCardProgress = function(status) {
+                const progress = JSON.parse(localStorage.getItem('physicsFlashcardProgress') || '{}');
+                if (!progress[chapter.id]) {
+                    progress[chapter.id] = { mastered: 0, studying: 0, forgotten: 0 };
+                }
+                
+                if (status === 'mastered') {
+                    progress[chapter.id].mastered = (progress[chapter.id].mastered || 0) + 1;
+                } else if (status === 'studying') {
+                    progress[chapter.id].studying = (progress[chapter.id].studying || 0) + 1;
+                } else if (status === 'forgotten') {
+                    progress[chapter.id].forgotten = (progress[chapter.id].forgotten || 0) + 1;
+                    // Add to forgotten cards
+                    const forgotten = JSON.parse(localStorage.getItem('physicsForgottenCards') || '{}');
+                    if (!forgotten[chapter.id]) {
+                        forgotten[chapter.id] = [];
+                    }
+                    forgotten[chapter.id].push(flashcards[currentCardIndex].id);
+                    localStorage.setItem('physicsForgottenCards', JSON.stringify(forgotten));
+                }
+                
+                localStorage.setItem('physicsFlashcardProgress', JSON.stringify(progress));
+            };
+
+            // Initialize modal
+            const modal = new bootstrap.Modal(document.getElementById('studyModal'));
+            modal.show();
+        }
+
+        // Sidebar Menu Functions
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebarOverlay');
+            
+            if (sidebar.style.left === '-350px' || sidebar.style.left === '') {
+                // Open sidebar
+                sidebar.style.left = '0';
+                overlay.style.display = 'block';
+                document.body.style.overflow = 'hidden'; // Prevent background scrolling
+            } else {
+                // Close sidebar
+                sidebar.style.left = '-350px';
+                overlay.style.display = 'none';
+                document.body.style.overflow = 'auto'; // Restore scrolling
+                
+                // Close all submenus when closing sidebar
+                closeAllSubmenus();
+            }
+        }
+
+        function toggleSubmenu(menuId) {
+            const submenu = document.getElementById(menuId + '-submenu');
+            const arrow = document.getElementById(menuId + '-arrow');
+            
+            if (submenu.style.display === 'none' || submenu.style.display === '') {
+                // Close all other submenus first
+                closeAllSubmenus();
+                
+                // Open this submenu
+                submenu.style.display = 'block';
+                arrow.style.transform = 'rotate(180deg)';
+            } else {
+                // Close this submenu
+                submenu.style.display = 'none';
+                arrow.style.transform = 'rotate(0deg)';
+            }
+        }
+
+        function closeAllSubmenus() {
+            const submenus = document.querySelectorAll('.submenu');
+            const arrows = document.querySelectorAll('[id$="-arrow"]');
+            
+            submenus.forEach(submenu => {
+                submenu.style.display = 'none';
+            });
+            
+            arrows.forEach(arrow => {
+                arrow.style.transform = 'rotate(0deg)';
+            });
+        }
+
+        // Navigation functions
+        function navigateToFocusMode() {
+            console.log('Focus Mode button clicked');
+            window.location.href = 'focus-mode.html';
+        }
+
+        function navigateToNotifications() {
+            console.log('Notifications button clicked');
+            showNotificationsModal();
+        }
+
+        function navigateToCommunity() {
+            console.log('Community button clicked');
+            window.location.href = 'physics-community.html';
+        }
+
+        function navigateToProfile() {
+            console.log('Profile button clicked');
+            window.location.href = 'student-profile.html';
+        }
+
+        // Clear old cached data and reset progress
+        function clearOldDataAndReset() {
+            // Remove ALL old hardcoded data from localStorage
+            localStorage.removeItem('physicsFlashcardProgress');
+            localStorage.removeItem('physicsForgottenCards');
+            
+            // Clear any other old keys that might exist
+            Object.keys(localStorage).forEach(key => {
+                if (key.includes('physicsFlashcard') && !key.includes('Categories')) {
+                    console.log('🗑️ Removing old key:', key);
+                    localStorage.removeItem(key);
+                }
+            });
+            
+            // Reset progress with fresh data
+            initializeFlashcardProgress();
+            updateStats();
+            renderChapters();
+            
+            console.log('🧹 Cleared old cached data and reset progress');
+        }
+
+        // Manual clear function for debugging
+        function manualClearData() {
+            console.log('🔧 Manual clear triggered');
+            clearOldDataAndReset();
+        }
+
+        // Open tricky flashcards modal
+        function openTrickyFlashcards() {
+            console.log('Opening tricky flashcards...');
+            
+            // Collect all difficult flashcards from all categories
+            let trickyFlashcards = [];
+            
+            chapters.forEach(chapter => {
+                const flashcards = JSON.parse(localStorage.getItem(`physicsFlashcards_${chapter.id}`) || '[]');
+                const difficultCards = flashcards.filter(card => 
+                    card.difficulty === 'hard' || 
+                    card.category?.toLowerCase().includes('advanced') ||
+                    card.question?.toLowerCase().includes('difficult') ||
+                    card.question?.toLowerCase().includes('challenge')
+                );
+                
+                // Add chapter info to each card
+                difficultCards.forEach(card => {
+                    trickyFlashcards.push({
+                        ...card,
+                        chapterTitle: chapter.title,
+                        chapterIcon: chapter.icon,
+                        chapterColor: chapter.color
+                    });
+                });
+            });
+
+            // Also add forgotten cards
+            const forgottenCardsData = JSON.parse(localStorage.getItem('physicsForgottenCards') || '{}');
+            Object.keys(forgottenCardsData).forEach(chapterId => {
+                const chapter = chapters.find(c => c.id == chapterId);
+                const forgottenIds = forgottenCardsData[chapterId];
+                
+                forgottenIds.forEach(cardId => {
+                    const chapterFlashcards = JSON.parse(localStorage.getItem(`physicsFlashcards_${chapterId}`) || '[]');
+                    const forgottenCard = chapterFlashcards.find(card => card.id === cardId);
+                    
+                    if (forgottenCard && chapter) {
+                        trickyFlashcards.push({
+                            ...forgottenCard,
+                            chapterTitle: chapter.title,
+                            chapterIcon: chapter.icon,
+                            chapterColor: chapter.color,
+                            reason: 'Forgotten'
+                        });
+                    }
+                });
+            });
+
+            // Add manually marked tricky flashcards
+            const manuallyMarkedTricky = JSON.parse(localStorage.getItem('physicsTrickyFlashcards') || '[]');
+            manuallyMarkedTricky.forEach(card => {
+                const chapter = chapters.find(c => c.id == card.chapterId);
+                if (chapter) {
+                    trickyFlashcards.push({
+                        ...card,
+                        chapterTitle: chapter.title,
+                        chapterIcon: chapter.icon,
+                        chapterColor: chapter.color,
+                        reason: card.reason || 'Manually marked'
+                    });
+                }
+            });
+
+            // Remove duplicates
+            const uniqueTrickyFlashcards = trickyFlashcards.filter((card, index, self) => 
+                index === self.findIndex((c) => c.id === card.id)
+            );
+
+            if (uniqueTrickyFlashcards.length === 0) {
+                showToast('No tricky flashcards found. Study more cards to see difficult ones here!', 'info');
+                return;
+            }
+
+            // Create modal for tricky flashcards
+            createTrickyFlashcardsModal(uniqueTrickyFlashcards);
+        }
+
+        // Create tricky flashcards modal
+        function createTrickyFlashcardsModal(trickyFlashcards) {
+            var modalHtml = '<div class="modal fade" id="trickyFlashcardsModal" tabindex="-1">' +
+                    '<div class="modal-dialog modal-xl modal-dialog-centered">' +
+                        '<div class="modal-content" style="border: none; border-radius: 18px; overflow: hidden; box-shadow: 0 18px 45px rgba(15,23,42,0.25); background: #ffffff; color: #111827;">' +
+                            '<div class="modal-header" style="background: #f3f4f6; color: #111827; border: none; padding: 1.4rem 1.75rem; position: relative;">' +
+                                '<div class="modal-header-decoration" style="position: absolute; inset: 0; background: linear-gradient(90deg, rgba(243,244,246,0.9), rgba(229,231,235,0.9)); opacity: 1;"></div>' +
+                                '<div class="d-flex align-items-center justify-content-between w-100" style="position: relative; z-index: 1;">' +
+                                    '<div>' +
+                                        '<div class="d-flex align-items-center mb-1">' +
+                                            '<div class="modal-icon-wrapper" style="width: 44px; height: 44px; background: #e5e7eb; border-radius: 999px; display: flex; align-items: center; justify-content: center; margin-right: 0.9rem;">' +
+                                                '<iconify-icon icon="material-symbols:psychology" style="font-size: 1.7rem; color: #4b5563;"></iconify-icon>' +
+                                            '</div>' +
+                                            '<div>' +
+                                                '<h5 class="modal-title mb-1" style="font-size: 1.35rem; font-weight: 700; letter-spacing: 0.01em; color: #111827;">' +
+                                                    'Tricky Flashcards' +
+                                                '</h5>' +
+                                                '<div class="d-flex align-items-center flex-wrap" style="gap: 0.4rem; font-size: 0.8rem; color: #4b5563;">' +
+                                                    '<span class="badge bg-light text-muted" style="padding: 0.2rem 0.65rem; border-radius: 999px; border: 1px solid #d1d5db;">' +
+                                                        '<iconify-icon icon="material-symbols:style" class="me-1"></iconify-icon>' +
+                                                        trickyFlashcards.length + ' card' + (trickyFlashcards.length === 1 ? '' : 's') +
+                                                    '</span>' +
+                                                    '<span class="badge" style="padding: 0.2rem 0.65rem; border-radius: 999px; font-weight: 500; display: inline-flex; align-items: center; gap: 0.15rem; background: #e5e7eb; color: #374151;">' +
+                                                        '<iconify-icon icon="material-symbols:warning" class="me-1"></iconify-icon>' +
+                                                        'Focus mode' +
+                                                    '</span>' +
+                                                '</div>' +
+                                            '</div>' +
+                                        '</div>' +
+                                        '<p class="mb-0" style="font-size: 0.85rem; color: #4b5563; max-width: 520px;">Quickly review the cards you struggle with the most, grouped by chapter and difficulty.</p>' +
+                                    '</div>' +
+                                    '<button type="button" class="btn btn-outline-secondary rounded-circle" onclick="exitTrickyFlashcardsMode()" style="width: 36px; height: 36px; padding: 0; display: flex; align-items: center; justify-content: center; border-radius: 999px; border: 1px solid #d1d5db; background: #ffffff; color: #6b7280; font-size: 0.9rem;">' +
+                                        '<iconify-icon icon="material-symbols:close-rounded" class="nav-icon" style="font-size: 1.5rem;"></iconify-icon>' +
+                                    '</button>' +
+                                '</div>' +
+                            '</div>' +
+                            '<div class="modal-body" style="padding: 1.5rem 1.75rem 1.25rem; max-height: 60vh; overflow-y: auto; background: #ffffff;">' +
+                                '<div class="d-flex justify-content-between align-items-center mb-3" style="font-size: 0.8rem; color: #6b7280;">' +
+                                    '<span><iconify-icon icon="material-symbols:insights" class="me-1"></iconify-icon>Tap any card to preview, or use the button at the bottom to study them all in sequence.</span>' +
+                                '</div>' +
+                                '<div class="tricky-flashcards-grid row g-3 g-md-4" id="trickyFlashcardsContainer">' +
+                                    '<!-- Flashcards will be loaded here -->' +
+                                '</div>' +
+                            '</div>' +
+                            '<div class="modal-footer" style="background: #f9fafb; border: none; padding: 1.1rem 1.75rem 1.3rem; border-top: 1px solid #e5e7eb;">' +
+                                '<div class="d-flex justify-content-between align-items-center w-100 flex-wrap" style="row-gap: 0.6rem;">' +
+                                    '<div class="text-white-75" style="font-size: 0.8rem; color: #6b7280;">' +
+                                        '<iconify-icon icon="material-symbols:info" class="me-1"></iconify-icon>' +
+                                        'Use this view as a warm-up before full practice sessions.' +
+                                    '</div>' +
+                                    '<div class="d-flex gap-2">' +
+                                        '<button type="button" class="btn btn-outline-secondary" onclick="exitTrickyFlashcardsMode()" style="padding: 0.45rem 1.3rem; border-radius: 999px; font-weight: 500; border: 1px solid #d1d5db; background: #ffffff; font-size: 0.85rem; color: #374151;">' +
+                                            '<iconify-icon icon="material-symbols:arrow-back" class="me-1"></iconify-icon>' +
+                                            'Back to flashcards' +
+                                        '</button>' +
+                                        '<button type="button" class="btn btn-primary" onclick="studyAllTrickyFlashcards()" style="padding: 0.45rem 1.6rem; border-radius: 999px; font-weight: 600; background: #2563eb; border: none; box-shadow: 0 6px 18px rgba(37,99,235,0.35); font-size: 0.85rem; display: inline-flex; align-items: center; gap: 0.25rem; color: #ffffff;">' +
+                                            '<iconify-icon icon="material-symbols:play-arrow" class="me-1"></iconify-icon>' +
+                                            'Study all tricky cards' +
+                                        '</button>' +
+                                    '</div>' +
+                                '</div>' +
+                        '</div>' +
+                    '</div>' +
+                '</div>';
+            
+            // Remove existing modal if present
+            const existingModal = document.getElementById('trickyFlashcardsModal');
+            if (existingModal) {
+                existingModal.remove();
+            }
+
+            // Add modal to page
+            document.body.insertAdjacentHTML('beforeend', modalHtml);
+
+            // Load flashcards into modal
+            loadTrickyFlashcardsIntoModal(trickyFlashcards);
+
+            // Show modal
+            const modal = new bootstrap.Modal(document.getElementById('trickyFlashcardsModal'));
+            modal.show();
+        }
+
+// Clear specific legacy keys only (do NOT touch teacher-created flashcards)
+// Previously this removed any key containing "physicsFlashcard", which
+// accidentally wiped keys like "physicsFlashcards_<chapterId>" coming
+// from the teacher dashboard. That caused chapters to always show 0 cards.
+// We now only clear the known legacy progress key.
+Object.keys(localStorage).forEach(key => {
+    if (key === 'physicsFlashcardProgress') {
+        console.log('🗑️ Removing old legacy key:', key);
+        localStorage.removeItem(key);
+    }
+});
+
+        // Load tricky flashcards into modal
+        function loadTrickyFlashcardsIntoModal(trickyFlashcards) {
+            const container = document.getElementById('trickyFlashcardsContainer');
+            
+            container.innerHTML = trickyFlashcards.map((card, index) => `
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="tricky-flashcard-card" style="background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05)); border: 1px solid rgba(255,255,255,0.2); border-radius: 15px; overflow: hidden; backdrop-filter: blur(10px); transition: all 0.3s ease; height: 100%;">
+                        <div class="card-header-custom" style="background: linear-gradient(135deg, rgba(245, 158, 11, 0.2), rgba(217, 119, 6, 0.2)); padding: 1rem; border-bottom: 1px solid rgba(255,255,255,0.1);">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="d-flex align-items-center">
+                                    <div class="chapter-icon-wrapper" style="width: 35px; height: 35px; background: rgba(255,255,255,0.2); border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-right: 0.75rem;">
+                                        <iconify-icon icon="${card.chapterIcon}" style="font-size: 1.2rem; color: #f59e0b;"></iconify-icon>
+                                    </div>
+                                    <div>
+                                        <div class="chapter-name" style="font-weight: 600; color: white; font-size: 0.9rem;">${card.chapterTitle}</div>
+                                        <div class="chapter-meta" style="font-size: 0.75rem; color: rgba(255,255,255,0.7);">Chapter ${card.chapterId}</div>
+                                    </div>
+                                </div>
+                                <div class="difficulty-badge">
+                                    ${card.reason === 'Forgotten' ? 
+                                        '<span class="badge bg-danger" style="padding: 0.4rem 0.8rem; font-size: 0.75rem; font-weight: 600;"><iconify-icon icon="material-symbols:warning" class="me-1"></iconify-icon>Forgotten</span>' : 
+                                        `<span class="badge bg-${card.difficulty === 'hard' ? 'danger' : 'warning'}" style="padding: 0.4rem 0.8rem; font-size: 0.75rem; font-weight: 600;">
+                                            <iconify-icon icon="material-symbols:trending-up" class="me-1"></iconify-icon>${card.difficulty || 'medium'}
+                                        </span>`
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body-custom" style="padding: 1.5rem;">
+                            <div class="question-section mb-3">
+                                <div class="question-label" style="font-size: 0.8rem; color: #94a3b8; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.5rem; font-weight: 600;">
+                                    <iconify-icon icon="material-symbols:help" class="me-1"></iconify-icon>Question
+                                </div>
+                                <div class="question-text" style="color: #e2e8f0; font-size: 0.95rem; line-height: 1.5; font-weight: 500;">
+                                    ${card.question || 'No question available'}
+                                </div>
+                            </div>
+                            <div class="answer-section">
+                                <div class="answer-label" style="font-size: 0.8rem; color: #94a3b8; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.5rem; font-weight: 600;">
+                                    <iconify-icon icon="material-symbols:check_circle" class="me-1"></iconify-icon>Answer
+                                </div>
+                                <div class="answer-text" style="color: #cbd5e1; font-size: 0.9rem; line-height: 1.4;">
+                                    ${card.answer || 'No answer available'}
+                                </div>
+                            </div>
+                            ${card.category ? `
+                                <div class="category-tag mt-3">
+                                    <span class="badge bg-white bg-opacity-20 text-white" style="padding: 0.3rem 0.8rem; font-size: 0.75rem; border: 1px solid rgba(255,255,255,0.2);">
+                                        <iconify-icon icon="material-symbols:label" class="me-1"></iconify-icon>${card.category}
+                                    </span>
+                                </div>
+                            ` : ''}
+                        </div>
+                        <div class="card-footer-custom" style="padding: 1rem 1.5rem; background: rgba(0,0,0,0.1); border-top: 1px solid rgba(255,255,255,0.1);">
+                            <button class="btn btn-warning w-100 study-btn" onclick="studySpecificTrickyFlashcard(${card.id}, '${card.chapterId}')" style="padding: 0.75rem; border-radius: 10px; font-weight: 600; background: linear-gradient(135deg, #f59e0b, #d97706); border: none; box-shadow: 0 4px 15px rgba(245, 158, 11, 0.3); transition: all 0.3s ease;">
+                                <iconify-icon icon="material-symbols:school" class="me-2"></iconify-icon>
+                                Study This Card
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+
+            // Add hover effects
+            setTimeout(() => {
+                const cards = container.querySelectorAll('.tricky-flashcard-card');
+                cards.forEach(card => {
+                    card.addEventListener('mouseenter', function() {
+                        this.style.transform = 'translateY(-5px)';
+                        this.style.boxShadow = '0 10px 30px rgba(245, 158, 11, 0.3)';
+                    });
+                    card.addEventListener('mouseleave', function() {
+                        this.style.transform = 'translateY(0)';
+                        this.style.boxShadow = 'none';
+                    });
+                });
+
+                const studyButtons = container.querySelectorAll('.study-btn');
+                studyButtons.forEach(btn => {
+                    btn.addEventListener('mouseenter', function() {
+                        this.style.transform = 'scale(1.02)';
+                        this.style.boxShadow = '0 6px 20px rgba(245, 158, 11, 0.4)';
+                    });
+                    btn.addEventListener('mouseleave', function() {
+                        this.style.transform = 'scale(1)';
+                        this.style.boxShadow = '0 4px 15px rgba(245, 158, 11, 0.3)';
+                    });
+                });
+            }, 100);
+        }
+
+        // Study specific tricky flashcard
+        function studySpecificTrickyFlashcard(cardId, chapterId) {
+            const chapter = chapters.find(c => c.id == chapterId);
+            if (!chapter) return;
+
+            const flashcards = JSON.parse(localStorage.getItem(`physicsFlashcards_${chapterId}`) || '[]');
+            const specificCard = flashcards.find(card => card.id === cardId);
+            
+            if (specificCard) {
+                // Find the index of this card
+                const cardIndex = flashcards.findIndex(card => card.id === cardId);
+                
+                // Create study modal with this specific card
+                const studyFlashcards = [specificCard];
+                createStudyModal(chapter, studyFlashcards, cardIndex);
+            }
+        }
+
+        // Study all tricky flashcards
+        function studyAllTrickyFlashcards() {
+            if (trickyFlashcards.length === 0) {
+                showToast('No tricky flashcards to study!', 'warning');
+                return;
+            }
+
+            // Group by chapter
+            const flashcardsByChapter = {};
+            trickyFlashcards.forEach(card => {
+                if (!flashcardsByChapter[card.chapterId]) {
+                    flashcardsByChapter[card.chapterId] = {
+                        chapter: chapters.find(c => c.id == card.chapterId),
+                        flashcards: []
+                    };
+                }
+                flashcardsByChapter[card.chapterId].flashcards.push(card);
+            });
+
+            // Study first chapter's flashcards
+            const firstChapter = Object.values(flashcardsByChapter)[0];
+            if (firstChapter) {
+                createStudyModal(firstChapter.chapter, firstChapter.flashcards);
+            }
+        }
+
+        // Exit tricky flashcards mode
+        function exitTrickyFlashcardsMode() {
+            const modal = bootstrap.Modal.getInstance(document.getElementById('trickyFlashcardsModal'));
+            modal.hide();
+        }
+
+        // Toast notification function
+        function showToast(message, type = 'info') {
+            const toastHtml = `
+                <div class="toast align-items-center text-white bg-${type === 'success' ? 'success' : type === 'error' ? 'danger' : type === 'warning' ? 'warning' : 'info'} border-0" role="alert" aria-live="assertive" aria-atomic="true" style="position: fixed; top: 20px; right: 20px; z-index: 9999;">
+                    <div class="d-flex">
+                        <div class="toast-body">
+                            ${message}
+                        </div>
+                        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                    </div>
+                </div>
+            `;
+            
+            // Remove existing toasts
+            document.querySelectorAll('.toast').forEach(toast => toast.remove());
+            
+            // Add new toast
+            document.body.insertAdjacentHTML('beforeend', toastHtml);
+            
+            // Initialize and show toast
+            const toastElement = document.querySelector('.toast');
+            const toast = new bootstrap.Toast(toastElement, { delay: 3000 });
+            toast.show();
+        }
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            loadChaptersFromStorage();
+            initializeFlashcardProgress();
+            updateStats();
+            renderChapters();
+            
+            // Force immediate clear if old data detected
+            const progress = getFlashcardProgress();
+            const hasOldValues = Object.values(progress).some(p => p.studying > 0 || p.mastered > 0);
+            if (hasOldValues) {
+                console.log('🔄 IMMEDIATE CLEAR: Old hardcoded data detected, clearing now...');
+                clearOldDataAndReset();
+                
+                // Force immediate UI update after clear
+                setTimeout(() => {
+                    updateStats();
+                    renderChapters();
+                }, 100);
+            }
+        });
+</script>
+</body>
+</html>

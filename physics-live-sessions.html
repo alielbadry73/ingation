@@ -1,0 +1,1395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Physics Live Sessions | IG Nation</title>
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/iconify-icon@1.0.7/dist/iconify-icon.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Jost:wght@400;600;700&display=swap" rel="stylesheet">
+    <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
+    
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Jost', sans-serif;
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            min-height: 100vh;
+        }
+        
+        /* Physics Dashboard Header */
+        .dashboard-header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            color: #333;
+            padding: 1rem 0;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            margin: 0;
+            position: relative;
+            top: 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            z-index: 999;
+        }
+        
+        .dashboard-header .container-fluid {
+            margin: 0 !important;
+            padding: 0 !important;
+        }
+        
+        .dashboard-header .row {
+            margin: 0 !important;
+        }
+        
+        
+        .sessions-content {
+            max-width: 1400px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+        
+        .page-header {
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+        
+        .page-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+        }
+        
+        .course-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+        }
+        
+        .page-subtitle {
+            color: #666;
+            font-size: 1.1rem;
+        }
+        
+        .sessions-tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            border-bottom: 2px solid #e9ecef;
+            justify-content: center;
+        }
+        
+        .tab-btn {
+            background: none;
+            border: none;
+            padding: 1rem 2rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #666;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s ease;
+        }
+        
+        .tab-btn.active {
+            color: #667eea;
+            border-bottom-color: #667eea;
+        }
+        
+        .tab-btn:hover {
+            color: #667eea;
+        }
+        
+        .sessions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+        
+        .session-card {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .session-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .session-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 24px rgba(0,0,0,0.15);
+        }
+        
+        .session-status {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+        
+        .status-live {
+            background: #fee;
+            color: #e11d48;
+            animation: pulse 2s infinite;
+        }
+        
+        .status-upcoming {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+        
+        .status-ended {
+            background: #f3f4f6;
+            color: #6b7280;
+        }
+        
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        
+        .session-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+        
+        .session-instructor {
+            color: #666;
+            font-size: 1rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .session-time {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #667eea;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        
+        .session-date {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #666;
+            margin-bottom: 1rem;
+        }
+        
+        .session-description {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+        
+        .session-stats {
+            display: flex;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 12px;
+        }
+        
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #666;
+            font-size: 0.9rem;
+        }
+        
+        .stat-item i {
+            color: #667eea;
+        }
+        
+        .session-actions {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .btn-primary-custom {
+            flex: 1;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+        
+        .btn-primary-custom:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+        }
+        
+        .btn-secondary-custom {
+            background: white;
+            color: #667eea;
+            border: 2px solid #667eea;
+            padding: 0.75rem 1.5rem;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-secondary-custom:hover {
+            background: #667eea;
+            color: white;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: #666;
+        }
+        
+        .empty-state i {
+            font-size: 4rem;
+            color: #ccc;
+            margin-bottom: 1rem;
+        }
+        
+        .teacher-controls {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e2e8f0;
+        }
+        
+        .control-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .control-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+        }
+        
+        .control-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #333;
+        }
+        
+        .control-subtitle {
+            color: #666;
+            font-size: 1rem;
+        }
+        
+        .zoom-form {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .form-label {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+        
+        .form-control {
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 0.75rem;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .form-control:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            outline: none;
+        }
+        
+        .btn-create-session {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1.1rem;
+        }
+        
+        .btn-create-session:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(16, 185, 129, 0.3);
+        }
+        
+        .live-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: #fee;
+            color: #e11d48;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            animation: pulse 2s infinite;
+        }
+        
+        .live-dot {
+            width: 8px;
+            height: 8px;
+            background: #e11d48;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+    </style>
+</head>
+<body>
+    <!-- Dashboard Header - Exact same as physics-progress.html -->
+    <header class="dashboard-header">
+        <div class="container-fluid">
+            <!-- Top Header with Hamburger Menu and Navigation Buttons -->
+            <div class="row align-items-center" style="padding: 0.5rem 0; border-bottom: 1px solid rgba(255, 255, 255, 0.1);">
+                <div class="col-6">
+                    <div class="d-flex align-items-center">
+                        <!-- Hamburger Menu Button -->
+                        <button class="hamburger-menu-btn" onclick="toggleSidebar()" style="width: 45px; height: 45px; background: white; border: 1px solid #e9ecef; border-radius: 8px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.1); margin-right: 1rem;" onmouseover="this.style.boxShadow='0 4px 8px rgba(0,0,0,0.15)'" onmouseout="this.style.boxShadow='0 2px 4px rgba(0,0,0,0.1)'">
+                            <iconify-icon icon="material-symbols:menu" style="font-size: 1.5rem; color: #333;"></iconify-icon>
+                        </button>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="d-flex justify-content-end align-items-center gap-2">
+                        <!-- IG Nation Logo -->
+                        <a href="student-dashboard.html" style="margin-right: 2rem; display: flex; align-items: center; text-decoration: none;">
+                            <img src="images/ig-nation-logo-graduation.png" alt="IG Nation" style="height: 45px; width: auto;">
+                        </a>
+                        
+                        <!-- Focus Mode Button -->
+                        <button class="nav-icon-btn" onclick="navigateToFocusMode()" style="width: 45px; height: 45px; background: white; border: 1px solid #e9ecef; border-radius: 8px; cursor: pointer; transition: all 0.3s ease; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 4px rgba(0,0,0,0.1);" onmouseover="this.style.boxShadow='0 4px 8px rgba(0,0,0,0.15)'" onmouseout="this.style.boxShadow='0 2px 4px rgba(0,0,0,0.1)'">
+                            <img src="images/7898418_focus_business_finance_office_marketing_icon.png" alt="Focus" style="width: 20px; height: 20px; filter: brightness(0) invert(0);">
+                        </button>
+                        
+                        <!-- Notifications Button -->
+                        <div class="notifications-container" style="position: relative;">
+                            <button class="nav-icon-btn" onclick="openNotifications()" style="width: 45px; height: 45px; background: white; border: 1px solid #e9ecef; border-radius: 8px; cursor: pointer; transition: all 0.3s ease; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 4px rgba(0,0,0,0.1); position: relative;" onmouseover="this.style.boxShadow='0 4px 8px rgba(0,0,0,0.15)'" onmouseout="this.style.boxShadow='0 2px 4px rgba(0,0,0,0.1)'">
+                                <iconify-icon icon="material-symbols:notifications" style="font-size: 1.2rem; color: #333;"></iconify-icon>
+                                <span id="notificationBadge" class="notification-badge" style="position: absolute; top: -5px; right: -5px; background: #ef4444; color: white; border-radius: 50%; width: 18px; height: 18px; font-size: 0.7rem; display: none; align-items: center; justify-content: center; font-weight: 700;">0</span>
+                            </button>
+                        </div>
+                        
+                        <!-- Community Button -->
+                        <button class="nav-icon-btn" onclick="navigateToCommunity()" style="width: 45px; height: 45px; background: white; border: 1px solid #e9ecef; border-radius: 8px; cursor: pointer; transition: all 0.3s ease; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 4px rgba(0,0,0,0.1);" onmouseover="this.style.boxShadow='0 4px 8px rgba(0,0,0,0.15)'" onmouseout="this.style.boxShadow='0 2px 4px rgba(0,0,0,0.1)'">
+                            <img src="images/4213440_community_group_leader_people_team_icon.png" alt="Community" style="width: 20px; height: 20px; filter: brightness(0) invert(0);">
+                        </button>
+                        
+                        <!-- Profile Button -->
+                        <button class="nav-icon-btn" onclick="navigateToProfile()" style="width: 45px; height: 45px; background: white; border: 1px solid #e9ecef; border-radius: 8px; cursor: pointer; transition: all 0.3s ease; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 4px rgba(0,0,0,0.1);" onmouseover="this.style.boxShadow='0 4px 8px rgba(0,0,0,0.15)'" onmouseout="this.style.boxShadow='0 2px 4px rgba(0,0,0,0.1)'">
+                            <img src="images/4092564_profile_about_mobile ui_user_icon.png" alt="Profile" style="width: 20px; height: 20px; filter: brightness(0) invert(0);">
+                        </button>
+                        </div>
+                </div>
+            </div>
+            
+        </div>
+    </header>
+
+    <!-- Sidebar Menu -->
+    <div id="sidebar" class="sidebar" style="position: fixed; top: 0; left: -350px; width: 350px; height: 100vh; background: white; box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1); transition: left 0.3s ease; z-index: 1000; overflow-y: auto;">
+        <!-- Sidebar Header -->
+        <div class="sidebar-header" style="padding: 1.5rem; border-bottom: 1px solid #e9ecef; display: flex; justify-content: space-between; align-items: center;">
+            <h4 style="margin: 0; color: #333; font-weight: 700;">My Courses</h4>
+            <button onclick="toggleSidebar()" style="background: none; border: none; color: #666; cursor: pointer; font-size: 1.5rem; padding: 0.25rem;" onmouseover="this.style.color='#333'" onmouseout="this.style.color='#666'">
+                <iconify-icon icon="material-symbols:close"></iconify-icon>
+            </button>
+        </div>
+        
+        <!-- Sidebar Content -->
+        <div class="sidebar-content" style="padding: 1rem;">
+            <!-- Books Section -->
+            <div class="menu-section">
+                <div class="menu-item" onclick="window.location.href='physics-library.html'" style="display: flex; align-items: center; padding: 1rem; background: #f8f9fa; border-radius: 12px; margin-bottom: 0.5rem; cursor: pointer; transition: all 0.3s ease;" onmouseover="this.style.background='#e9ecef'" onmouseout="this.style.background='#f8f9fa'">
+                    <div class="menu-icon" style="width: 40px; height: 40px; background: linear-gradient(135deg, #667eea, #764ba2); border-radius: 8px; display: flex; align-items: center; justify-content: center; margin-right: 1rem;">
+                        <iconify-icon icon="material-symbols:menu-book" style="font-size: 1.5rem; color: white;"></iconify-icon>
+                    </div>
+                    <div class="menu-text" style="flex: 1;">
+                        <div class="menu-title" style="font-weight: 600; color: #333; font-size: 1rem;">Books</div>
+                        <div class="menu-subtitle" style="font-size: 0.8rem; color: #666;">Textbooks & Study Materials</div>
+                    </div>
+                    <iconify-icon icon="material-symbols:keyboard-arrow-right" style="font-size: 1.2rem; color: #666;"></iconify-icon>
+                </div>
+            </div>
+
+            <!-- Lectures Section -->
+            <div class="menu-section">
+                <div class="menu-item" onclick="window.location.href='physics-lectures.html'" style="display: flex; align-items: center; padding: 1rem; background: #f8f9fa; border-radius: 12px; margin-bottom: 0.5rem; cursor: pointer; transition: all 0.3s ease;" onmouseover="this.style.background='#e9ecef'" onmouseout="this.style.background='#f8f9fa'">
+                    <div class="menu-icon" style="width: 40px; height: 40px; background: linear-gradient(135deg, #667eea, #764ba2); border-radius: 8px; display: flex; align-items: center; justify-content: center; margin-right: 1rem;">
+                        <iconify-icon icon="material-symbols:play-circle" style="font-size: 1.5rem; color: white;"></iconify-icon>
+                    </div>
+                    <div class="menu-text" style="flex: 1;">
+                        <div class="menu-title" style="font-weight: 600; color: #333; font-size: 1rem;">Lectures</div>
+                        <div class="menu-subtitle" style="font-size: 0.8rem; color: #666;">Video Lessons & Tutorials</div>
+                    </div>
+                    <iconify-icon icon="material-symbols:keyboard-arrow-right" style="font-size: 1.2rem; color: #666;"></iconify-icon>
+                </div>
+            </div>
+
+            <!-- Track Progress Section -->
+            <div class="menu-section">
+                <div class="menu-item" onclick="toggleSubmenu('progress')" style="display: flex; align-items: center; padding: 1rem; background: #f8f9fa; border-radius: 12px; margin-bottom: 0.5rem; cursor: pointer; transition: all 0.3s ease;" onmouseover="this.style.background='#e9ecef'" onmouseout="this.style.background='#f8f9fa'">
+                    <div class="menu-icon" style="width: 40px; height: 40px; background: linear-gradient(135deg, #667eea, #764ba2); border-radius: 8px; display: flex; align-items: center; justify-content: center; margin-right: 1rem;">
+                        <iconify-icon icon="material-symbols:trending-up" style="font-size: 1.5rem; color: white;"></iconify-icon>
+                    </div>
+                    <div class="menu-text" style="flex: 1;">
+                        <div class="menu-title" style="font-weight: 600; color: #333; font-size: 1rem;">Track Progress</div>
+                        <div class="menu-subtitle" style="font-size: 0.8rem; color: #666;">Monitor Learning Journey</div>
+                    </div>
+                    <iconify-icon id="progress-arrow" icon="material-symbols:keyboard-arrow-down" style="font-size: 1.2rem; color: #666; transition: transform 0.3s ease;"></iconify-icon>
+                </div>
+                <div id="progress-submenu" class="submenu" style="display: none; margin-left: 1rem; margin-bottom: 0.5rem;">
+                    <div class="submenu-item" style="padding: 0.75rem; color: #666; font-size: 0.9rem; border-left: 2px solid #e9ecef; padding-left: 1rem; margin-bottom: 0.25rem;">Quiz Scores</div>
+                    <div class="submenu-item" style="padding: 0.75rem; color: #666; font-size: 0.9rem; border-left: 2px solid #e9ecef; padding-left: 1rem; margin-bottom: 0.25rem;">Assignment Grades</div>
+                    <div class="submenu-item" style="padding: 0.75rem; color: #666; font-size: 0.9rem; border-left: 2px solid #e9ecef; padding-left: 1rem;">Study Time</div>
+                </div>
+            </div>
+
+            <!-- Practice Section -->
+            <div class="menu-section">
+                <div class="menu-item" onclick="window.location.href='coming-soon.html'" style="display: flex; align-items: center; padding: 1rem; background: #f8f9fa; border-radius: 12px; margin-bottom: 0.5rem; cursor: pointer; transition: all 0.3s ease;" onmouseover="this.style.background='#e9ecef'" onmouseout="this.style.background='#f8f9fa'">
+                    <div class="menu-icon" style="width: 40px; height: 40px; background: linear-gradient(135deg, #667eea, #764ba2); border-radius: 8px; display: flex; align-items: center; justify-content: center; margin-right: 1rem;">
+                        <iconify-icon icon="material-symbols:fitness-center" style="font-size: 1.5rem; color: white;"></iconify-icon>
+                    </div>
+                    <div class="menu-text" style="flex: 1;">
+                        <div class="menu-title" style="font-weight: 600; color: #333; font-size: 1rem;">Practice on Topic</div>
+                        <div class="menu-subtitle" style="font-size: 0.8rem; color: #666;">Topic-based Practice</div>
+                    </div>
+                    <iconify-icon icon="material-symbols:keyboard-arrow-right" style="font-size: 1.2rem; color: #666;"></iconify-icon>
+                </div>
+            </div>
+
+            <!-- Badges Section -->
+            <div class="menu-section">
+                <div class="menu-item" onclick="toggleSubmenu('badges')" style="display: flex; align-items: center; padding: 1rem; background: #f8f9fa; border-radius: 12px; margin-bottom: 0.5rem; cursor: pointer; transition: all 0.3s ease;" onmouseover="this.style.background='#e9ecef'" onmouseout="this.style.background='#f8f9fa'">
+                    <div class="menu-icon" style="width: 40px; height: 40px; background: linear-gradient(135deg, #667eea, #764ba2); border-radius: 8px; display: flex; align-items: center; justify-content: center; margin-right: 1rem;">
+                        <iconify-icon icon="material-symbols:workspace-premium" style="font-size: 1.5rem; color: white;"></iconify-icon>
+                    </div>
+                    <div class="menu-text" style="flex: 1;">
+                        <div class="menu-title" style="font-weight: 600; color: #333; font-size: 1rem;">Badges</div>
+                        <div class="menu-subtitle" style="font-size: 0.8rem; color: #666;">Achievements & Rewards</div>
+                    </div>
+                    <iconify-icon id="badges-arrow" icon="material-symbols:keyboard-arrow-down" style="font-size: 1.2rem; color: #666; transition: transform 0.3s ease;"></iconify-icon>
+                </div>
+                <div id="badges-submenu" class="submenu" style="display: none; margin-left: 1rem; margin-bottom: 0.5rem;">
+                    <div class="submenu-item" style="padding: 0.75rem; color: #666; font-size: 0.9rem; border-left: 2px solid #e9ecef; padding-left: 1rem; margin-bottom: 0.25rem;">Quiz Master</div>
+                    <div class="submenu-item" style="padding: 0.75rem; color: #666; font-size: 0.9rem; border-left: 2px solid #e9ecef; padding-left: 1rem; margin-bottom: 0.25rem;">Study Streak</div>
+                    <div class="submenu-item" style="padding: 0.75rem; color: #666; font-size: 0.9rem; border-left: 2px solid #e9ecef; padding-left: 1rem;">Top Performer</div>
+                </div>
+            </div>
+
+            
+            <!-- Live Sessions Section -->
+            <div class="menu-section">
+                <div class="menu-item" onclick="window.location.href='physics-live-sessions.html'" style="display: flex; align-items: center; padding: 1rem; background: #f8f9fa; border-radius: 12px; margin-bottom: 0.5rem; cursor: pointer; transition: all 0.3s ease;" onmouseover="this.style.background='#e9ecef'" onmouseout="this.style.background='#f8f9fa'">
+                    <div class="menu-icon" style="width: 40px; height: 40px; background: linear-gradient(135deg, #667eea, #764ba2); border-radius: 8px; display: flex; align-items: center; justify-content: center; margin-right: 1rem;">
+                        <iconify-icon icon="material-symbols:video-call" style="font-size: 1.5rem; color: white;"></iconify-icon>
+                    </div>
+                    <div class="menu-text" style="flex: 1;">
+                        <div class="menu-title" style="font-weight: 600; color: #333; font-size: 1rem;">Live Sessions</div>
+                        <div class="menu-subtitle" style="font-size: 0.8rem; color: #666;">Interactive Learning Sessions</div>
+                    </div>
+                    <iconify-icon icon="material-symbols:keyboard-arrow-right" style="font-size: 1.2rem; color: #666;"></iconify-icon>
+                </div>
+            </div>
+            
+            <!-- Past Papers Section -->
+            <div class="menu-section">
+                <div class="menu-item" onclick="toggleSubmenu('papers')" style="display: flex; align-items: center; padding: 1rem; background: #f8f9fa; border-radius: 12px; margin-bottom: 0.5rem; cursor: pointer; transition: all 0.3s ease;" onmouseover="this.style.background='#e9ecef'" onmouseout="this.style.background='#f8f9fa'">
+                    <div class="menu-icon" style="width: 40px; height: 40px; background: linear-gradient(135deg, #667eea, #764ba2); border-radius: 8px; display: flex; align-items: center; justify-content: center; margin-right: 1rem;">
+                        <iconify-icon icon="material-symbols:description" style="font-size: 1.5rem; color: white;"></iconify-icon>
+                    </div>
+                    <div class="menu-text" style="flex: 1;">
+                        <div class="menu-title" style="font-weight: 600; color: #333; font-size: 1rem;">Past Papers</div>
+                        <div class="menu-subtitle" style="font-size: 0.8rem; color: #666;">Previous Exam Papers & Solutions</div>
+                    </div>
+                    <iconify-icon id="papers-arrow" icon="material-symbols:keyboard-arrow-down" style="font-size: 1.2rem; color: #666; transition: transform 0.3s ease;"></iconify-icon>
+                </div>
+                <div id="papers-submenu" class="submenu" style="display: none; margin-left: 1rem; margin-bottom: 0.5rem;">
+                    <div class="submenu-item" onclick="window.location.href='physics-past-papers.html'" style="padding: 0.75rem; color: #666; font-size: 0.9rem; border-left: 2px solid #e9ecef; padding-left: 1rem; margin-bottom: 0.25rem; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.background='#f8f9fa'; this.style.color='#667eea'" onmouseout="this.style.background='transparent'; this.style.color='#666'">All Past Papers</div>
+                    <div class="submenu-item" onclick="window.location.href='physics-past-papers-2025.html'" style="padding: 0.75rem; color: #666; font-size: 0.9rem; border-left: 2px solid #e9ecef; padding-left: 1rem; margin-bottom: 0.25rem; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.background='#f8f9fa'; this.style.color='#667eea'" onmouseout="this.style.background='transparent'; this.style.color='#666'">2025 Papers</div>
+                    <div class="submenu-item" onclick="window.location.href='physics-past-papers-2024.html'" style="padding: 0.75rem; color: #666; font-size: 0.9rem; border-left: 2px solid #e9ecef; padding-left: 1rem; margin-bottom: 0.25rem; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.background='#f8f9fa'; this.style.color='#667eea'" onmouseout="this.style.background='transparent'; this.style.color='#666'">2024 Papers</div>
+                    <div class="submenu-item" onclick="window.location.href='physics-past-papers-2023.html'" style="padding: 0.75rem; color: #666; font-size: 0.9rem; border-left: 2px solid #e9ecef; padding-left: 1rem; margin-bottom: 0.25rem; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.background='#f8f9fa'; this.style.color='#667eea'" onmouseout="this.style.background='transparent'; this.style.color='#666'">2023 Papers</div>
+                    <div class="submenu-item" onclick="window.location.href='physics-past-papers-2022.html'" style="padding: 0.75rem; color: #666; font-size: 0.9rem; border-left: 2px solid #e9ecef; padding-left: 1rem; margin-bottom: 0.25rem; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.background='#f8f9fa'; this.style.color='#667eea'" onmouseout="this.style.background='transparent'; this.style.color='#666'">2022 Papers</div>
+                    <div class="submenu-item" onclick="window.location.href='physics-past-papers-2021.html'" style="padding: 0.75rem; color: #666; font-size: 0.9rem; border-left: 2px solid #e9ecef; padding-left: 1rem; margin-bottom: 0.25rem; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.background='#f8f9fa'; this.style.color='#667eea'" onmouseout="this.style.background='transparent'; this.style.color='#666'">2021 Papers</div>
+                    <div class="submenu-item" onclick="window.location.href='physics-past-papers-2020.html'" style="padding: 0.75rem; color: #666; font-size: 0.9rem; border-left: 2px solid #e9ecef; padding-left: 1rem; margin-bottom: 0.25rem; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.background='#f8f9fa'; this.style.color='#667eea'" onmouseout="this.style.background='transparent'; this.style.color='#666'">2020 Papers</div>
+                    <div class="submenu-item" onclick="window.location.href='physics-past-papers-2019.html'" style="padding: 0.75rem; color: #666; font-size: 0.9rem; border-left: 2px solid #e9ecef; padding-left: 1rem; margin-bottom: 0.25rem; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.background='#f8f9fa'; this.style.color='#667eea'" onmouseout="this.style.background='transparent'; this.style.color='#666'">2019 Papers</div>
+                    <div class="submenu-item" onclick="window.location.href='physics-past-papers-2018.html'" style="padding: 0.75rem; color: #666; font-size: 0.9rem; border-left: 2px solid #e9ecef; padding-left: 1rem; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.background='#f8f9fa'; this.style.color='#667eea'" onmouseout="this.style.background='transparent'; this.style.color='#666'">2018 Papers</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sidebar Overlay -->
+    <div id="sidebarOverlay" class="sidebar-overlay" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); z-index: 999; display: none;" onclick="toggleSidebar()"></div>
+    
+    <!-- Sessions Content -->
+    <div class="sessions-content">
+        <div class="page-header">
+            <h1 class="page-title">
+                <div class="course-icon">
+                    <iconify-icon icon="material-symbols:science"></iconify-icon>
+                </div>
+                Physics Live Sessions
+            </h1>
+            <p class="page-subtitle">Join interactive physics learning sessions with expert instructors</p>
+        </div>
+        
+        <div class="sessions-tabs">
+            <button class="tab-btn active" onclick="switchTab('live')">Live Now</button>
+            <button class="tab-btn" onclick="switchTab('upcoming')">Upcoming</button>
+            <button class="tab-btn" onclick="switchTab('past')">Past Sessions</button>
+        </div>
+        
+        <div id="live-sessions" class="sessions-grid">
+            <!-- Demo Live Session 1 -->
+            <div class="session-card">
+                <span class="session-status status-live">
+                    <span class="live-dot"></span>
+                    LIVE NOW
+                </span>
+                <h3 class="session-title">Mechanics - Forces and Motion</h3>
+                <div class="session-instructor">
+                    <i class="bi bi-person-circle"></i>
+                    <span>Dr. Sarah Johnson</span>
+                </div>
+                <div class="session-time">
+                    <i class="bi bi-clock"></i>
+                    <span>Started 15 minutes ago</span>
+                </div>
+                <div class="session-date">
+                    <i class="bi bi-calendar"></i>
+                    <span>Today, 3:00 PM - 4:30 PM</span>
+                </div>
+                <p class="session-description">
+                    Deep dive into Newton's laws of motion with practical problem-solving examples and interactive demonstrations.
+                </p>
+                <div class="session-stats">
+                    <div class="stat-item">
+                        <i class="bi bi-people-fill"></i>
+                        <span>47 joined</span>
+                    </div>
+                    <div class="stat-item">
+                        <i class="bi bi-chat-dots"></i>
+                        <span>28 messages</span>
+                    </div>
+                </div>
+                <div class="session-actions">
+                    <button class="btn-primary-custom" onclick="joinDemoSession('mechanics-demo')">
+                        <i class="bi bi-camera-video-fill"></i>
+                        Join Now
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Demo Live Session 2 -->
+            <div class="session-card">
+                <span class="session-status status-live">
+                    <span class="live-dot"></span>
+                    LIVE NOW
+                </span>
+                <h3 class="session-title">Electricity - Circuit Analysis</h3>
+                <div class="session-instructor">
+                    <i class="bi bi-person-circle"></i>
+                    <span>Prof. Michael Chen</span>
+                </div>
+                <div class="session-time">
+                    <i class="bi bi-clock"></i>
+                    <span>Started 5 minutes ago</span>
+                </div>
+                <div class="session-date">
+                    <i class="bi bi-calendar"></i>
+                    <span>Today, 4:00 PM - 5:00 PM</span>
+                </div>
+                <p class="session-description">
+                    Understanding electrical circuits, Ohm's law, and series/parallel connections with hands-on examples.
+                </p>
+                <div class="session-stats">
+                    <div class="stat-item">
+                        <i class="bi bi-people-fill"></i>
+                        <span>32 joined</span>
+                    </div>
+                    <div class="stat-item">
+                        <i class="bi bi-chat-dots"></i>
+                        <span>15 messages</span>
+                    </div>
+                </div>
+                <div class="session-actions">
+                    <button class="btn-primary-custom" onclick="joinDemoSession('electricity-demo')">
+                        <i class="bi bi-camera-video-fill"></i>
+                        Join Now
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <div id="upcoming-sessions" class="sessions-grid" style="display: none;">
+            <!-- Upcoming sessions will be loaded dynamically here -->
+            <div style="grid-column: 1 / -1; text-align: center; padding: 4rem 2rem; color: #94a3b8;">
+                <iconify-icon icon="material-symbols:event-available" style="font-size: 4rem; opacity: 0.3; margin-bottom: 1rem;"></iconify-icon>
+                <h3 style="color: #64748b; margin-bottom: 0.5rem;">No Upcoming Sessions</h3>
+                <p>Check back later for scheduled live sessions.</p>
+            </div>
+        </div>
+        
+        <div id="past-sessions" class="sessions-grid" style="display: none;">
+            <!-- Past Session 1 -->
+            <div class="session-card">
+                <span class="session-status status-ended">
+                    <i class="bi bi-check-circle"></i>
+                    ENDED
+                </span>
+                <h3 class="session-title">Quantum Physics Introduction</h3>
+                <div class="session-instructor">
+                    <i class="bi bi-person-circle"></i>
+                    <span>Dr. Sarah Johnson</span>
+                </div>
+                <div class="session-time">
+                    <i class="bi bi-clock"></i>
+                    <span>2 hours duration</span>
+                </div>
+                <div class="session-date">
+                    <i class="bi bi-calendar"></i>
+                    <span>Yesterday, 2:00 PM - 4:00 PM</span>
+                </div>
+                <div class="session-description">
+                    <p>Introduction to quantum mechanics, wave-particle duality, and the Heisenberg uncertainty principle.</p>
+                </div>
+                <div class="session-stats">
+                    <div class="stat-item">
+                        <i class="bi bi-people"></i>
+                        <span>45 attendees</span>
+                    </div>
+                    <div class="stat-item">
+                        <i class="bi bi-play-circle"></i>
+                        <span>Recording available</span>
+                    </div>
+                    <div class="stat-item">
+                        <i class="bi bi-chat-dots"></i>
+                        <span>23 questions</span>
+                    </div>
+                </div>
+                <div class="session-actions">
+                    <button class="btn-primary-custom" onclick="viewRecording('quantum-intro')">
+                        <i class="bi bi-play-circle"></i>
+                        Watch Recording
+                    </button>
+                    <button class="btn-secondary-custom" onclick="downloadMaterials('quantum-intro')">
+                        <i class="bi bi-download"></i>
+                        Materials
+                    </button>
+                </div>
+            </div>
+
+            <!-- Past Session 2 -->
+            <div class="session-card">
+                <span class="session-status status-ended">
+                    <i class="bi bi-check-circle"></i>
+                    ENDED
+                </span>
+                <h3 class="session-title">Thermodynamics and Heat Transfer</h3>
+                <div class="session-instructor">
+                    <i class="bi bi-person-circle"></i>
+                    <span>Prof. Michael Chen</span>
+                </div>
+                <div class="session-time">
+                    <i class="bi bi-clock"></i>
+                    <span>1.5 hours duration</span>
+                </div>
+                <div class="session-date">
+                    <i class="bi bi-calendar"></i>
+                    <span>Dec 15, 2023, 10:00 AM - 11:30 AM</span>
+                </div>
+                <div class="session-description">
+                    <p>Laws of thermodynamics, heat transfer mechanisms, and practical applications in engineering.</p>
+                </div>
+                <div class="session-stats">
+                    <div class="stat-item">
+                        <i class="bi bi-people"></i>
+                        <span>38 attendees</span>
+                    </div>
+                    <div class="stat-item">
+                        <i class="bi bi-play-circle"></i>
+                        <span>Recording available</span>
+                    </div>
+                    <div class="stat-item">
+                        <i class="bi bi-chat-dots"></i>
+                        <span>15 questions</span>
+                    </div>
+                </div>
+                <div class="session-actions">
+                    <button class="btn-primary-custom" onclick="viewRecording('thermodynamics')">
+                        <i class="bi bi-play-circle"></i>
+                        Watch Recording
+                    </button>
+                    <button class="btn-secondary-custom" onclick="downloadMaterials('thermodynamics')">
+                        <i class="bi bi-download"></i>
+                        Materials
+                    </button>
+                </div>
+            </div>
+
+            <!-- Past Session 3 -->
+            <div class="session-card">
+                <span class="session-status status-ended">
+                    <i class="bi bi-check-circle"></i>
+                    ENDED
+                </span>
+                <h3 class="session-title">Electromagnetic Induction</h3>
+                <div class="session-instructor">
+                    <i class="bi bi-person-circle"></i>
+                    <span>Dr. Emily Rodriguez</span>
+                </div>
+                <div class="session-time">
+                    <i class="bi bi-clock"></i>
+                    <span>2 hours duration</span>
+                </div>
+                <div class="session-date">
+                    <i class="bi bi-calendar"></i>
+                    <span>Dec 10, 2023, 3:00 PM - 5:00 PM</span>
+                </div>
+                <div class="session-description">
+                    <p>Faraday's law, Lenz's law, and applications of electromagnetic induction in modern technology.</p>
+                </div>
+                <div class="session-stats">
+                    <div class="stat-item">
+                        <i class="bi bi-people"></i>
+                        <span>52 attendees</span>
+                    </div>
+                    <div class="stat-item">
+                        <i class="bi bi-play-circle"></i>
+                        <span>Recording available</span>
+                    </div>
+                    <div class="stat-item">
+                        <i class="bi bi-chat-dots"></i>
+                        <span>31 questions</span>
+                    </div>
+                </div>
+                <div class="session-actions">
+                    <button class="btn-primary-custom" onclick="viewRecording('electromagnetic')">
+                        <i class="bi bi-play-circle"></i>
+                        Watch Recording
+                    </button>
+                    <button class="btn-secondary-custom" onclick="downloadMaterials('electromagnetic')">
+                        <i class="bi bi-download"></i>
+                        Materials
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    
+    <script src="js/notifications.js"></script>
+    <script>
+        // Navigation Functions
+        function navigateToFocusMode() {
+            window.location.href = 'focus-mode.html';
+        }
+        
+        function navigateToCommunity() {
+            window.location.href = 'physics-community.html';
+        }
+        
+        function navigateToProfile() {
+            window.location.href = 'student-profile.html';
+        }
+        
+        // Sidebar Functions
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebarOverlay');
+            
+            if (sidebar.style.left === '-350px' || sidebar.style.left === '') {
+                // Open sidebar
+                sidebar.style.left = '0';
+                overlay.style.display = 'block';
+                document.body.style.overflow = 'hidden'; // Prevent background scrolling
+            } else {
+                // Close sidebar
+                sidebar.style.left = '-350px';
+                overlay.style.display = 'none';
+                document.body.style.overflow = 'auto'; // Restore scrolling
+                
+                // Close all submenus when closing sidebar
+                closeAllSubmenus();
+            }
+        }
+
+        function toggleSubmenu(menuId) {
+            const submenu = document.getElementById(menuId + '-submenu');
+            const arrow = document.getElementById(menuId + '-arrow');
+            
+            if (submenu.style.display === 'none' || submenu.style.display === '') {
+                // Close all other submenus first
+                closeAllSubmenus();
+                
+                // Open this submenu
+                submenu.style.display = 'block';
+                arrow.style.transform = 'rotate(180deg)';
+            } else {
+                // Close this submenu
+                submenu.style.display = 'none';
+                arrow.style.transform = 'rotate(0deg)';
+            }
+        }
+
+        function closeAllSubmenus() {
+            const submenus = document.querySelectorAll('.submenu');
+            const arrows = document.querySelectorAll('[id$="-arrow"]');
+            
+            submenus.forEach(submenu => {
+                submenu.style.display = 'none';
+            });
+            
+            arrows.forEach(arrow => {
+                arrow.style.transform = 'rotate(0deg)';
+            });
+        }
+
+        // Check if user is a teacher
+        function checkTeacherStatus() {
+            const isTeacher = localStorage.getItem('userRole') === 'teacher' || 
+                             window.location.search.includes('teacher=true');
+            if (isTeacher) {
+                const teacherControls = document.getElementById('teacherControls');
+                if (teacherControls) {
+                    teacherControls.style.display = 'block';
+                }
+            }
+        }
+        
+        // Generate valid Zoom meeting ID (10-11 digits)
+        function generateValidZoomMeetingId() {
+            // Zoom meeting IDs are typically 10-11 digits
+            // Personal meeting IDs are 10 digits, scheduled meetings can be 10-11
+            const length = Math.random() > 0.5 ? 10 : 11;
+            let meetingId = '';
+            for (let i = 0; i < length; i++) {
+                meetingId += Math.floor(Math.random() * 10);
+            }
+            return meetingId;
+        }
+        
+        // Generate valid Zoom password (6-10 characters, alphanumeric)
+        function generateValidZoomPassword() {
+            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+            const length = Math.floor(Math.random() * 5) + 6; // 6-10 characters
+            let password = '';
+            for (let i = 0; i < length; i++) {
+                password += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            return password;
+        }
+        
+        function switchTab(tab) {
+            // Update tab buttons
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            // Hide all sections
+            document.getElementById('live-sessions').style.display = 'none';
+            document.getElementById('upcoming-sessions').style.display = 'none';
+            document.getElementById('past-sessions').style.display = 'none';
+            
+            // Show selected section and load appropriate sessions
+            if (tab === 'live') {
+                document.getElementById('live-sessions').style.display = 'grid';
+                loadLiveSessions();
+            } else if (tab === 'upcoming') {
+                document.getElementById('upcoming-sessions').style.display = 'grid';
+                loadUpcomingSessions();
+            } else if (tab === 'past') {
+                document.getElementById('past-sessions').style.display = 'grid';
+                loadPastSessions();
+            }
+        }
+        
+        function createZoomSession() {
+            const title = document.getElementById('sessionTitle').value;
+            const topic = document.getElementById('sessionTopic').value;
+            const duration = document.getElementById('sessionDuration').value;
+            const description = document.getElementById('sessionDescription').value;
+            
+            if (!title || !topic || !duration) {
+                alert('Please fill in all required fields');
+                return;
+            }
+            
+            // Generate valid Zoom meeting details
+            const meetingId = generateValidZoomMeetingId();
+            const meetingPassword = generateValidZoomPassword();
+            const meetingUrl = `https://zoom.us/j/${meetingId}`;
+            
+            // Create session object
+            const session = {
+                id: Date.now().toString(),
+                title: title,
+                topic: topic,
+                duration: parseInt(duration),
+                description: description,
+                meetingId: meetingId,
+                meetingPassword: meetingPassword,
+                meetingUrl: meetingUrl,
+                status: 'live',
+                instructor: 'Dr. Sarah Johnson',
+                startTime: new Date().toISOString(),
+                participants: 0,
+                messages: 0
+            };
+            
+            // Save to localStorage
+            let sessions = JSON.parse(localStorage.getItem('physicsLiveSessions')) || [];
+            sessions.push(session);
+            localStorage.setItem('physicsLiveSessions', JSON.stringify(sessions));
+            
+            // Show success message with meeting details
+            alert(`🎉 Live Session Created Successfully!\n\nMeeting ID: ${meetingId}\nPassword: ${meetingPassword}\n\nMeeting URL: ${meetingUrl}\n\nYou can now share these details with your students.`);
+            
+            // Refresh the live sessions
+            loadLiveSessions();
+        }
+        
+        function loadLiveSessions() {
+            const sessions = JSON.parse(localStorage.getItem('physicsLiveSessions')) || [];
+            const liveSessionsContainer = document.getElementById('live-sessions');
+            
+            console.log('Loading live sessions. Found sessions:', sessions);
+            
+            // Filter live sessions - be more flexible with status checking
+            const liveSessions = sessions.filter(session => {
+                const isLive = session.status === 'live' || 
+                              session.status === 'active' || 
+                              session.status === 'running' ||
+                              !session.status; // If no status, assume it's live
+                console.log(`Session ${session.id}: status=${session.status}, isLive=${isLive}`);
+                return isLive;
+            });
+            
+            // Sort by most recent (newest first)
+            liveSessions.sort((a, b) => {
+                const dateA = new Date(a.startTime || a.createdAt || 0);
+                const dateB = new Date(b.startTime || b.createdAt || 0);
+                return dateB - dateA; // Newest first
+            });
+            
+            console.log('Filtered and sorted live sessions:', liveSessions);
+            
+            if (liveSessions.length === 0) {
+                liveSessionsContainer.innerHTML = `
+                    <div style="text-align: center; padding: 4rem 2rem; color: #94a3b8; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                        <iconify-icon icon="material-symbols:videocam-off" style="font-size: 4rem; opacity: 0.3; margin-bottom: 1rem;"></iconify-icon>
+                        <h3 style="color: #64748b; margin-bottom: 0.5rem; text-align: center;">No Live Sessions</h3>
+                        <p style="text-align: center; max-width: 600px; margin: 0 auto;">There are currently no live physics sessions. Check back later or join upcoming sessions.</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            // Generate HTML for live sessions
+            const sessionsHtml = liveSessions.map(session => `
+                <div class="session-card">
+                    <span class="session-status status-live">
+                        <span class="live-dot"></span>
+                        LIVE NOW
+                    </span>
+                    <h3 class="session-title">${session.title}</h3>
+                    <div class="session-instructor">
+                        <i class="bi bi-person-circle"></i>
+                        <span>${session.instructor}</span>
+                    </div>
+                    <div class="session-time">
+                        <i class="bi bi-clock"></i>
+                        <span>Started ${getTimeAgo(session.startTime)}</span>
+                    </div>
+                    <div class="session-date">
+                        <i class="bi bi-calendar"></i>
+                        <span>${new Date(session.startTime).toLocaleDateString()}</span>
+                    </div>
+                    <p class="session-description">${session.description || 'Interactive physics learning session'}</p>
+                    <div class="session-stats">
+                        <div class="stat-item">
+                            <i class="bi bi-people-fill"></i>
+                            <span>${session.participants} joined</span>
+                        </div>
+                        <div class="stat-item">
+                            <i class="bi bi-chat-dots"></i>
+                            <span>${session.messages} messages</span>
+                        </div>
+                    </div>
+                    <div class="session-actions">
+                        <button class="btn-primary-custom" onclick="joinSession('${session.id}')">
+                            <i class="bi bi-camera-video-fill"></i>
+                            Join Now
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+            
+            liveSessionsContainer.innerHTML = sessionsHtml;
+        }
+
+        function loadUpcomingSessions() {
+            const sessions = JSON.parse(localStorage.getItem('physicsLiveSessions')) || [];
+            const upcomingSessionsContainer = document.getElementById('upcoming-sessions');
+            
+            // Filter upcoming sessions
+            const upcomingSessions = sessions.filter(session => {
+                return session.status === 'upcoming' || session.status === 'scheduled';
+            });
+            
+            // Sort by most recent (newest first)
+            upcomingSessions.sort((a, b) => {
+                const dateA = new Date(a.startTime || a.createdAt || 0);
+                const dateB = new Date(b.startTime || b.createdAt || 0);
+                return dateB - dateA; // Newest first
+            });
+            
+            if (upcomingSessions.length === 0) {
+                upcomingSessionsContainer.innerHTML = `
+                    <div style="grid-column: 1 / -1; text-align: center; padding: 4rem 2rem; color: #94a3b8;">
+                        <iconify-icon icon="material-symbols:event-available" style="font-size: 4rem; opacity: 0.3; margin-bottom: 1rem;"></iconify-icon>
+                        <h3 style="color: #64748b; margin-bottom: 0.5rem;">No Upcoming Sessions</h3>
+                        <p>Check back later for scheduled live sessions.</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            // Generate HTML for upcoming sessions
+            const sessionsHtml = upcomingSessions.map(session => `
+                <div class="session-card">
+                    <span class="session-status status-upcoming">📅 UPCOMING</span>
+                    <h3 class="session-title">${session.title}</h3>
+                    <div class="session-instructor">
+                        <i class="bi bi-person-circle"></i>
+                        <span>${session.instructor}</span>
+                    </div>
+                    <div class="session-time">
+                        <i class="bi bi-clock"></i>
+                        <span>${new Date(session.startTime).toLocaleString()}</span>
+                    </div>
+                    <div class="session-date">
+                        <i class="bi bi-calendar"></i>
+                        <span>${new Date(session.startTime).toLocaleDateString()}</span>
+                    </div>
+                    <p class="session-description">${session.description || 'Upcoming physics learning session'}</p>
+                    <div class="session-stats">
+                        <div class="stat-item">
+                            <i class="bi bi-alarm"></i>
+                            <span>Reminder set</span>
+                        </div>
+                        <div class="stat-item">
+                            <i class="bi bi-people"></i>
+                            <span>${session.maxParticipants || 30} max</span>
+                        </div>
+                    </div>
+                    <div class="session-actions">
+                        <button class="btn-primary-custom" onclick="registerSession('${session.id}')">
+                            <i class="bi bi-calendar-check"></i>
+                            Register
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+            
+            upcomingSessionsContainer.innerHTML = sessionsHtml;
+        }
+
+        function loadPastSessions() {
+            const sessions = JSON.parse(localStorage.getItem('physicsLiveSessions')) || [];
+            const pastSessionsContainer = document.getElementById('past-sessions');
+            
+            // Filter past sessions
+            const pastSessions = sessions.filter(session => {
+                return session.status === 'ended' || session.status === 'completed';
+            });
+            
+            // Sort by most recent (newest first)
+            pastSessions.sort((a, b) => {
+                const dateA = new Date(a.endTime || a.startTime || a.createdAt || 0);
+                const dateB = new Date(b.endTime || b.startTime || b.createdAt || 0);
+                return dateB - dateA; // Newest first
+            });
+            
+            if (pastSessions.length === 0) {
+                pastSessionsContainer.innerHTML = `
+                    <div style="grid-column: 1 / -1; text-align: center; padding: 4rem 2rem; color: #94a3b8;">
+                        <iconify-icon icon="material-symbols:history" style="font-size: 4rem; opacity: 0.3; margin-bottom: 1rem;"></iconify-icon>
+                        <h3 style="color: #64748b; margin-bottom: 0.5rem;">No Past Sessions</h3>
+                        <p>No completed sessions yet. Check back after sessions have ended.</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            // Generate HTML for past sessions
+            const sessionsHtml = pastSessions.map(session => `
+                <div class="session-card">
+                    <span class="session-status status-ended">
+                        <i class="bi bi-check-circle"></i>
+                        ENDED
+                    </span>
+                    <h3 class="session-title">${session.title}</h3>
+                    <div class="session-instructor">
+                        <i class="bi bi-person-circle"></i>
+                        <span>${session.instructor}</span>
+                    </div>
+                    <div class="session-time">
+                        <i class="bi bi-clock"></i>
+                        <span>${session.duration || 60} minutes duration</span>
+                    </div>
+                    <div class="session-date">
+                        <i class="bi bi-calendar"></i>
+                        <span>${new Date(session.endTime || session.startTime).toLocaleDateString()}</span>
+                    </div>
+                    <p class="session-description">${session.description || 'Completed physics learning session'}</p>
+                    <div class="session-stats">
+                        <div class="stat-item">
+                            <i class="bi bi-people"></i>
+                            <span>${session.participants || 0} attendees</span>
+                        </div>
+                        <div class="stat-item">
+                            <i class="bi bi-play-circle"></i>
+                            <span>Recording available</span>
+                        </div>
+                        <div class="stat-item">
+                            <i class="bi bi-chat-dots"></i>
+                            <span>${session.messages || 0} questions</span>
+                        </div>
+                    </div>
+                    <div class="session-actions">
+                        <button class="btn-primary-custom" onclick="viewRecording('${session.id}')">
+                            <i class="bi bi-play-circle"></i>
+                            Watch Recording
+                        </button>
+                        <button class="btn-secondary-custom" onclick="downloadMaterials('${session.id}')">
+                            <i class="bi bi-download"></i>
+                            Materials
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+            
+            pastSessionsContainer.innerHTML = sessionsHtml;
+        }
+        
+        function getTimeAgo(startTime) {
+            const now = new Date();
+            const start = new Date(startTime);
+            const diffMs = now - start;
+            const diffMins = Math.floor(diffMs / 60000);
+            
+            if (diffMins < 1) return 'just now';
+            if (diffMins < 60) return `${diffMins} minutes ago`;
+            const diffHours = Math.floor(diffMins / 60);
+            return `${diffHours} hours ago`;
+        }
+        
+        function joinSession(sessionId) {
+            // Get session details from localStorage
+            const sessions = JSON.parse(localStorage.getItem('physicsLiveSessions')) || [];
+            const session = sessions.find(s => s.id == sessionId); // Use == for type flexibility
+            
+            if (session) {
+                // Open Zoom application with meeting details
+                openZoomMeeting(session);
+            } else {
+                // Session not found - provide helpful options
+                console.log('Session not found. Available sessions:', sessions);
+                console.log('Looking for session ID:', sessionId);
+                
+                // Show a more helpful error message with options
+                const userChoice = confirm(`❌ Session not found!\n\nThis might be because:\n• The session has ended\n• The session was cancelled\n• There's a temporary issue\n\nWould you like to:\n\nOK - Try joining a demo session instead\nCancel - Return to sessions list`);
+                
+                if (userChoice) {
+                    // Offer to join a demo session
+                    const demoChoice = confirm(`🎥 Join a Demo Session?\n\nChoose a demo session to join:\n\nOK - Mechanics Demo\nCancel - Electricity Demo`);
+                    
+                    if (demoChoice) {
+                        joinDemoSession('mechanics-demo');
+                    } else {
+                        joinDemoSession('electricity-demo');
+                    }
+                }
+            }
+        }
+        
+        function joinDemoSession(demoType) {
+            // Demo sessions with valid Zoom meeting IDs for testing
+            const demoSessions = {
+                'mechanics-demo': {
+                    title: 'Mechanics - Forces and Motion',
+                    meetingId: '1234567890',
+                    meetingPassword: 'Physics123',
+                    meetingUrl: 'https://zoom.us/j/1234567890'
+                },
+                'electricity-demo': {
+                    title: 'Electricity - Circuit Analysis',
+                    meetingId: '9876543210',
+                    meetingPassword: 'Physics456',
+                    meetingUrl: 'https://zoom.us/j/9876543210'
+                }
+            };
+            
+            const session = demoSessions[demoType];
+            if (session) {
+                openZoomMeeting(session);
+            } else {
+                alert('Demo session not found!');
+            }
+        }
+        
+        function openZoomMeeting(session) {
+            // Create Zoom meeting URL with parameters
+            const zoomUrl = `zoommtg://zoom.us/join?confno=${session.meetingId}&pwd=${session.meetingPassword}`;
+            const webUrl = session.meetingUrl;
+            
+            // Try to open Zoom app first, fallback to web
+            const link = document.createElement('a');
+            link.href = zoomUrl;
+            link.click();
+            
+            // If Zoom app doesn't open, show options to user
+            setTimeout(() => {
+                const userChoice = confirm(`🎥 Joining Live Session: ${session.title}\n\nMeeting ID: ${session.meetingId}\nPassword: ${session.meetingPassword}\n\nChoose how to join:\n\nOK - Open in Zoom Web\nCancel - Copy meeting details`);
+                
+                if (userChoice) {
+                    // Open in web browser
+                    window.open(webUrl, '_blank');
+                } else {
+                    // Copy meeting details to clipboard
+                    const meetingDetails = `Meeting ID: ${session.meetingId}\nPassword: ${session.meetingPassword}\nJoin URL: ${webUrl}`;
+                    
+                    if (navigator.clipboard) {
+                        navigator.clipboard.writeText(meetingDetails).then(() => {
+                            alert('📋 Meeting details copied to clipboard!\n\nYou can now paste them into your Zoom app.');
+                        }).catch(() => {
+                            showMeetingDetails(session);
+                        });
+                    } else {
+                        showMeetingDetails(session);
+                    }
+                }
+            }, 1000);
+        }
+        
+        function showMeetingDetails(session) {
+            alert(`🎥 Live Session Details\n\nSession: ${session.title}\nMeeting ID: ${session.meetingId}\nPassword: ${session.meetingPassword}\n\nJoin URL: ${session.meetingUrl}\n\nPlease copy these details and paste them into your Zoom app.`);
+        }
+        
+        function registerSession(sessionId) {
+            alert('📅 Registration Successful!\n\nYou will receive a reminder 15 minutes before the session starts.\n\nThe session link will be sent to your email.');
+        }
+        
+        function viewRecording(sessionId) {
+            // Simulate opening a recording
+            const recordings = {
+                'quantum-intro': 'https://example.com/recordings/quantum-physics-intro',
+                'thermodynamics': 'https://example.com/recordings/thermodynamics-heat-transfer',
+                'electromagnetic': 'https://example.com/recordings/electromagnetic-induction'
+            };
+            
+            const recordingUrl = recordings[sessionId];
+            if (recordingUrl) {
+                alert(`🎥 Recording Available\n\nSession recording is ready to view.\n\nIn a real application, this would open:\n${recordingUrl}\n\nFor now, this is a demo notification.`);
+            } else {
+                alert('📹 Recording not available yet. Please check back later.');
+            }
+        }
+        
+        function downloadMaterials(sessionId) {
+            // Simulate downloading materials
+            const materials = {
+                'quantum-intro': ['quantum-physics-notes.pdf', 'wave-particle-duality-slides.pdf', 'practice-problems.pdf'],
+                'thermodynamics': ['thermodynamics-handbook.pdf', 'heat-transfer-diagrams.pdf', 'lab-exercises.pdf'],
+                'electromagnetic': ['faradays-law-notes.pdf', 'induction-experiments.pdf', 'homework-solutions.pdf']
+            };
+            
+            const sessionMaterials = materials[sessionId];
+            if (sessionMaterials) {
+                alert(`📚 Materials Download\n\nAvailable materials for this session:\n\n${sessionMaterials.join('\n')}\n\nIn a real application, these files would be downloaded to your device.`);
+            } else {
+                alert('📋 No materials available for this session yet.');
+            }
+        }
+        
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            checkTeacherStatus();
+            loadLiveSessions();
+            loadUpcomingSessions();
+            loadPastSessions();
+        });
+    </script>
+</body>
+</html>

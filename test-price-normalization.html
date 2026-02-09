@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Test Price Normalization</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 800px;
+      margin: 50px auto;
+      padding: 20px;
+    }
+    .test-result {
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 5px;
+    }
+    .pass {
+      background-color: #d4edda;
+      border: 1px solid #c3e6cb;
+      color: #155724;
+    }
+    .fail {
+      background-color: #f8d7da;
+      border: 1px solid #f5c6cb;
+      color: #721c24;
+    }
+    .info {
+      background-color: #d1ecf1;
+      border: 1px solid #bee5eb;
+      color: #0c5460;
+    }
+    pre {
+      background-color: #f5f5f5;
+      padding: 10px;
+      border-radius: 5px;
+      overflow-x: auto;
+    }
+  </style>
+</head>
+<body>
+  <h1>Price Normalization Test</h1>
+  <p>Testing Requirements 2.5, 7.1, 7.3: Price normalization in addToCart()</p>
+  
+  <div id="results"></div>
+
+  <script src="backend/public/js/cart-manager.js"></script>
+  <script>
+    const resultsDiv = document.getElementById('results');
+    
+    function addResult(message, passed, details = null) {
+      const div = document.createElement('div');
+      div.className = `test-result ${passed ? 'pass' : 'fail'}`;
+      div.innerHTML = `<strong>${passed ? '✅ PASS' : '❌ FAIL'}:</strong> ${message}`;
+      if (details) {
+        div.innerHTML += `<pre>${JSON.stringify(details, null, 2)}</pre>`;
+      }
+      resultsDiv.appendChild(div);
+    }
+
+    function addInfo(message) {
+      const div = document.createElement('div');
+      div.className = 'test-result info';
+      div.innerHTML = `<strong>ℹ️ INFO:</strong> ${message}`;
+      resultsDiv.appendChild(div);
+    }
+
+    // Clear cart before testing
+    window.cartManager.clearCart();
+    addInfo('Cart cleared for testing');
+
+    // Test 1: Numeric price
+    addInfo('Test 1: Adding item with numeric price (299.00)');
+    const item1 = {
+      id: 'test-1',
+      type: 'course',
+      title: 'Test Course 1',
+      price: 299.00,
+      instructor: 'Test Instructor',
+      board: 'Cambridge',
+      quantity: 1
+    };
+    window.cartManager.addToCart(item1);
+    const cart1 = window.cartManager.getCart();
+    const stored1 = cart1.find(item => item.id === 'test-1');
+    addResult(
+      'Numeric price stored correctly',
+      stored1 && typeof stored1.price === 'number' && stored1.price === 299.00,
+      { expected: 299.00, actual: stored1?.price, type: typeof stored1?.price }
+    );
+
+    // Test 2: Price with £ symbol
+    addInfo('Test 2: Adding item with £ symbol (£45.50)');
+    const item2 = {
+      id: 'test-2',
+      type: 'course',
+      title: 'Test Course 2',
+      price: '£45.50',
+      instructor: 'Test Instructor',
+      board: 'Cambridge',
+      quantity: 1
+    };
+    window.cartManager.addToCart(item2);
+    const cart2 = window.cartManager.getCart();
+    const stored2 = cart2.find(item => item.id === 'test-2');
+    addResult(
+      'Price with £ symbol normalized correctly',
+      stored2 && typeof stored2.price === 'number' && stored2.price === 45.50,
+      { input: '£45.50', expected: 45.50, actual: stored2?.price, type: typeof stored2?.price }
+    );
+
+    // Test 3: Price with EGP
+    addInfo('Test 3: Adding item with EGP (279.00 EGP)');
+    const item3 = {
+      id: 'test-3',
+      type: 'course',
+      title: 'Test Course 3',
+      price: '279.00 EGP',
+      instructor: 'Test Instructor',
+      board: 'Cambridge',
+      quantity: 1
+    };
+    window.cartManager.addToCart(item3);
+    const cart3 = window.cartManager.getCart();
+    const stored3 = cart3.find(item => item.id === 'test-3');
+    addResult(
+      'Price with EGP normalized correctly',
+      stored3 && typeof stored3.price === 'number' && stored3.price === 279.00,
+      { input: '279.00 EGP', expected: 279.00, actual: stored3?.price, type: typeof stored3?.price }
+    );
+
+    // Test 4: Price with Â£ (malformed £)
+    addInfo('Test 4: Adding item with Â£ symbol (Â£125.99)');
+    const item4 = {
+      id: 'test-4',
+      type: 'course',
+      title: 'Test Course 4',
+      price: 'Â£125.99',
+      instructor: 'Test Instructor',
+      board: 'Cambridge',
+      quantity: 1
+    };
+    window.cartManager.addToCart(item4);
+    const cart4 = window.cartManager.getCart();
+    const stored4 = cart4.find(item => item.id === 'test-4');
+    addResult(
+      'Price with Â£ symbol normalized correctly',
+      stored4 && typeof stored4.price === 'number' && stored4.price === 125.99,
+      { input: 'Â£125.99', expected: 125.99, actual: stored4?.price, type: typeof stored4?.price }
+    );
+
+    // Test 5: Price with commas
+    addInfo('Test 5: Adding item with commas (1,299.50 EGP)');
+    const item5 = {
+      id: 'test-5',
+      type: 'course',
+      title: 'Test Course 5',
+      price: '1,299.50 EGP',
+      instructor: 'Test Instructor',
+      board: 'Cambridge',
+      quantity: 1
+    };
+    window.cartManager.addToCart(item5);
+    const cart5 = window.cartManager.getCart();
+    const stored5 = cart5.find(item => item.id === 'test-5');
+    addResult(
+      'Price with commas normalized correctly',
+      stored5 && typeof stored5.price === 'number' && stored5.price === 1299.50,
+      { input: '1,299.50 EGP', expected: 1299.50, actual: stored5?.price, type: typeof stored5?.price }
+    );
+
+    // Test 6: Verify localStorage storage
+    addInfo('Test 6: Verifying prices stored in localStorage are numeric');
+    const storedCart = JSON.parse(localStorage.getItem('cart'));
+    const allNumeric = storedCart.every(item => typeof item.price === 'number');
+    addResult(
+      'All prices in localStorage are numeric',
+      allNumeric,
+      { cartItems: storedCart.map(item => ({ id: item.id, price: item.price, type: typeof item.price })) }
+    );
+
+    // Test 7: Verify no currency symbols in stored prices
+    addInfo('Test 7: Verifying no currency symbols in stored prices');
+    const noCurrencySymbols = storedCart.every(item => {
+      const priceStr = String(item.price);
+      return !priceStr.match(/£|EGP|Â£/);
+    });
+    addResult(
+      'No currency symbols in stored prices',
+      noCurrencySymbols,
+      { prices: storedCart.map(item => ({ id: item.id, price: item.price })) }
+    );
+
+    // Summary
+    addInfo('All tests completed! Check console for CartManager logs.');
+    console.log('Final cart state:', window.cartManager.getCart());
+    console.log('localStorage.cart:', localStorage.getItem('cart'));
+  </script>
+</body>
+</html>
