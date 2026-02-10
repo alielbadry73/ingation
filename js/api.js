@@ -430,11 +430,11 @@ function resetTodoLists() {
 }
 
 async function handleRegisterClick() {
-    const firstName = document.getElementById('registerFirstName')?.value || '';
-    const lastName = document.getElementById('registerLastName')?.value || '';
-    const email = document.getElementById('registerEmail')?.value || '';
-    const password = document.getElementById('registerPassword')?.value || '';
-    const phone = document.getElementById('registerPhone')?.value || '';
+    const firstName = document.getElementById('firstName')?.value || '';
+    const lastName = document.getElementById('lastName')?.value || '';
+    const email = document.getElementById('email')?.value || '';
+    const password = document.getElementById('password')?.value || '';
+    const phone = document.getElementById('phone')?.value || '';
 
     if (!firstName || !lastName || !email || !password) {
         showToast('Please fill in all required fields', 'warning');
