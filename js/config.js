@@ -1,20 +1,14 @@
 // API Configuration
 // This file determines which backend URL to use based on the environment
 
-// Railway deployment URL - UPDATE THIS WITH YOUR ACTUAL RAILWAY URL
-const RAILWAY_BACKEND_URL = 'https://elbadry-production.up.railway.app';
-
-// Local development URL
+// Local development URL only
 const LOCAL_BACKEND_URL = 'http://localhost:3000';
 
-// Determine which URL to use
-// Set this to 'production' when deploying, or 'development' for local testing
-const ENVIRONMENT = 'production'; // Change to 'development' for local testing
+// Always use local development
+const ENVIRONMENT = 'development';
 
 // Export the appropriate base URL
-const API_BASE_URL = ENVIRONMENT === 'production' 
-    ? RAILWAY_BACKEND_URL 
-    : LOCAL_BACKEND_URL;
+const API_BASE_URL = LOCAL_BACKEND_URL;
 
 // Export configuration
 window.API_CONFIG = {
