@@ -90,7 +90,17 @@ app.use((req, res, next) => {
 });
 
 // Database connection
-const db = new sqlite3.Database('./database.sqlite');
+console.log('🔌 Connecting to database...');
+const dbPath = process.env.DB_PATH || './database.sqlite';
+console.log('📁 Database path:', dbPath);
+const db = new sqlite3.Database(dbPath, (err) => {
+    if (err) {
+        console.error('❌ Database connection failed:', err);
+        process.exit(1);
+    } else {
+        console.log('✅ Database connected successfully');
+    }
+});
 
 // Initialize database tables if they don't exist
 db.serialize(() => {
