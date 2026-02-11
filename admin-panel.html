@@ -420,6 +420,7 @@
                                                 <th>Name</th>
                                                 <th>Email</th>
                                                 <th>Phone</th>
+                                                <th>Parent Phone</th>
                                                 <th>Joined</th>
                                                 <th>Actions</th>
                                             </tr>
@@ -507,11 +508,7 @@
                                         </div>
                                     </div>
                                     
-                                    <h6 class="mt-4 mb-3 text-primary">Parent/Guardian Information</h6>
-                                    <div id="parentInfo">
-                                        <p class="text-muted">Loading parent information...</p>
-                                    </div>
-                                    
+                                                                        
                                     <h6 class="mt-4 mb-3 text-primary">Student Activity & Progress</h6>
                                     <div class="row mb-3">
                                         <div class="col-md-4">
@@ -561,25 +558,7 @@
                                         </table>
                                     </div>
 
-                                    <h6 class="mt-4 mb-3">Available Courses</h6>
-                                    <div class="table-responsive">
-                                        <table class="table table-sm">
-                                            <thead>
-                                                <tr>
-                                                    <th>Course</th>
-                                                    <th>Instructor</th>
-                                                    <th>Price</th>
-                                                    <th>Actions</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody id="availableCourses">
-                                                <tr>
-                                                    <td colspan="4" class="text-center">Loading courses...</td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
+                                                                    </div>
                             </div>
                         </div>
                     </div>
@@ -943,11 +922,12 @@
                                             <table class="table table-hover">
                                                 <thead class="table-dark">
                                                     <tr>
-                                                        <th>Rank</th>
-                                                        <th>Student</th>
-                                                        <th>Points</th>
-                                                        <th>Progress</th>
-                                                        <th>Last Activity</th>
+                                                        <th>ID</th>
+                                                        <th>Name</th>
+                                                        <th>Email</th>
+                                                        <th>Phone</th>
+                                                        <th>Parent Phone</th>
+                                                        <th>Joined</th>
                                                         <th>Actions</th>
                                                     </tr>
                                                 </thead>
@@ -1477,7 +1457,7 @@
         function displayStudents(students) {
             const tableBody = document.getElementById('studentsTable');
             if (students.length === 0) {
-                tableBody.innerHTML = '<tr><td colspan="6" class="text-center">No students found</td></tr>';
+                tableBody.innerHTML = '<tr><td colspan="7" class="text-center">No students found</td></tr>';
                 return;
             }
 
@@ -1487,16 +1467,11 @@
                     <td>${student.first_name} ${student.last_name}</td>
                     <td>${student.email}</td>
                     <td>${student.phone || 'N/A'}</td>
+                    <td>${student.parent_phone || 'N/A'}</td>
                     <td>${new Date(student.created_at).toLocaleDateString()}</td>
                     <td>
                         <button class="btn btn-sm btn-outline-primary" onclick="viewStudentDetails(${student.id})">
                             <i class="bi bi-eye"></i> View
-                        </button>
-                        <button class="btn btn-sm btn-outline-warning" onclick="editStudent(${student.id})">
-                            <i class="bi bi-pencil"></i> Edit
-                        </button>
-                        <button class="btn btn-sm btn-outline-danger" onclick="removeStudent(${student.id}, '${student.first_name} ${student.last_name}')">
-                            <i class="bi bi-trash"></i> Remove
                         </button>
                     </td>
                 </tr>
@@ -1559,14 +1534,8 @@
                     document.getElementById('studentDaysActive').textContent = 'N/A';
                 }
                 
-                // Load parent information
-                loadParentInfo(studentId);
-                
                 // Load enrollments
                 loadStudentEnrollments(studentId);
-                
-                // Load available courses
-                loadAvailableCourses(studentId);
                 
                 // Show modal
                 new bootstrap.Modal(document.getElementById('studentDetailsModal')).show();
@@ -1576,54 +1545,7 @@
             }
         }
         
-        async function loadParentInfo(studentId) {
-            try {
-                const response = await fetch(`${getApiUrl()}/admin/student/${studentId}/parent`, {
-                    headers: { 'Authorization': `Bearer ${authToken}` }
-                });
                 
-                const parentInfoDiv = document.getElementById('parentInfo');
-                
-                if (!response.ok) {
-                    parentInfoDiv.innerHTML = '<p class="text-muted">Error loading parent information</p>';
-                    return;
-                }
-                
-                const parent = await response.json();
-                
-                if (parent) {
-                    parentInfoDiv.innerHTML = `
-                        <div class="row">
-                            <div class="col-md-6">
-                                <strong>Parent Name:</strong> ${parent.first_name} ${parent.last_name}
-                            </div>
-                            <div class="col-md-6">
-                                <strong>Email:</strong> ${parent.email || 'N/A'}
-                            </div>
-                        </div>
-                        <div class="row mt-2">
-                            <div class="col-md-6">
-                                <strong>Phone:</strong> ${parent.phone || 'N/A'}
-                            </div>
-                            <div class="col-md-6">
-                                <strong>WhatsApp:</strong> ${parent.whatsapp_number || 'N/A'}
-                            </div>
-                        </div>
-                        <div class="row mt-2">
-                            <div class="col-md-6">
-                                <strong>Relationship:</strong> ${parent.relationship || 'Parent/Guardian'}
-                            </div>
-                        </div>
-                    `;
-                } else {
-                    parentInfoDiv.innerHTML = '<p class="text-muted">No parent linked to this student</p>';
-                }
-            } catch (error) {
-                console.error('Error loading parent info:', error);
-                document.getElementById('parentInfo').innerHTML = '<p class="text-danger">Error loading parent information</p>';
-            }
-        }
-        
         async function loadStudentEnrollments(studentId) {
             try {
                 const response = await fetch(`${getApiUrl()}/admin/enrollments`, {
@@ -1668,46 +1590,8 @@
             }
         }
         
-        async function loadAvailableCourses(studentId) {
-            try {
-                const response = await fetch(`${getApiUrl()}/courses`, {
-                    headers: { 'Authorization': `Bearer ${authToken}` }
-                });
                 
-                if (!response.ok) {
-                    throw new Error('Failed to load courses');
-                }
-                
-                const courses = await response.json();
-                const tbody = document.getElementById('availableCourses');
-                
-                if (courses.length === 0) {
-                    tbody.innerHTML = '<tr><td colspan="4" class="text-center">No courses available</td></tr>';
-                    return;
-                }
-                
-                tbody.innerHTML = courses.map(course => `
-                    <tr>
-                        <td>${course.title}</td>
-                        <td>${course.instructor}</td>
-                        <td>${course.price} EGP</td>
-                        <td>
-                            <button class="btn btn-sm btn-primary" onclick="grantAccess(${studentId}, ${course.id})">
-                                <i class="bi bi-plus-circle"></i> Grant Access
-                            </button>
-                        </td>
-                    </tr>
-                `).join('');
-            } catch (error) {
-                console.error('Error loading available courses:', error);
-                document.getElementById('availableCourses').innerHTML = '<tr><td colspan="4" class="text-center text-danger">Error loading courses</td></tr>';
-            }
-        }
-        
-        async function grantAccess(userId, courseId) {
-            try {
-                console.log('Granting access:', { userId, courseId });
-                const response = await fetch(`${getApiUrl()}/admin/grant-access`, {
+                        const response = await fetch(`${getApiUrl()}/admin/grant-access`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
