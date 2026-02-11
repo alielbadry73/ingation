@@ -5,11 +5,11 @@
 const RAILWAY_BACKEND_URL = 'https://ig-nation-app.fly.dev';
 
 // Local development URL
-const LOCAL_BACKEND_URL = 'http://localhost:8080';
+const LOCAL_BACKEND_URL = 'http://localhost:3000';
 
 // Determine which URL to use
 // Set this to 'production' when deploying, or 'development' for local testing
-const ENVIRONMENT = 'production'; // Force production mode for Fly.io backend
+const ENVIRONMENT = 'development'; // Use development mode since backend is down
 
 // Export the appropriate base URL
 const API_BASE_URL = ENVIRONMENT === 'production' 
