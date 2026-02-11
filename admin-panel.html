@@ -1295,6 +1295,61 @@
             }
         }
 
+        async function loadOrders() {
+            try {
+                const orders = await apiCall('/api/admin/orders').catch(() => []);
+                const tableHtml = orders.map(order => 
+                    '<tr>' +
+                    '<td>' + order.id + '</td>' +
+                    '<td>' + (order.first_name + ' ' + order.last_name) + '</td>' +
+                    '<td>' + order.total_amount + ' EGP</td>' +
+                    '<td>' + new Date(order.created_at).toLocaleDateString() + '</td>' +
+                    '<td><span class="badge bg-' + (order.status === 'completed' ? 'success' : 'warning') + '">' + (order.status || 'pending') + '</span></td>' +
+                    '<td>' +
+                    '<button class="btn btn-sm btn-info btn-action me-1" onclick="viewOrderDetails(' + order.id + ')" title="View Details">' +
+                    '<i class="bi bi-eye"></i>' +
+                    '</button>' +
+                    (order.status !== 'completed' ? 
+                        '<button class="btn btn-sm btn-success btn-action me-1" onclick="approveOrder(' + order.id + ')" title="Approve & Grant Access">' +
+                        '<i class="bi bi-check-circle"></i> Approve' +
+                        '</button>' : ''
+                    ) +
+                    '</td>' +
+                    '</tr>'
+                ).join('');
+                
+                document.getElementById('ordersTable').innerHTML = tableHtml || '<tr><td colspan="6" class="text-center text-muted">No orders found</td></tr>';
+            } catch (error) {
+                console.error('Error loading orders:', error);
+                document.getElementById('ordersTable').innerHTML = '<tr><td colspan="6" class="text-center text-danger">Error loading orders</td></tr>';
+            }
+        }
+
+        async function loadCourseAnalytics() {
+            try {
+                const courses = await apiCall('/api/courses').catch(() => []);
+                const analyticsHtml = courses.map(course => 
+                    '<tr>' +
+                    '<td>' + course.id + '</td>' +
+                    '<td>' + course.title + '</td>' +
+                    '<td>' + (course.enrollments_count || 0) + '</td>' +
+                    '<td>' + (course.completion_rate || 0) + '%</td>' +
+                    '<td>' + (course.revenue || 0) + ' EGP</td>' +
+                    '<td>' +
+                    '<button class="btn btn-sm btn-info btn-action me-1" onclick="viewCourseAnalytics(' + course.id + ')" title="View Details">' +
+                    '<i class="bi bi-graph-up"></i>' +
+                    '</button>' +
+                    '</td>' +
+                    '</tr>'
+                ).join('');
+                
+                document.getElementById('courseAnalyticsTable').innerHTML = analyticsHtml || '<tr><td colspan="6" class="text-center text-muted">No courses found</td></tr>';
+            } catch (error) {
+                console.error('Error loading course analytics:', error);
+                document.getElementById('courseAnalyticsTable').innerHTML = '<tr><td colspan="6" class="text-center text-danger">Error loading course analytics</td></tr>';
+            }
+        }
+
         function showSection(sectionName, clickedElement = null) {
             // Hide all sections
             document.querySelectorAll('[id$="-section"]').forEach(section => {
