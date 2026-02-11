@@ -2121,7 +2121,7 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-outline-danger" onclick="resetCart()">Reset Cart</button>
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Continue Shopping</button>
-                    <button type="button" class="btn btn-primary" id="checkoutBtn" disabled onclick="proceedToCheckout()">Proceed to Checkout</button>
+                    <button type="button" class="btn btn-primary" id="checkoutBtn" disabled onclick="proceedToCheckoutFromCart()">Proceed to Checkout</button>
                 </div>
             </div>
         </div>
@@ -3905,6 +3905,25 @@
             }, 500);
         }
         
+        // Proceed to checkout from cart with all courses
+        function proceedToCheckoutFromCart() {
+            // Check if user is logged in
+            const isLoggedIn = localStorage.getItem('userLoggedIn');
+            if (!isLoggedIn) {
+                showToast('Please log in to proceed to checkout', 'warning');
+                // Show login modal
+                const loginModal = new bootstrap.Modal(document.getElementById('loginModal'));
+                loginModal.show();
+                return;
+            }
+            
+            // Redirect to checkout page
+            showToast('Redirecting to checkout...', 'success');
+            setTimeout(() => {
+                window.location.href = 'checkout.html';
+            }, 500);
+        }
+        
         // Handle post-login enrollment
         window.handlePostLoginEnrollment = function() {
             const pendingEnrollment = localStorage.getItem('pendingEnrollment');
@@ -4014,7 +4033,7 @@
                                 <div>
                                     <div class="course-title fw-bold">${course.title}</div>
                                     <div class="course-instructor text-muted small">${course.instructor} - ${course.board}</div>
-                                    <div class="course-price text-primary fw-bold">${course.price} <span class="text-muted">x${item.quantity}</span></div>
+                                    <div class="course-price text-primary fw-bold">${course.price} EGP <span class="text-muted">x${item.quantity}</span></div>
                                 </div>
                             </div>
                             <button class="btn btn-outline-danger btn-sm" onclick="removeFromCart('${item.courseId}')">
@@ -4251,8 +4270,6 @@
             // Update cart count and modal
             updateCartCount();
             updateCartModal();
-            
-            showToast(`${course.title} added to cart!`, 'success');
         }
 
         // Function to reset todo lists after login
