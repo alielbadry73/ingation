@@ -1,43 +1,49 @@
-# Fly.io Configuration for IG Nation Backend
+# fly.toml app configuration file generated for ig-nation-backend on 2026-02-11T17:45:59Z
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
 
-app = "ig-nation-backend"
-primary_region = "iad"
-
-[build]
-  builder = "heroku/buildpacks:20"
-
-[env]
-  PORT = "8080"
-  NODE_ENV = "production"
-  JWT_SECRET = "your-super-secret-jwt-key-change-this-in-production"
-  JWT_EXPIRES_IN = "7d"
-  DB_PATH = "/data/database.sqlite"
-  FRONTEND_URL = "https://ig-nation-backend.fly.dev"
-
-[http_service]
-  internal_port = 8080
-  protocol = "tcp"
-  
-  [[http_service.checks]]
-    interval = 15000
-    timeout = 5000
-    grace_period = "5s"
-    method = "GET"
-    path = "/health"
-
-[[http_service.checks]]
-  interval = 30000
-  timeout = 5000
-  grace_period = "5s"
-  method = "GET"
-  path = "/"
-
-[[mounts]]
-  source = "ig_nation_data"
-  destination = "/data"
-
-[deploy]
-  strategy = "rolling"
+app = 'ig-nation-backend'
+primary_region = 'iad'
 
 [experimental]
   auto_rollback = true
+
+[build]
+  image = "node:18-alpine"
+
+[deploy]
+  strategy = 'rolling'
+
+[env]
+  DB_PATH = '/data/database.sqlite'
+  FRONTEND_URL = 'https://ig-nation-backend.fly.dev'
+  JWT_EXPIRES_IN = '7d'
+  NODE_ENV = 'production'
+  PORT = '8080'
+
+[[mounts]]
+  source = 'ig_nation_data'
+  destination = '/data'
+
+[http_service]
+  internal_port = 8080
+
+  [[http_service.checks]]
+    interval = '15s'
+    timeout = '5s'
+    grace_period = '5s'
+    method = 'GET'
+    path = '/health'
+
+  [[http_service.checks]]
+    interval = '30s'
+    timeout = '5s'
+    grace_period = '5s'
+    method = 'GET'
+    path = '/'
+
+[[vm]]
+  memory = '1gb'
+  cpus = 1
+  memory_mb = 1024
