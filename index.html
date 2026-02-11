@@ -630,9 +630,14 @@
     <!-- Main Navigation Bar -->
     <nav class="main-navigation">
         <div class="container-fluid">
+            <!-- Mobile Menu Toggle -->
+            <button class="mobile-menu-toggle d-lg-none" type="button" onclick="toggleMobileMenu()">
+                <iconify-icon icon="material-symbols:menu"></iconify-icon>
+            </button>
+            
             <div class="row align-items-center">
                 <div class="col-7">
-                    <ul class="nav-menu d-flex list-unstyled mb-0">
+                    <ul class="nav-menu d-flex list-unstyled mb-0" id="mainNavMenu">
                         <li class="nav-item">
                             <a href="index.html" class="nav-link active">Home</a>
                         </li>
@@ -3536,6 +3541,14 @@
                 });
             }
         });
+
+        // Mobile Menu Toggle
+        function toggleMobileMenu() {
+            const navMenu = document.getElementById('mainNavMenu');
+            if (navMenu) {
+                navMenu.classList.toggle('mobile-menu-open');
+            }
+        }
 
         // Cart functions - now using unified cart system
         window.addToCart = function(courseId) {
