@@ -136,7 +136,7 @@ class CartManager {
         
         if (existingItem) {
             console.log('🛒 Item already in cart, updating quantity');
-            this.updateItemQuantity(itemId, (existingItem.quantity || 0) + 1);
+            this.updateQuantity(itemId, (existingItem.quantity || 0) + 1);
             return false;
         }
         
