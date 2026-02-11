@@ -3,7 +3,7 @@
 
 // Backend URLs
 const LOCAL_BACKEND_URL = 'http://localhost:3000';
-const PRODUCTION_BACKEND_URL = 'https://my-project-gphv.onrender.com'; // Your live Render backend
+const PRODUCTION_BACKEND_URL = 'https://api.ignation.com'; // Your live Render backend
 
 // Environment detection
 // Set to 'production' for live deployment, 'development' for local testing

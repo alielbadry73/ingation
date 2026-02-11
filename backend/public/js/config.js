@@ -2,7 +2,7 @@
 // This file determines which backend URL to use based on the environment
 
 // Render deployment URL - Your live Render backend
-const RAILWAY_BACKEND_URL = 'https://my-project-gphv.onrender.com';
+const RAILWAY_BACKEND_URL = 'https://api.ignation.com';
 
 // Local development URL
 const LOCAL_BACKEND_URL = 'http://localhost:3000';
