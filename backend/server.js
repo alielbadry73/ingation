@@ -60,23 +60,36 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-// Serve static files from backend/public (we'll populate it with frontend assets)
+// Serve static files with root priority (root files override public files)
 const publicDir = path.join(__dirname, 'public');
+app.use(express.static(path.join(__dirname, '..')));
 app.use(express.static(publicDir));
 
 // Static file serving moved after API routes to prevent interference
 
-// If a public file for the homepage exists, serve it
+// Serve root index.html with highest priority
 app.get('/', (req, res) => {
     // Force cache invalidation
     res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
     res.setHeader('Pragma', 'no-cache');
     res.setHeader('Expires', '0');
     
-    const filePath = path.join(publicDir, 'index.html');
-    if (require('fs').existsSync(filePath)) return res.sendFile(filePath);
-    // fallback to repo root version
-    return res.sendFile(path.join(__dirname, '..', 'index.html'));
+    // PRIORITY 1: Serve root index.html first
+    const rootFilePath = path.join(__dirname, '..', 'index.html');
+    if (require('fs').existsSync(rootFilePath)) {
+        console.log('🎯 Serving root index.html (highest priority)');
+        return res.sendFile(rootFilePath);
+    }
+    
+    // PRIORITY 2: Fallback to public/index.html
+    const publicFilePath = path.join(publicDir, 'index.html');
+    if (require('fs').existsSync(publicFilePath)) {
+        console.log('📁 Serving public/index.html (fallback)');
+        return res.sendFile(publicFilePath);
+    }
+    
+    // PRIORITY 3: Error if neither exists
+    return res.status(404).json({ error: 'index.html not found' });
 });
 // Health endpoint for readiness checks
 app.get('/health', (req, res) => {
@@ -3663,7 +3676,4 @@ app.post('/api/zoom/end-meeting/:meetingId', authenticateJWT, (req, res) => {
     });
 });
 
-// Serve files from the repository root as a fallback for legacy pages
-// (this lets requests such as /admin-panel.html work when the file lives at repo root)
-// IMPORTANT: This must be after API routes to prevent interference
-app.use(express.static(path.join(__dirname, '..')));
+// Repository root static files already served above with priority
