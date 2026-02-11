@@ -255,8 +255,8 @@
             const FAILED_ATTEMPTS_KEY = 'adminLoginFailedCount';
 
             function getApiUrl() {
-                if (window.API_CONFIG && window.API_CONFIG.apiURL) return window.API_CONFIG.apiURL;
-                return window.location.origin + '/api';
+                // Force use of production backend API
+                return 'https://api.ignation.com/api';
             }
 
             function isLockedOut() {
