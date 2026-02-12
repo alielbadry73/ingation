@@ -2823,7 +2823,7 @@
         }
         
         // Check backend for active enrollments
-        const apiUrl = (window.API_CONFIG && window.API_CONFIG.apiURL) || 'http://localhost:3000/api';
+        const apiUrl = (window.API_CONFIG && window.API_CONFIG.apiURL) || 'https://your-render-app-name.onrender.com/api';
         const response = await fetch(`${apiUrl}/my-enrollments`, {
           headers: {
             'Authorization': `Bearer ${authToken}`,

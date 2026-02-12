@@ -49,9 +49,15 @@ const upload = multer({
     }
 });
 
-// Middleware - Explicit CORS configuration
+// Middleware - Dynamic CORS configuration for production
+const corsOrigins = process.env.CORS_ORIGINS 
+    ? process.env.CORS_ORIGINS.split(',').map(origin => origin.trim())
+    : ['http://localhost:3000', 'https://localhost:3000', 'https://my-project12345.netlify.app'];
+
+console.log('🌐 CORS Origins:', corsOrigins);
+
 app.use(cors({
-    origin: ['https://my-project12345.netlify.app', 'http://localhost:3000', 'https://localhost:3000'],
+    origin: corsOrigins,
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization']

@@ -1,19 +1,19 @@
 // API Configuration for Backend Public Files
 // This file determines which backend URL to use based on the environment
 
-// Fly.io deployment URL - Your live Fly.io backend
-const RAILWAY_BACKEND_URL = 'https://ig-nation-app.fly.dev';
+// Render deployment URL - Your live Render backend
+const RENDER_BACKEND_URL = 'https://your-render-app-name.onrender.com'; // Replace with your actual Render URL
 
 // Local development URL
 const LOCAL_BACKEND_URL = 'http://localhost:3000';
 
 // Determine which URL to use
-// Set this to 'production' when deploying, or 'development' for local testing
-const ENVIRONMENT = 'development'; // Use development mode since backend is down
+// Set this to 'production' when deploying to Render, or 'development' for local testing
+const ENVIRONMENT = 'production'; // Use production mode for Render deployment
 
 // Export the appropriate base URL
 const API_BASE_URL = ENVIRONMENT === 'production' 
-    ? RAILWAY_BACKEND_URL 
+    ? RENDER_BACKEND_URL 
     : LOCAL_BACKEND_URL;
 
 // Export configuration
